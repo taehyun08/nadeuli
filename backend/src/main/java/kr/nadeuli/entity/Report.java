@@ -29,9 +29,6 @@ public class Report extends Base{
     @JoinColumn(name = "reporter_tag", referencedColumnName = "tag")
     private Member reporter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id")
-    private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
