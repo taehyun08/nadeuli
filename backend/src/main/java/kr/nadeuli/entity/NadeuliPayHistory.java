@@ -37,11 +37,11 @@ public class NadeuliPayHistory extends Base {
     @Column(name = "product_title", nullable = false)
     private String productTitle;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag", insertable = false, updatable = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product product;
 

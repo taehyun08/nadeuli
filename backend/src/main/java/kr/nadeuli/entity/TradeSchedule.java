@@ -25,15 +25,15 @@ public class TradeSchedule extends Base {
     @Column(name = "trading_location", nullable = false)
     private String tradingLocation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_tag", nullable = false)
     private Member buyer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_tag", nullable = false)
     private Member seller;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
