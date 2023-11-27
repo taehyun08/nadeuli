@@ -20,7 +20,6 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -34,8 +33,9 @@ public class OriScheMemChatFav {
     @Column(name = "ori_sche_mem_chat_fav_id")
     private Long oriScheMemChatFav;
 
-    @Column(name = "tag", length = 20, nullable = false)
-    private String tag;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ans_question_id")

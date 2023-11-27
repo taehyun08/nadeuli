@@ -1,5 +1,8 @@
 package kr.nadeuli.entity;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import org.hibernate.annotations.DynamicUpdate;
 
 import jakarta.persistence.Column;
@@ -19,7 +22,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -48,7 +50,5 @@ public class Orikkiri {
     @Column(name = "orikkiri_regist_time", nullable = false)
     private LocalDateTime orikkiriRegistTime;
 
-    @Column(name = "orikkiri_master_tag", nullable = false, length = 20)
-    private String orikkiriMasterTag;
 
 }

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -65,6 +64,7 @@ public class Post extends Base{
     private Orikkiri orikkiri;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 }
 
