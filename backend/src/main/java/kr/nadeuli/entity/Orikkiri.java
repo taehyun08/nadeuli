@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -50,5 +51,15 @@ public class Orikkiri {
     @Column(name = "orikkiri_regist_time", nullable = false)
     private LocalDateTime orikkiriRegistTime;
 
+    @OneToMany(mappedBy = "orikkiri", fetch = FetchType.LAZY)
+    private List<AnsQuestion> ansQuestions;
 
+    @OneToMany(mappedBy = "orikkiri", fetch = FetchType.LAZY)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "orikkiri", fetch = FetchType.LAZY)
+    private List<OrikkiriSchedule> orikkiriSchedules;
+
+    @OneToMany(mappedBy = "orikkiri", fetch = FetchType.LAZY)
+    private List<OriScheMemChatFav> oriScheMemChatFavs;
 }
