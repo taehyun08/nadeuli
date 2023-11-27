@@ -2,6 +2,7 @@ package kr.nadeuli.product;
 
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.entity.Member;
+import kr.nadeuli.entity.Product;
 import kr.nadeuli.service.product.ProductService;
 import kr.nadeuli.service.product.impl.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -34,11 +35,13 @@ public class ProductApplicationTests {
                 .content("싸게 팔아요")
                 .images(imageList)
                 .video("난비디오.avi")
+                .viewNum(0L)
                 .tradingLocation("나는거래장소")
                 .gu("강남구")
                 .buyer(Member.builder().tag("WVU3").build())
                 .build();
         System.out.println(productDTO);
+
         productService.addProduct(productDTO);
     }
 }

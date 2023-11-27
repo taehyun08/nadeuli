@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findByTitleContainingOrContentContaining(String keyword, Pageable pageable);
-    Page<Product> findBySellerAndAndSold();
+    Page<Product> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+    //Page<Product> findBySellerAndAndSold();
 }

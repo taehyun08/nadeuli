@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -34,20 +35,17 @@ public class Product extends Base{
     @Column(name = "view_num", nullable = false)
     private Long viewNum;
 
-    @Column(name = "is_bargain", nullable = false)
-    @Builder.Default
-    private boolean isBargain = false;
+    @Column(name = "is_bargain", nullable = false, columnDefinition = "boolean default false")
+    private boolean isBargain;
 
     @Column(name = "price", nullable = false)
     private Long price;
 
-    @Column(name = "is_sold", nullable = false)
-    @Builder.Default
-    private boolean isSold = false;
+    @Column(name = "is_sold", nullable = false, columnDefinition = "boolean default false")
+    private boolean isSold;
 
-    @Column(name = "is_premium", nullable = false)
-    @Builder.Default
-    private boolean isPremium = false;
+    @Column(name = "is_premium", nullable = false, columnDefinition = "boolean default false")
+    private boolean isPremium;
 
     @Column(name = "premium_time")
     private Long premiumTime;
@@ -83,9 +81,5 @@ public class Product extends Base{
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OriScheMemChatFav> oriScheMemChatFavs;
-
-
-
-
 
 }

@@ -4,6 +4,7 @@ import kr.nadeuli.common.CalculateTimeAgo;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.entity.Image;
 import kr.nadeuli.entity.Product;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,14 +13,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring")
 public interface ProductMapper {
     @Mapping(target = "tradeReviews", ignore = true)
     @Mapping(target = "tradeSchedules", ignore = true)
     @Mapping(target = "nadeuliPayHistories", ignore = true)
     @Mapping(target = "reports", ignore = true)
     @Mapping(target = "oriScheMemChatFavs", ignore = true)
-    @Mapping(target = "regDate", ignore = true)
     @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
     Product productDTOToProduct(ProductDTO productDTO);
 
