@@ -3,6 +3,7 @@ package kr.nadeuli.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -81,57 +82,54 @@ public class Member {
   @Column(name = "block_day")
   private Integer blockDay;
 
-
   //정지
-  @OneToMany(mappedBy = "blockMember", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "blockMember", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Block> blocks;
 
   //계좌
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<BankAccount> bankAccounts;
 
   //신고
-  @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Report> reports;
 
   //오리스케멤챗페브
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<OriScheMemChatFav> oriScheMemChatFavs;
 
   //상품
-  @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Product> sellerProducts;
 
-  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Product> buyerProducts;
 
   //거래후기
-  @OneToMany(mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<TradeReview> tradeReviews;
 
   //나드리페이 내역
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<NadeuliPayHistory> nadeuliPayHistories;
 
   //게시물
-  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Post> posts;
 
   //댓글
-  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Comment> comments;
 
   //오리끼리
-  @OneToMany(mappedBy = "orikkiriMaster", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "orikkiriMaster", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Orikkiri> orikkiris;
 
   //나드리 부름
-  @OneToMany(mappedBy = "deliveryPerson", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "deliveryPerson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeuliDeliveries;
 
-  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeuliDeliveries;
-
-
 
 }

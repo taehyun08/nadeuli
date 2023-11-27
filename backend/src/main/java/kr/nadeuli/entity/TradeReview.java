@@ -31,11 +31,11 @@ public class TradeReview {
     @Column(name = "member_picture", nullable = false)
     private String memberPicture;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trader_tag", nullable = false)
     private Member trader;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
