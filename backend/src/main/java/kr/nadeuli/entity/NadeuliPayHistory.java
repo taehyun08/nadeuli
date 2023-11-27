@@ -19,11 +19,11 @@ public class NadeuliPayHistory extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nadeuli_pay_history_id", nullable = false)
-    private int nadeuliPayHistoryId;
+    private Long nadeuliPayHistoryId;
 
     @Column(name = "trading_money", nullable = false)
     @Builder.Default
-    private int tradingMoney = 0;
+    private Long tradingMoney = 0L;
 
     @Column(name = "bank_name")
     private String bankName;
@@ -32,7 +32,7 @@ public class NadeuliPayHistory extends Base {
     private String bankAccountBackNum;
 
     @Column(name = "trade_type", nullable = false)
-    private int tradeType;
+    private Long tradeType;
 
     @Column(name = "product_title", nullable = false)
     private String productTitle;

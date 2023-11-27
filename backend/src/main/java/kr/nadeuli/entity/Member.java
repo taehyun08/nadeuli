@@ -9,6 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
+import kr.nadeuli.common.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,8 +40,8 @@ public class Member {
   @Column(name = "nickname", length = 40, nullable = false)
   private String nickname;
 
-  @Column(name = "affinity", nullable = false, columnDefinition = "INT DEFAULT 50")
-  private int affinity;
+  @Column(name = "affinity", nullable = false, columnDefinition = "BIGINT DEFAULT 50")
+  private Long affinity;
 
   @Column(name = "email")
   private String email;
@@ -51,8 +52,8 @@ public class Member {
   @Column(name = "picture", nullable = false)
   private String picture;
 
-  @Column(name = "nadeuli_pay_balance", nullable = false, columnDefinition = "INT DEFAULT 0")
-  private int nadeuliPayBalance;
+  @Column(name = "nadeuli_pay_balance", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+  private Long nadeuliPayBalance;
 
   @Column(name = "is_activate", nullable = false)
   private boolean isActivate;
@@ -60,8 +61,8 @@ public class Member {
   @Column(name = "is_nadeuli_delivery", nullable = false)
   private boolean isNadeuliDelivery;
 
-  @Column(name = "role", nullable = false, columnDefinition = "INT DEFAULT 1")
-  private int role;
+  @Column(name = "role", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+  private Role role;
 
   @Column(name = "gu", nullable = false)
   private String gu;
@@ -79,7 +80,7 @@ public class Member {
   private LocalDateTime blockEnd;
 
   @Column(name = "block_day")
-  private Integer blockDay;
+  private Long blockDay;
 
   //정지
   @OneToMany(mappedBy = "blockMember", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

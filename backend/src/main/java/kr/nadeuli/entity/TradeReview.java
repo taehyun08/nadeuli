@@ -14,18 +14,18 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @ToString(exclude = {"trader", "product"})
 @Table(name = "trade_review")
-public class TradeReview {
+public class TradeReview extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trade_review_id", nullable = false)
-    private int tradeReviewId;
+    private Long tradeReviewId;
 
     @Column(name = "content", nullable = false, length = 5000)
     private String content;
 
     @Column(name = "affinity_score", nullable = false)
-    private int affinityScore;
+    private Long affinityScore;
 
     @Column(name = "member_picture", nullable = false)
     private String memberPicture;

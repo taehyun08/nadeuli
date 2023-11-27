@@ -39,8 +39,9 @@ public class Block {
   @Column(name = "block_end", nullable = false)
   private LocalDateTime blockEnd;
 
+  //영구정지 -1
   @Column(name = "block_day", length = 20, nullable = false)
-  private Integer blockDay;
+  private Long blockDay;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "block_member_tag", referencedColumnName = "tag", nullable = false)

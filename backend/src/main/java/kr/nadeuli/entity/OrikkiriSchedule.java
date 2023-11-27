@@ -29,7 +29,7 @@ public class OrikkiriSchedule {
     private Long orikkiriSchedule;
 
     @Column(name = "schedule_member_num", nullable = false)
-    private int scheduleMemberNum;
+    private Long scheduleMemberNum;
 
     @Column(name = "meeting_dong_ne", nullable = false, length = 255)
     private String meetingDongNe;

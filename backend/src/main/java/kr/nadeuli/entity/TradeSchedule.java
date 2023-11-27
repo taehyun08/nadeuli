@@ -19,7 +19,7 @@ public class TradeSchedule extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trade_schedule_id", nullable = false)
-    private int tradeScheduleId;
+    private Long tradeScheduleId;
 
     @Column(name = "trading_location", nullable = false)
     private String tradingLocation;
