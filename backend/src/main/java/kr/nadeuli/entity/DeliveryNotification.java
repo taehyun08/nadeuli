@@ -2,10 +2,7 @@ package kr.nadeuli.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,7 +12,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @ToString(exclude = "nadeuliDelivery")
 @Table(name = "delivery_notification")
-public class DeliveryNotification {
+public class DeliveryNotification extends Base {
 
     // 부름 알림 아이디
     @Id
@@ -28,13 +25,9 @@ public class DeliveryNotification {
     private String notificationContent;
 
     // 읽음 여부
+    @Builder.Default
     @Column(name = "is_read", nullable = false)
-    private boolean isRead;
-
-    // 등록 시간
-    @CreationTimestamp
-    @Column(name = "reg_date", nullable = false, updatable = false)
-    private LocalDateTime regDate;
+    private boolean isRead = false;
 
     // 나드리부름 아이디
     @ManyToOne(fetch = FetchType.LAZY)
