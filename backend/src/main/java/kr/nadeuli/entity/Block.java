@@ -20,12 +20,11 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"member"})
+@ToString(exclude = {"blockMember"})
 @Table(name = "block")
 public class Block {
 

@@ -19,7 +19,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

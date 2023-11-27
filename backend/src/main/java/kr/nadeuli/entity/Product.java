@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,15 +35,18 @@ public class Product extends Base{
     private int viewNum;
 
     @Column(name = "is_bargain", nullable = false)
+    @Builder.Default
     private boolean isBargain = false;
 
     @Column(name = "price", nullable = false)
     private int price;
 
     @Column(name = "is_sold", nullable = false)
+    @Builder.Default
     private boolean isSold = false;
 
     @Column(name = "is_premium", nullable = false)
+    @Builder.Default
     private boolean isPremium = false;
 
     @Column(name = "premium_time")

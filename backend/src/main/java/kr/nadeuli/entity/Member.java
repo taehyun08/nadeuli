@@ -19,14 +19,13 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
 @ToString(exclude = {"blocks", "bankAccounts", "reports", "oriScheMemChatFavs",
     "sellerProducts", "buyerProducts", "tradeReviews", "nadeuliPayHistories", "posts",
-    "comments", "orikkiris", "nadeuliDeliveries"})
+    "comments", "nadeuliDeliveries"})
 @Table(name="member")
 public class Member {
 
@@ -121,15 +120,11 @@ public class Member {
   @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Comment> comments;
 
-  //오리끼리
-  @OneToMany(mappedBy = "orikkiriMaster", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-  private List<Orikkiri> orikkiris;
-
   //나드리 부름
   @OneToMany(mappedBy = "deliveryPerson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeuliDeliveries;
 
   @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-  private List<NadeuliDelivery> nadeuliDeliveries;
+  private List<NadeuliDelivery> nadeulibuyers;
 
 }

@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,6 +22,7 @@ public class NadeuliPayHistory extends Base {
     private int nadeuliPayHistoryId;
 
     @Column(name = "trading_money", nullable = false)
+    @Builder.Default
     private int tradingMoney = 0;
 
     @Column(name = "bank_name")
