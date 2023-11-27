@@ -46,7 +46,7 @@ public class Post extends Base{
     private String orikkiriPicture;
 
     @Column(name = "post_category", nullable = false)
-    private int postCategory;
+    private Long postCategory;
 
     @Column(name = "gu", length = 255, nullable = false)
     private String gu;
@@ -63,7 +63,6 @@ public class Post extends Base{
     private Orikkiri orikkiri;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Builder.Default
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)

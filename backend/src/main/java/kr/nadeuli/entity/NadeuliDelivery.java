@@ -36,19 +36,19 @@ class NadeuliDelivery extends Base {
 
     // 상품 가격
     @Column(name = "product_price", nullable = false)
-    private int productPrice;
+    private Long productPrice;
 
     // 상품 수량
     @Column(name = "product_num")
-    private int productNum;
+    private Long productNum;
 
     // 부름비 {기본값 = 0}
-    @Column(name = "delivery_fee", nullable = false, columnDefinition = "int default 0")
-    private int deliveryFee;
+    @Column(name = "delivery_fee", nullable = false, columnDefinition = "BIGINT default 0")
+    private Long deliveryFee;
 
     // 나드리페이 보증금 (상품 가격 + 부름비)
     @Column(nullable = false)
-    private int deposit;
+    private Long deposit;
 
     // 출발지 한글 주소
     @Column(nullable = false)
@@ -76,7 +76,7 @@ class NadeuliDelivery extends Base {
 
     // 주문 상태 {0 : 주문등록, 1 : 주문취소, 2 : 주문수락, 3 : 배달취소, 4 : 배달완료}
     @Column(name = "delivery_state", nullable = false)
-    private int deliveryState;
+    private Long deliveryState;
 
     // 사진 이름
     @Column(name = "image_name", nullable = false)

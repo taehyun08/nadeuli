@@ -20,7 +20,7 @@ public class Product extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
-    private int productId;
+    private Long productId;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -32,14 +32,14 @@ public class Product extends Base{
     private String video;
 
     @Column(name = "view_num", nullable = false)
-    private int viewNum;
+    private Long viewNum;
 
     @Column(name = "is_bargain", nullable = false)
     @Builder.Default
     private boolean isBargain = false;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private Long price;
 
     @Column(name = "is_sold", nullable = false)
     @Builder.Default
@@ -50,7 +50,7 @@ public class Product extends Base{
     private boolean isPremium = false;
 
     @Column(name = "premium_time")
-    private Integer premiumTime;
+    private Long premiumTime;
 
     @Column(name = "trading_location", nullable = false)
     private String tradingLocation;
