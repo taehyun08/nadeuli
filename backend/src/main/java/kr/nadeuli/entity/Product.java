@@ -75,6 +75,17 @@ public class Product extends Base{
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<NadeuliPayHistory> nadeuliPayHistories;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Report> reports;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<OriScheMemChatFav> oriScheMemChatFavs;
+
+
+
 
 
 }
