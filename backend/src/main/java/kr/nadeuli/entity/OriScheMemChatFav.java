@@ -1,9 +1,22 @@
 package kr.nadeuli.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -12,21 +25,17 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString
+@ToString(exclude = {"ansQuestion", "orikkiri", "orikkiriSchedule", "product"})
 @Table(name = "ori_sche_mem_chat_fav")
 public class OriScheMemChatFav {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ori_sche_mem_chat_fav_id")
-    private Long oriScheMemChatFavId;
+    private Long oriScheMemChatFav;
 
     @Column(name = "tag", length = 20, nullable = false)
     private String tag;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id")
-    private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ans_question_id")
@@ -44,6 +53,4 @@ public class OriScheMemChatFav {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // Constructors, Getters, and Setters
-    // 생성자, Getter 및 Setter
 }

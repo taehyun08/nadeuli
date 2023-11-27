@@ -1,8 +1,22 @@
 package kr.nadeuli.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -13,14 +27,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString
+@ToString(exclude = {"orikkiri"})
 @Table(name = "orikkiri_schedule")
 public class OrikkiriSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orikkiri_schedule_id")
-    private Long orikkiriScheduleId;
+    private Long orikkiriSchedule;
 
     @Column(name = "schedule_member_num", nullable = false)
     private int scheduleMemberNum;
@@ -33,6 +47,6 @@ public class OrikkiriSchedule {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orikkiri_id")
-    private Orikkiri orikkiriId;
+    private Orikkiri orikkiri;
 
 }
