@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -63,8 +62,14 @@ public class Post extends Base{
     @JoinColumn(name = "orikkiri_id")
     private Orikkiri orikkiri;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Report> reports;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Image> images;
 }
 
