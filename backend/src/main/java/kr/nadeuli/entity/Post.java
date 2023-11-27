@@ -1,12 +1,17 @@
 package kr.nadeuli.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -15,14 +20,14 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString
+@ToString(exclude = {"writer", "orikkiri", "comments"})
 @Table(name = "post")
 public class Post extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Long postId;
+    private Long post;
 
     @Column(name = "title", length = 255, nullable = false)
     private String title;
@@ -59,10 +64,7 @@ public class Post extends Base{
     @JoinColumn(name = "orikkiri_id")
     private Orikkiri orikkiri;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-
-
-
 }
 
