@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"deliveryPerson", "buyer", "product"})
+@ToString(exclude = { "deliveryPerson", "buyer", "product" })
 @Table(name = "nadeuli_delivery")
 class NadeuliDelivery extends Base {
 
@@ -63,7 +63,7 @@ class NadeuliDelivery extends Base {
     @Column(name = "order_cancel_date", updatable = false)
     private LocalDateTime orderCancelDate;
 
-    // 주문 수락 시간  (이벤트 발생 시 별도 INSERT)
+    // 주문 수락 시간 (이벤트 발생 시 별도 INSERT)
     @Column(name = "order_accept_date", updatable = false)
     private LocalDateTime orderAcceptDate;
 
