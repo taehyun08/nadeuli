@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring")
 public interface TradeScheduleMapper {
-    TradeSchedule tradeScheduleToTradeScheduleDTO(TradeScheduleDTO tradeScheduleDTO);
+    TradeScheduleDTO tradeScheduleToTradeScheduleDTO(TradeSchedule tradeSchedule);
 
-    TradeScheduleDTO tradeScheduleDTOToTradeSchedule(TradeSchedule tradeSchedule);
+    TradeSchedule tradeScheduleDTOToTradeSchedule(TradeScheduleDTO tradeScheduleDTO);
 }

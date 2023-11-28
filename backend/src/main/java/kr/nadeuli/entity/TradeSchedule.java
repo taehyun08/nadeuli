@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"buyer", "seller"})
+@ToString(exclude = {"buyer", "seller", "product"})
 @Table(name = "trade_schedule")
 public class TradeSchedule {
 
