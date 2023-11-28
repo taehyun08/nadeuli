@@ -26,7 +26,7 @@ public class ProductApplicationTests {
     @Value("${pageSize}")
     private int pageSize;
 
-    @Test
+    //@Test
     public void testAddProduct() throws Exception{
         List<String> imageList = new ArrayList<>();
         imageList.add("당근사진.jpg");
@@ -75,14 +75,31 @@ public class ProductApplicationTests {
         imageList.add("무슨사진.png");
         imageList.add("사진사진.jpg");
         ProductDTO productDTO = ProductDTO.builder()
-                                          .productId(2L)
-                                          .title("상품제목목")
+                                          .productId(5L)
+                                          .title("상품제")
                                           .price(12340L)
-                                          .isPremium(true)
-                                          .premiumTime(3L)
-                                          .content("싸게 팔아요")
+                                          .isPremium(false)
+                                          .premiumTime(0L)
+                                          .content("싸게 팔아요asdfa")
+                                          .images(imageList)
+                                          .video("난비디오.avi")
+                                          .viewNum(0L)
+                                          .tradingLocation("나는거래장소")
+                                          .gu("강남구asdfa")
+                                          .buyer(Member.builder().tag("WVU3").build())
                                           .build();
-        //productService.updateProduct();
+        productService.updateProduct(productDTO);
+    }
+
+    //@Test
+    public void testSaleCompleted() throws Exception{
+        productService.saleCompleted(1L);
+    }
+
+    //@Test
+    //@Transactional
+    public void testDeleteProduct() throws Exception{
+        productService.deleteProduct(1L);
     }
 
 

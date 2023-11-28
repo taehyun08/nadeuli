@@ -30,6 +30,9 @@ public interface ProductMapper {
 
     @Named("stringToImage")
     default List<Image> stringToImage(List<String> images){
+        if(images == null){
+            return null;
+        }
         return images.stream().map(imageName -> {
             return Image.builder().imageName(imageName).build();
         }).collect(Collectors.toList());
@@ -37,6 +40,9 @@ public interface ProductMapper {
 
     @Named("imageToString")
     default List<String> imageToString(List<Image> images){
+        if(images == null){
+            return null;
+        }
         return images.stream().map(Image::getImageName).collect(Collectors.toList());
     }
 

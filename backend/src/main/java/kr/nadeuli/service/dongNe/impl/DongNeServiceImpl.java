@@ -38,7 +38,7 @@ public class DongNeServiceImpl implements DongNeService {
     @Override
     public List<PostDTO> getDongNePostList(SearchDTO searchDTO) throws Exception {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
-        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageUnit(), sort);
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Post> postPage;
         if(searchDTO.getSearchKeyword() == null || searchDTO.getSearchKeyword().isEmpty()){
             postPage = dongNeRepository.findAll(pageable);
