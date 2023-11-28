@@ -1,19 +1,14 @@
 package kr.nadeuli.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,7 +20,7 @@ public class OriScheMemChatFav {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ori_sche_mem_chat_fav_id")
-    private Long oriScheMemChatFav;
+    private Long oriScheMemChatFavId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag")
@@ -49,6 +44,5 @@ public class OriScheMemChatFav {
 
     @OneToMany(mappedBy = "oriScheMemChatFav", fetch = FetchType.LAZY)
     private List<AnsQuestion> ansQuestions;
-
 
 }
