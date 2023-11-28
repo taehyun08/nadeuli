@@ -26,7 +26,7 @@ public class ProductDTO {
     private String tradingLocation;
     private String gu;
     private List<String> images;
-    private Long timeAgo;
+    private String timeAgo;
     private Member seller;
     private Member buyer;
 }

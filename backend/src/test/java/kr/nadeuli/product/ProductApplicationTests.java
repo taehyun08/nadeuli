@@ -3,9 +3,8 @@ package kr.nadeuli.product;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Member;
-import kr.nadeuli.entity.Product;
 import kr.nadeuli.service.product.ProductService;
-import kr.nadeuli.service.product.impl.ProductRepository;
+import kr.nadeuli.service.product.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +51,7 @@ public class ProductApplicationTests {
     }
 
     //@Test
+    //@Transactional
     public void testGetProduct() throws Exception{
         long productId = 2L;
         ProductDTO productDTO = productService.getProduct(productId);

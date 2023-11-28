@@ -1,4 +1,4 @@
-package kr.nadeuli.service.product.impl;
+package kr.nadeuli.service.product;
 
 import kr.nadeuli.entity.Product;
 import org.springframework.data.domain.Page;

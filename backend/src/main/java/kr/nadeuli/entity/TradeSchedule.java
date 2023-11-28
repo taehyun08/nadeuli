@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @ToString(exclude = {"buyer", "seller"})
 @Table(name = "trade_schedule")
-public class TradeSchedule extends Base {
+public class TradeSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,9 @@ public class TradeSchedule extends Base {
 
     @Column(name = "trading_location", nullable = false)
     private String tradingLocation;
+
+    @Column(name = "trading_time", nullable = false)
+    private LocalDateTime tradingTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_tag", nullable = false)

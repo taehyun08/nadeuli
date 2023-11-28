@@ -38,8 +38,8 @@ public interface PostMapper {
     }
 
     @Named("regDateToTimeAgo")
-    default Long regDateToTimeAgo(LocalDateTime regDate){
-        return CalculateTimeAgo.calculateTimeDifferenceInMinutes(regDate);
+    default String regDateToTimeAgo(LocalDateTime regDate){
+        return CalculateTimeAgo.calculateTimeDifferenceString(regDate);
     }
 
 }
