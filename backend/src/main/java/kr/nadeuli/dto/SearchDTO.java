@@ -13,4 +13,6 @@ public class SearchDTO {
     private String searchKeyword;
     private int currentPage;
     private int pageSize;
+    private boolean isSold;
+    private boolean isBuyer;
 }

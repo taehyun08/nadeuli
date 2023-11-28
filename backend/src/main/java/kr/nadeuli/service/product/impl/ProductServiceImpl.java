@@ -2,6 +2,7 @@ package kr.nadeuli.service.product.impl;
 
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Product;
 import kr.nadeuli.mapper.ProductMapper;
 import kr.nadeuli.scheduler.PremiumTimeScheduler;
@@ -64,6 +65,21 @@ public class ProductServiceImpl implements ProductService {
         }
         log.info(productPage);
         return productPage.map(productMapper::productToProductDTO).toList();
+    }
+
+    @Override
+    public List<ProductDTO> getMyProductList(String tag, SearchDTO searchDTO) throws Exception {
+        Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
+        Page<Product> productPage;
+        if(!searchDTO.isBuyer()){
+            productPage = productRepository.findBySellerAndIsSold(Member.builder().tag(tag).build(), searchDTO.isSold(), pageable);
+        }else{
+            productPage = productRepository.findByBuyer(Member.builder().tag(tag).build(), pageable);
+        }
+        log.info(productPage);
+        return productPage.map(productMapper::productToProductDTO).toList();
+
     }
 
     @Override
