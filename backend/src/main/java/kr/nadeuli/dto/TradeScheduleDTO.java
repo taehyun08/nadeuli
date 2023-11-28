@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class TradeScheduleDTO {
     private Long tradeScheduleId;
     private String tradingLocation;
+    private LocalDateTime tradingTime;
     private Member buyer;
     private Member seller;
     private Product product;
