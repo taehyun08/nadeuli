@@ -67,7 +67,7 @@ public class Product extends Base{
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<TradeReview> tradeReviews;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TradeSchedule> tradeSchedules;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)

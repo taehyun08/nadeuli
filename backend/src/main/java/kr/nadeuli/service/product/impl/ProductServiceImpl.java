@@ -74,10 +74,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void saleCompleted(long productId) throws Exception {
-        Product product = Product.builder()
-                                 .productId(productId)
-                                 .isSold(true)
-                                 .build();
+        Product product = productRepository.findById(productId).orElse(null);
+        if(product == null){
+            throw new NullPointerException();
+        }
+        product.setSold(true);
         productRepository.save(product);
         log.info(product);
     }
