@@ -20,6 +20,7 @@ public interface ProductMapper {
     @Mapping(target = "nadeuliPayHistories", ignore = true)
     @Mapping(target = "reports", ignore = true)
     @Mapping(target = "oriScheMemChatFavs", ignore = true)
+    @Mapping(target = "regDate", ignore = true)
     @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
     Product productDTOToProduct(ProductDTO productDTO);
 

@@ -4,6 +4,7 @@ import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Product;
 import kr.nadeuli.mapper.ProductMapper;
+import kr.nadeuli.scheduler.PremiumTimeScheduler;
 import kr.nadeuli.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,21 +14,27 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
+@Transactional
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final PremiumTimeScheduler premiumTimeScheduler;
 
     @Override
     public void addProduct(ProductDTO productDTO) throws Exception {
         Product product = productMapper.productDTOToProduct(productDTO);
         log.info(product);
         productRepository.save(product);
+        if(productDTO.isPremium()){
+            premiumTimeScheduler.startPremiumTimeScheduler(product.getProductId());
+        }
     }
 
     @Override
@@ -35,6 +42,9 @@ public class ProductServiceImpl implements ProductService {
         Product product = productMapper.productDTOToProduct(productDTO);
         log.info(product);
         productRepository.save(product);
+        if(productDTO.isPremium()){
+            premiumTimeScheduler.startPremiumTimeScheduler(product.getProductId());
+        }
     }
 
     @Override
@@ -45,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getProductList(SearchDTO searchDTO) throws Exception {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
-        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageUnit(), sort);
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Product> productPage;
         if(searchDTO.getSearchKeyword() == null || searchDTO.getSearchKeyword().isEmpty()){
             productPage = productRepository.findAll(pageable);
@@ -70,5 +80,28 @@ public class ProductServiceImpl implements ProductService {
                                  .build();
         productRepository.save(product);
         log.info(product);
+    }
+
+    // false면 프리미엄이 종료, true면 프리미엄 지속
+    @Override
+    public boolean updatePremiumTime(long productId) throws Exception {
+        Product product = productRepository.findById(productId).orElse(null);
+        if(product == null){
+            throw new NullPointerException();
+        }
+        long premiumTime = product.getPremiumTime();
+        if(product.getPremiumTime() == 0){
+            productRepository.save(Product.builder()
+                                     .productId(productId)
+                                     .isPremium(false)
+                                          .build());
+            return false;
+        }else{
+            productRepository.save(Product.builder()
+                                          .productId(productId)
+                                          .premiumTime(premiumTime-1)
+                                          .build());
+            return true;
+        }
     }
 }

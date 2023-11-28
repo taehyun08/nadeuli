@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class SearchDTO {
     private String searchKeyword;
     private int currentPage;
-    private int pageUnit;
+    private int pageSize;
 }
