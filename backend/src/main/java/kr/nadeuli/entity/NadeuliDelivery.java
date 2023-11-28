@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = { "deliveryPerson", "buyer", "product" })
+@ToString(exclude = {"deliveryPerson", "buyer", "product", "deliveryNotifications", "images", "reports"})
 @Table(name = "nadeuli_delivery")
 public class NadeuliDelivery extends Base {
 
@@ -82,9 +83,17 @@ public class NadeuliDelivery extends Base {
     @Column(name = "image_name", nullable = false)
     private String imageName;
 
+    // 배송자 닉네임
+    @Column(name = "delivery_person_nickname")
+    private String deliveryPersonNickName;
+
+    // 구매자 닉네임
+    @Column(name = "buyer_nickname", nullable = false)
+    private String buyerNickName;
+
     // 배송자 태그
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_person_tag", referencedColumnName = "tag", updatable = false)
+    @JoinColumn(name = "delivery_person_tag", referencedColumnName = "tag")
     private Member deliveryPerson;
 
     // 구매자 태그
@@ -96,4 +105,16 @@ public class NadeuliDelivery extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Product product;
+
+    // 부름 알림
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY)
+    private List<DeliveryNotification> deliveryNotifications;
+
+    // 상품 사진
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY)
+    private List<Image> images;
+
+    // 신고
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY)
+    private List<Report> reports;
 }
