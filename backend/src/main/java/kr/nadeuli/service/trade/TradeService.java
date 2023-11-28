@@ -13,8 +13,6 @@ public interface TradeService {
 
     void updateTradeReview(TradeReviewDTO tradeReviewDTO);
 
-    TradeReviewDTO getTradeReview(String tag);
-
     List<TradeReviewDTO> getTradeReviewList(String tag, SearchDTO searchDTO);
 
     void deleteTradeReivew(Long tradeReviewId);
@@ -25,5 +23,5 @@ public interface TradeService {
 
     void updateTradeSchedule(TradeScheduleDTO tradeScheduleDTO);
 
-    List<TradeScheduleDTO> getTradeSchedulList(String tag);
+    List<TradeScheduleDTO> getTradeSchedulList(String tag, SearchDTO searchDTO);
 }
