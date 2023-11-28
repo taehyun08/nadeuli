@@ -31,6 +31,10 @@ public class TradeReview extends Base{
     @Column(name = "member_picture", nullable = false)
     private String memberPicture;
 
+    @ManyToOne
+    @JoinColumn(name = "writer_tag", nullable = false)
+    private Member writer;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trader_tag", nullable = false)
     private Member trader;

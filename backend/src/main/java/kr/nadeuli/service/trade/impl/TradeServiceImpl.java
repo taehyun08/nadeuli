@@ -3,6 +3,7 @@ package kr.nadeuli.service.trade.impl;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.dto.TradeReviewDTO;
 import kr.nadeuli.dto.TradeScheduleDTO;
+import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.TradeReview;
 import kr.nadeuli.entity.TradeSchedule;
 import kr.nadeuli.mapper.TradeReviewMapper;
@@ -47,7 +48,12 @@ public class TradeServiceImpl implements TradeService {
     public List<TradeReviewDTO> getTradeReviewList(String tag, SearchDTO searchDTO) {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
-        Page<TradeReview> tradeReviewPage = tradeReviewRepository.findAll(pageable);
+        Page<TradeReview> tradeReviewPage;
+        if(searchDTO.isWriter()){
+            tradeReviewPage = tradeReviewRepository.findByWriter(Member.builder().tag(tag).build(), pageable);
+        }else{
+            tradeReviewPage = tradeReviewRepository.findByTrader(Member.builder().tag(tag).build(), pageable);
+        }
         log.info(tradeReviewPage);
         return tradeReviewPage.map(tradeReviewMapper::tradeReviewToTradeReviewDTO).toList();
     }
@@ -71,17 +77,17 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public List<TradeScheduleDTO> getTradeSchedulList(String tag) {
-        return null;
+    public List<TradeScheduleDTO> getTradeSchedulList(String tag, SearchDTO searchDTO) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "tradingTime");
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
+        Page<TradeSchedule> tradeSchedules = tradeScheduleRepository.findAll(pageable);
+        log.info(tradeSchedules);
+        return tradeSchedules.map(tradeScheduleMapper::tradeScheduleToTradeScheduleDTO).toList();
     }
 
     @Override
     public TradeScheduleDTO getTradeSchedule(Long tradeScheduleId) {
-        return null;
+        return tradeScheduleRepository.findById(tradeScheduleId).map(tradeScheduleMapper::tradeScheduleToTradeScheduleDTO).orElse(null);
     }
 
-    @Override
-    public TradeReviewDTO getTradeReview(String tag) {
-        return null;
-    }
 }
