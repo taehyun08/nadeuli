@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,7 +18,7 @@ public class Report extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_id")
-    private Long report;
+    private Long reportId;
 
     @Column(name = "content", length = 5000, nullable = false)
     private String content;

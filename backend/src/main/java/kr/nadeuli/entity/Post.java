@@ -3,29 +3,27 @@ package kr.nadeuli.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"writer", "orikkiri", "comments"})
+@ToString(exclude = {"writer", "orikkiri", "comments", "reports", "images"})
 @Table(name = "post")
 public class Post extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Long post;
+    private Long postId;
 
     @Column(name = "title", length = 255, nullable = false)
     private String title;
@@ -62,7 +60,7 @@ public class Post extends Base{
     @JoinColumn(name = "orikkiri_id")
     private Orikkiri orikkiri;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)

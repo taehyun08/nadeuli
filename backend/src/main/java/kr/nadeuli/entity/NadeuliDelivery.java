@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @ToString(exclude = { "deliveryPerson", "buyer", "product" })
 @Table(name = "nadeuli_delivery")
-class NadeuliDelivery extends Base {
+public class NadeuliDelivery extends Base {
 
     // 나드리부름 아이디
     @Id
