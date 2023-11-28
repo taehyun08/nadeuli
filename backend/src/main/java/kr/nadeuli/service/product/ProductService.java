@@ -18,4 +18,6 @@ public interface ProductService {
 
     public void saleCompleted(long productId) throws Exception;
 
+    public boolean updatePremiumTime(long productId) throws Exception;
+
 }
