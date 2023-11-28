@@ -43,7 +43,7 @@ public class ProductApplicationTests {
                 .viewNum(0L)
                 .tradingLocation("나는거래장소")
                 .gu("강남구rnrn")
-                .buyer(Member.builder().tag("WVU3").build())
+                .seller(Member.builder().tag("WVU3").build())
                 .build();
         System.out.println(productDTO);
 
@@ -100,6 +100,20 @@ public class ProductApplicationTests {
     //@Transactional
     public void testDeleteProduct() throws Exception{
         productService.deleteProduct(1L);
+    }
+
+    //@Test
+    //@Transactional
+    public void testGetMyProductList() throws Exception{
+        String sellerTag = "WVU3";
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCurrentPage(0);
+        searchDTO.setPageSize(pageSize);
+//        searchDTO.setSold(false);
+        searchDTO.setBuyer(true);
+        System.out.println(searchDTO.isBuyer());
+        List<ProductDTO> productDTOList = productService.getMyProductList(sellerTag, searchDTO);
+        System.out.println(productDTOList);
     }
 
 

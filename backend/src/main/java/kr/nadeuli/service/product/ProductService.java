@@ -5,19 +5,21 @@ import kr.nadeuli.dto.SearchDTO;
 
 import java.util.List;
 
-public interface ProductService {
-    public void addProduct(ProductDTO productDTO) throws Exception;
+ public interface ProductService {
+     void addProduct(ProductDTO productDTO) throws Exception;
 
-    public void updateProduct(ProductDTO productDTO) throws Exception;
+     void updateProduct(ProductDTO productDTO) throws Exception;
 
-    public ProductDTO getProduct(long productId) throws Exception;
+     ProductDTO getProduct(long productId) throws Exception;
 
-    public List<ProductDTO> getProductList(SearchDTO searchDTO) throws Exception;
+     List<ProductDTO> getProductList(SearchDTO searchDTO) throws Exception;
 
-    public void deleteProduct(long productId) throws Exception;
+     List<ProductDTO> getMyProductList(String sellerTag, SearchDTO searchDTO) throws Exception;
 
-    public void saleCompleted(long productId) throws Exception;
+     void deleteProduct(long productId) throws Exception;
 
-    public boolean updatePremiumTime(long productId) throws Exception;
+     void saleCompleted(long productId) throws Exception;
+
+     boolean updatePremiumTime(long productId) throws Exception;
 
 }
