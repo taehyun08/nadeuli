@@ -1,6 +1,7 @@
 package kr.nadeuli.service.comment.impl;
 
 import kr.nadeuli.dto.CommentDTO;
+import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.entity.Comment;
 import kr.nadeuli.entity.Post;
 import kr.nadeuli.mapper.CommentMapper;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Log4j2
+@Transactional
 @Service("commentServiceImpl")
 public class CommentServiceImpl implements CommentService {
 
@@ -38,8 +40,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> getCommentList(Post post) throws Exception {
-        Post initializedPost = postRepository.findById(post.getPostId()).orElseThrow(() -> new Exception("Post not found"));
+    public List<CommentDTO> getCommentList(PostDTO postDTO) throws Exception {
+        Post initializedPost = postRepository.findById(postDTO.getPostId()).orElseThrow(() -> new Exception("Post not found"));
         List<Comment> comments = commentRepository.findByPost(initializedPost);
         return comments.stream().map(commentMapper::commentToCommentDTO).collect(Collectors.toList());
     }
