@@ -1,6 +1,5 @@
 package kr.nadeuli.dto;
 
-import kr.nadeuli.entity.NadeuliDelivery;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +16,5 @@ public class ReportDTO {
     private MemberDTO reporter;
     private PostDTO post;
     private ProductDTO product;
-    private NadeuliDelivery nadeuliDelivery;
+    private NadeuliDeliveryDTO nadeuliDelivery;
 }

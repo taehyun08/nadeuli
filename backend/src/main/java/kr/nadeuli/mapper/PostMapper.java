@@ -1,8 +1,12 @@
 package kr.nadeuli.mapper;
 
 import kr.nadeuli.common.CalculateTimeAgo;
+import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.OrikkiriDTO;
 import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.entity.Image;
+import kr.nadeuli.entity.Member;
+import kr.nadeuli.entity.Orikkiri;
 import kr.nadeuli.entity.Post;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
@@ -19,12 +23,50 @@ public interface PostMapper {
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "reports", ignore = true)
     @Mapping(target = "regDate", ignore = true)
+    @Mapping(source = "writer", target = "writer", qualifiedByName = "memberDTOToMember")
+    @Mapping(source = "orikkiri", target = "orikkiri", qualifiedByName = "orikkiriDTOToOrikkiri")
     @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
     Post postDTOToPost(PostDTO postDTO);
 
+    @Mapping(source = "writer", target = "writer", qualifiedByName = "memberToMemberDTO")
+    @Mapping(source = "orikkiri", target = "orikkiri", qualifiedByName = "orikkiriToOrikkiriDTO")
     @Mapping(source = "images", target = "images", qualifiedByName = "imageToString")
     @Mapping(source = "regDate", target = "timeAgo", qualifiedByName = "regDateToTimeAgo")
     PostDTO postToPostDTO(Post post);
+
+    @Named("memberDTOToMember")
+    default Member memberDTOToMember(MemberDTO memberDTO){
+        if(memberDTO == null){
+            return null;
+        }
+        return Member.builder().tag(memberDTO.getTag()).build();
+    }
+
+    @Named("memberToMemberDTO")
+    default MemberDTO memberToMemberDTO(Member member){
+        if(member == null){
+            return null;
+        }
+        return MemberDTO.builder().tag(member.getTag())
+                .build();
+    }
+
+    @Named("orikkiriDTOToOrikkiri")
+    default Orikkiri orikkiriDTOToOrikkiri(OrikkiriDTO orikkiriDTO){
+        if(orikkiriDTO == null){
+            return null;
+        }
+        return Orikkiri.builder().orikkiriId(orikkiriDTO.getOrikkiriId()).build();
+    }
+
+    @Named("orikkiriToOrikkiriDTO")
+    default OrikkiriDTO orikkiriToOrikkiriDTO(Orikkiri orikkiri){
+        if(orikkiri == null){
+            return null;
+        }
+        return OrikkiriDTO.builder().orikkiriId(orikkiri.getOrikkiriId())
+                .build();
+    }
 
     @Named("stringToImage")
     default List<Image> stringToImage(List<String> images){

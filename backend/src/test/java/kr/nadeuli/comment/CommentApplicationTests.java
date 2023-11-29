@@ -2,8 +2,9 @@ package kr.nadeuli.comment;
 
 import jakarta.transaction.Transactional;
 import kr.nadeuli.dto.CommentDTO;
+import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.entity.Comment;
-import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Post;
 import kr.nadeuli.service.comment.CommentRepository;
 import kr.nadeuli.service.comment.CommentService;
@@ -28,9 +29,9 @@ public class CommentApplicationTests {
         CommentDTO commentDTO = CommentDTO.builder()
                 .content("자 13이 3개!?")
                 .timeAgo("방금 전")
-//                .refComment(Comment.builder().commentId(2L).build())
-                .post(Post.builder().postId(13L).build())
-                .writer(Member.builder().tag("Bss3").build())
+                .refComment(CommentDTO.builder().commentId(2L).build())
+                .post(PostDTO.builder().postId(1L).build())
+                .writer(MemberDTO.builder().tag("Bss3").build())
                 .build();
         System.out.println(commentDTO);
 
@@ -48,16 +49,16 @@ public class CommentApplicationTests {
 //    @Test
 //    @Transactional
     public void testGetCommentList() throws Exception {
-        Post post = new Post();
-        post.setPostId(13L);
+        PostDTO postDTO = new PostDTO();
+        postDTO.setPostId(1L);
 
-        List<CommentDTO> commentList = commentService.getCommentList(post);
+        List<CommentDTO> commentList = commentService.getCommentList(postDTO);
         System.out.println(commentList);
     }
 
-//    @Test
+    //@Test
     public void testDeleteComment() throws Exception{
-        long commentID = 17L;
+        long commentID = 3L;
         commentService.deleteComment(commentID);
     }
 
@@ -68,10 +69,10 @@ public class CommentApplicationTests {
     public void testUpdateComment() throws Exception {
         CommentDTO commentDTO = CommentDTO.builder()
                 .commentId(4L)
-                .content("있겠냐??")
+                .content("있겠냐???")
                 .timeAgo("방금 전")
-                .post(Post.builder().postId(2L).build())
-                .writer(Member.builder().tag("Bss3").build())
+                .post(PostDTO.builder().postId(1L).build())
+                .writer(MemberDTO.builder().tag("Bss3").build())
                 .build();
         System.out.println(commentDTO);
 

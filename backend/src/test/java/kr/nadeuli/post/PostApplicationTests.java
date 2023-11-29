@@ -7,6 +7,7 @@ import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Orikkiri;
 import kr.nadeuli.service.post.PostRepository;
 import kr.nadeuli.service.post.PostService;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,8 @@ public class PostApplicationTests {
     @Value("${pageSize}")
     private int pageSize;
 
-    //@Test
+//    @Test
+//    @RepeatedTest(3)
     public void testAddPost() throws Exception {
         List<String> imageList = new ArrayList<>();
         imageList.add("눈사진.jpg");
@@ -36,14 +38,14 @@ public class PostApplicationTests {
         imageList.add("우리끼리 사진.jpg");
         PostDTO postDTO = PostDTO.builder()
                 .title("앨범 제목11")
-//                .content("스트리밍 내용")
-                .postCategory(4L)
+                .content("스트리밍 내용")
+                .postCategory(3L)
                 .images(imageList)
                 .video("test")
 //                .orikkiri(Orikkiri.builder().orikkiriId().build())
                 .orikkiriName("우리끼리1")
                 .orikkiriPicture("우리끼리사진1")
-//                .streaming("먹방")
+                .streaming("먹방")
                 .images(imageList)
                 .gu("송파구")
                 .dongNe("서울")
@@ -54,8 +56,8 @@ public class PostApplicationTests {
         postService.addPost(postDTO);
     }
 
-    @Test
-    @Transactional
+//    @Test
+//    @Transactional
     public void testGetPost() throws Exception {
         long postId = 2L;
         PostDTO postDTO = postService.getPost(postId);
@@ -64,7 +66,7 @@ public class PostApplicationTests {
 
     //@Test
     public void testDeletePost() throws Exception{
-        long postId = 2L;
+        long postId = 1L;
         postService.deletePost(postId);
     }
 
@@ -85,7 +87,7 @@ public class PostApplicationTests {
         List<String> imageList = new ArrayList<>();
         imageList.add("눈사진.jpg");
         PostDTO postDTO = PostDTO.builder()
-                .postId(2L)
+                .postId(1L)
                 .title("댓글이 어케되나 볼까")
                 .content("동네 맛집 맛집맛집")
                 .images(imageList)
