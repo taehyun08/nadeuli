@@ -1,6 +1,7 @@
 package kr.nadeuli.entity;
 
 import jakarta.persistence.*;
+import kr.nadeuli.category.TradeType;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,19 +33,19 @@ public class NadeuliPayHistory extends Base {
     @Column(name = "bank_account_back_num")
     private String bankAccountBackNum;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "trade_type", nullable = false)
-    private Long tradeType;
+    private TradeType tradeType;
 
-    @Column(name = "product_title", nullable = false)
+    @Column(name = "product_title")
     private String productTitle;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag", insertable = false, updatable = false)
+    @JoinColumn(name = "tag")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    // 다른 필드, 생성자, 게터 및 세터
 }
