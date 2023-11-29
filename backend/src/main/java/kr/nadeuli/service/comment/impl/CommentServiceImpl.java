@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Log4j2
+@Transactional
 @Service("commentServiceImpl")
 public class CommentServiceImpl implements CommentService {
 

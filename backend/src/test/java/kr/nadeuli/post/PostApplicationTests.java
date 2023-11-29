@@ -1,8 +1,10 @@
 package kr.nadeuli.post;
 
+import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Member;
+import kr.nadeuli.entity.Orikkiri;
 import kr.nadeuli.service.post.PostRepository;
 import kr.nadeuli.service.post.PostService;
 import org.junit.jupiter.api.Test;
@@ -33,32 +35,37 @@ public class PostApplicationTests {
         imageList.add("음식사진.png");
         imageList.add("우리끼리 사진.jpg");
         PostDTO postDTO = PostDTO.builder()
-                .postId(2L)
-                .title("게시물 제목11")
-                .content("동네 맛집 뭐있음?")
-                .video("눈옴!")
-                .postCategory(3L)
+                .title("앨범 제목11")
+//                .content("스트리밍 내용")
+                .postCategory(4L)
+                .images(imageList)
+                .video("test")
+//                .orikkiri(Orikkiri.builder().orikkiriId().build())
+                .orikkiriName("우리끼리1")
+                .orikkiriPicture("우리끼리사진1")
+//                .streaming("먹방")
                 .images(imageList)
                 .gu("송파구")
                 .dongNe("서울")
-                .writer(Member.builder().tag("Bss3").build())
+                .writer(MemberDTO.builder().tag("Bss3").build())
                 .build();
         System.out.println(postDTO);
 
         postService.addPost(postDTO);
     }
 
-    //@Test
-    //@Transactional
+    @Test
+    @Transactional
     public void testGetPost() throws Exception {
-        long postId = 1L;
+        long postId = 2L;
         PostDTO postDTO = postService.getPost(postId);
         System.out.println(postDTO);
     }
 
     //@Test
-    public void testDeletePost(){
-        postRepository.deleteById(2L);
+    public void testDeletePost() throws Exception{
+        long postId = 2L;
+        postService.deletePost(postId);
     }
 
 
@@ -68,7 +75,7 @@ public class PostApplicationTests {
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);
         searchDTO.setPageSize(pageSize);
-        searchDTO.setSearchKeyword("동네");
+        searchDTO.setSearchKeyword("내용");
         List<PostDTO> postDTOList = postService.getPostList(searchDTO);
         System.out.println(postDTOList);
     }
@@ -79,13 +86,13 @@ public class PostApplicationTests {
         imageList.add("눈사진.jpg");
         PostDTO postDTO = PostDTO.builder()
                 .postId(2L)
-                .title("게시물 제목 변경")
-                .content("동네 맛집 뭐있음?")
+                .title("댓글이 어케되나 볼까")
+                .content("동네 맛집 맛집맛집")
                 .images(imageList)
                 .postCategory(2L)
                 .gu("송파구")
                 .dongNe("서울")
-                .writer(Member.builder().tag("Bss3").build())
+                .writer(MemberDTO.builder().tag("Bss3").build())
                 .build();
         System.out.println(postDTO);
 
