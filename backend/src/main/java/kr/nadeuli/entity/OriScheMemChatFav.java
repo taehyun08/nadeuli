@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"ansQuestion", "orikkiri", "orikkiriSchedule", "product"})
+@ToString(exclude = {"member", "ansQuestion", "orikkiri", "orikkiriSchedule", "product"})
 @Table(name = "ori_sche_mem_chat_fav")
 public class OriScheMemChatFav {
 
@@ -25,10 +25,6 @@ public class OriScheMemChatFav {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag")
     private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ans_question_id")
-    private AnsQuestion ansQuestion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orikkiri_id")
