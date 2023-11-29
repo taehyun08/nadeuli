@@ -27,6 +27,6 @@ public class ProductDTO {
     private String gu;
     private List<String> images;
     private String timeAgo;
-    private Member seller;
-    private Member buyer;
+    private MemberDTO seller;
+    private MemberDTO buyer;
 }
