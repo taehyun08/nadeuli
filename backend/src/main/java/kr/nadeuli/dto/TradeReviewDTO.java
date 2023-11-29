@@ -17,6 +17,7 @@ public class TradeReviewDTO {
     private Long affinityScore;
     private String memberPicture;
     private String timeAgo;
-    private Member trader;
-    private Product product;
+    private MemberDTO writer;
+    private MemberDTO trader;
+    private ProductDTO product;
 }

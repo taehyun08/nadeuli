@@ -3,8 +3,6 @@ package kr.nadeuli.service.trade;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.dto.TradeReviewDTO;
 import kr.nadeuli.dto.TradeScheduleDTO;
-import kr.nadeuli.entity.TradeReview;
-import kr.nadeuli.entity.TradeSchedule;
 
 import java.util.List;
 
@@ -23,5 +21,7 @@ public interface TradeService {
 
     void updateTradeSchedule(TradeScheduleDTO tradeScheduleDTO);
 
-    List<TradeScheduleDTO> getTradeSchedulList(String tag, SearchDTO searchDTO);
+    List<TradeScheduleDTO> getTradeScheduleList(String tag, SearchDTO searchDTO);
+
+    void deleteTradeSchedule(Long tradeScheduleId);
 }

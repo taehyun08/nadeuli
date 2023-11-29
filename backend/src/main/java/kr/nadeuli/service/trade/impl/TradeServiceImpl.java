@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public void addTradeReview(TradeReviewDTO tradeReviewDTO) {
         log.info(tradeReviewDTO);
+        log.info(tradeReviewMapper.tradeReviewDTOToTradeReview(tradeReviewDTO));
         tradeReviewRepository.save(tradeReviewMapper.tradeReviewDTOToTradeReview(tradeReviewDTO));
     }
 
@@ -77,10 +79,11 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public List<TradeScheduleDTO> getTradeSchedulList(String tag, SearchDTO searchDTO) {
+    public List<TradeScheduleDTO> getTradeScheduleList(String tag, SearchDTO searchDTO) {
+        LocalDateTime currentTIme = LocalDateTime.now();
         Sort sort = Sort.by(Sort.Direction.DESC, "tradingTime");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
-        Page<TradeSchedule> tradeSchedules = tradeScheduleRepository.findAll(pageable);
+        Page<TradeSchedule> tradeSchedules = tradeScheduleRepository.findTradeScheduleList(Member.builder().tag(tag).build(), currentTIme, pageable);
         log.info(tradeSchedules);
         return tradeSchedules.map(tradeScheduleMapper::tradeScheduleToTradeScheduleDTO).toList();
     }
@@ -90,4 +93,9 @@ public class TradeServiceImpl implements TradeService {
         return tradeScheduleRepository.findById(tradeScheduleId).map(tradeScheduleMapper::tradeScheduleToTradeScheduleDTO).orElse(null);
     }
 
+    @Override
+    public void deleteTradeSchedule(Long tradeScheduleId) {
+        log.info(tradeScheduleId);
+        tradeScheduleRepository.deleteById(tradeScheduleId);
+    }
 }
