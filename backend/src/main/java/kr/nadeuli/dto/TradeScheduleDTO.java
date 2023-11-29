@@ -17,7 +17,7 @@ public class TradeScheduleDTO {
     private Long tradeScheduleId;
     private String tradingLocation;
     private LocalDateTime tradingTime;
-    private Member buyer;
-    private Member seller;
-    private Product product;
+    private MemberDTO buyer;
+    private MemberDTO seller;
+    private ProductDTO product;
 }

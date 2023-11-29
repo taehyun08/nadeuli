@@ -1,5 +1,6 @@
 package kr.nadeuli.product;
 
+import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Member;
@@ -26,13 +27,14 @@ public class ProductApplicationTests {
     private int pageSize;
 
     //@Test
+    //@Transactional
     public void testAddProduct() throws Exception{
         List<String> imageList = new ArrayList<>();
         imageList.add("당근사진.jpg");
         imageList.add("무슨사진.png");
         imageList.add("사진사진.jpg");
         ProductDTO productDTO = ProductDTO.builder()
-                .productId(3L)
+//                .productId(3L)
                 .title("상품제목목")
                 .price(12340L)
                 .isPremium(true)
@@ -43,7 +45,7 @@ public class ProductApplicationTests {
                 .viewNum(0L)
                 .tradingLocation("나는거래장소")
                 .gu("강남구rnrn")
-                .seller(Member.builder().tag("WVU3").build())
+                .seller(MemberDTO.builder().tag("WVU3").build())
                 .build();
         System.out.println(productDTO);
 
@@ -86,7 +88,7 @@ public class ProductApplicationTests {
                                           .viewNum(0L)
                                           .tradingLocation("나는거래장소")
                                           .gu("강남구asdfa")
-                                          .buyer(Member.builder().tag("WVU3").build())
+                                          .buyer(MemberDTO.builder().tag("WVU3").build())
                                           .build();
         productService.updateProduct(productDTO);
     }
