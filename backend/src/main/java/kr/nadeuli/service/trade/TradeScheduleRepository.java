@@ -1,4 +1,4 @@
-package kr.nadeuli.service.trade.impl;
+package kr.nadeuli.service.trade;
 
 import kr.nadeuli.entity.TradeSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;

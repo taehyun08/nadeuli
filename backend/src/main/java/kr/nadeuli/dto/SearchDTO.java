@@ -15,4 +15,5 @@ public class SearchDTO {
     private int pageSize;
     private boolean isSold;
     private boolean isBuyer;
+    private boolean isWriter;
 }
