@@ -1,8 +1,10 @@
 package kr.nadeuli.mapper;
 
 import kr.nadeuli.common.CalculateTimeAgo;
+import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.entity.Image;
+import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Product;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
@@ -20,15 +22,23 @@ public interface ProductMapper {
     @Mapping(target = "nadeuliPayHistories", ignore = true)
     @Mapping(target = "reports", ignore = true)
     @Mapping(target = "oriScheMemChatFavs", ignore = true)
+    @Mapping(target = "regDate", ignore = true)
     @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
+    @Mapping(source = "seller", target = "seller", qualifiedByName = "memberDTOToMember")
+    @Mapping(source = "buyer", target = "buyer", qualifiedByName = "memberDTOToMember")
     Product productDTOToProduct(ProductDTO productDTO);
 
     @Mapping(source = "images", target = "images", qualifiedByName = "imageToString")
     @Mapping(source = "regDate", target = "timeAgo", qualifiedByName = "regDateToTimeAgo")
+    @Mapping(source = "seller", target = "seller", qualifiedByName = "memberToMemberDTO")
+    @Mapping(source = "buyer", target = "buyer", qualifiedByName = "memberToMemberDTO")
     ProductDTO productToProductDTO(Product product);
 
     @Named("stringToImage")
     default List<Image> stringToImage(List<String> images){
+        if(images == null){
+            return null;
+        }
         return images.stream().map(imageName -> {
             return Image.builder().imageName(imageName).build();
         }).collect(Collectors.toList());
@@ -36,12 +46,32 @@ public interface ProductMapper {
 
     @Named("imageToString")
     default List<String> imageToString(List<Image> images){
+        if(images == null){
+            return null;
+        }
         return images.stream().map(Image::getImageName).collect(Collectors.toList());
     }
 
     @Named("regDateToTimeAgo")
-    default Long regDateToTimeAgo(LocalDateTime regDate){
-        return CalculateTimeAgo.calculateTimeDifferenceInMinutes(regDate);
+    default String regDateToTimeAgo(LocalDateTime regDate){
+        return CalculateTimeAgo.calculateTimeDifferenceString(regDate);
+    }
+
+    @Named("memberDTOToMember")
+    default Member memberDTOToMember(MemberDTO memberDTO){
+        if(memberDTO == null){
+            return null;
+        }
+        return Member.builder().tag(memberDTO.getTag()).build();
+    }
+
+    @Named("memberToMemberDTO")
+    default MemberDTO memberToMemberDTO(Member member){
+        if(member == null){
+            return null;
+        }
+        return MemberDTO.builder().tag(member.getTag())
+                     .build();
     }
 
 }

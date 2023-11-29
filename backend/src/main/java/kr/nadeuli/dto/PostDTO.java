@@ -1,8 +1,6 @@
 package kr.nadeuli.dto;
 
 
-import kr.nadeuli.entity.Orikkiri;
-import kr.nadeuli.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,9 +25,9 @@ public class PostDTO {
     private Long postCategory;
     private String gu;
     private String dongNe;
-    private Long timeAgo;
-    private Member writer;
-    private Orikkiri orikkiri;
+    private String timeAgo;
+    private MemberDTO writer;
+    private OrikkiriDTO orikkiri;
     private List<String> images;
 
 }

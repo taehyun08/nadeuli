@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrikkiriRepository extends JpaRepository<Orikkiri, Long> {
 
-
-
 }

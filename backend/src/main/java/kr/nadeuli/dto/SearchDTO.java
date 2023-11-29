@@ -12,5 +12,8 @@ import lombok.NoArgsConstructor;
 public class SearchDTO {
     private String searchKeyword;
     private int currentPage;
-    private int pageUnit;
+    private int pageSize;
+    private boolean isSold;
+    private boolean isBuyer;
+    private boolean isWriter;
 }

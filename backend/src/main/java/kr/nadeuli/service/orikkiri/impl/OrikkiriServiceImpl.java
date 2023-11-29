@@ -4,4 +4,5 @@ import kr.nadeuli.service.orikkiri.OrikkiriService;
 
 public class OrikkiriServiceImpl implements OrikkiriService {
 
+
 }
