@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class CommentDTO {
     private Long commentId;
     private String content;
+    private String timeAgo;
     private Post post;
     private Member writer;
     private Comment refComment;

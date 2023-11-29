@@ -27,7 +27,7 @@ public class PostDTO {
     private Long postCategory;
     private String gu;
     private String dongNe;
-    private Long timeAgo;
+    private String timeAgo;
     private Member writer;
     private Orikkiri orikkiri;
     private List<String> images;
