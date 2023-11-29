@@ -18,6 +18,7 @@ public interface PostMapper {
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "reports", ignore = true)
+    @Mapping(target = "regDate", ignore = true)
     @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
     Post postDTOToPost(PostDTO postDTO);
 
@@ -27,6 +28,9 @@ public interface PostMapper {
 
     @Named("stringToImage")
     default List<Image> stringToImage(List<String> images){
+        if(images == null){
+            return null;
+        }
         return images.stream().map(imageName -> {
             return Image.builder().imageName(imageName).build();
         }).collect(Collectors.toList());
@@ -34,6 +38,9 @@ public interface PostMapper {
 
     @Named("imageToString")
     default List<String> imageToString(List<Image> images){
+        if(images == null){
+            return null;
+        }
         return images.stream().map(Image::getImageName).collect(Collectors.toList());
     }
 
