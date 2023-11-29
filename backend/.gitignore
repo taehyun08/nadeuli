@@ -18,8 +18,12 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application.properties
 application-mysql.properties
 application-monggo.properties
+application-oauth.properties
+application-redis.properties
+application-coolsms.properties
 .idea
 *.iws
 *.iml

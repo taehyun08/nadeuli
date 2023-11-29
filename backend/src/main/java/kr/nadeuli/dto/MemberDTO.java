@@ -30,5 +30,6 @@ public class MemberDTO {
   private String blockReason;
   private LocalDateTime blockEnd;
   private Long blockDay;
+  private String socialId;
 
 }
