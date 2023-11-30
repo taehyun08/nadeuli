@@ -15,7 +15,7 @@ import java.util.Date;
 @EntityListeners(value = {AuditingEntityListener.class})
 @Getter
 abstract class Base {
-    @CreatedDate
-    @Column(updatable = false)
+    @LastModifiedDate
+    @Column(updatable = true)
     private LocalDateTime regDate;
 }
