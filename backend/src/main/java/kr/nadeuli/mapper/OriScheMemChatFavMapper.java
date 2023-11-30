@@ -60,6 +60,7 @@ public interface OriScheMemChatFavMapper {
         }
         return OrikkiriDTO.builder().orikkiriId(orikkiri.getOrikkiriId()).build();
     }
+
     @Named("orikkiriScheduleDTOToOrikkiriSchedule")
     default OrikkiriSchedule orikkiriScheduleDTOToOrikkiriSchedule(OrikkiriScheduleDTO orikkiriScheduleDTO){
         if(orikkiriScheduleDTO == null){
