@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BlockDTO {
+  //1. 회원 정지
 
   private Long id;
   private String blockReason;
   private LocalDateTime blockEnd;
   private Long blockDay;
+  private MemberDTO blockMember;
 
 }

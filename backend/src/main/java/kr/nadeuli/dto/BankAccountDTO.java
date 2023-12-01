@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BankAccountDTO {
+  //1. 계좌정보 DTO
 
   private Long id;
   private String bankAccountNum;

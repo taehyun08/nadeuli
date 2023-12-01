@@ -3,7 +3,7 @@ package kr.nadeuli.oauthinfo;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import kr.nadeuli.common.Role;
+import kr.nadeuli.category.Role;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;

@@ -47,7 +47,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    //StringUtils
+    //쉬운 파싱을 위한 StringUtils
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
     //CoolSMS
@@ -56,9 +56,11 @@ dependencies {
     //Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+    //api 통신을위한 가짜 객체를생성. 결과값을 미리 정할수있음
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
 
+    //WebClient 사용해서 외부 API 호출하기위한 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('bootBuildImage') {

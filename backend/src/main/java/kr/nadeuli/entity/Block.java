@@ -15,16 +15,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"blockMember"})
 @Table(name = "block")
 public class Block {
 
@@ -44,6 +45,6 @@ public class Block {
   private Long blockDay;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "block_member_tag", referencedColumnName = "tag", nullable = false)
+  @JoinColumn(name = "block_member_tag", nullable = false)
   private Member blockMember;
 }

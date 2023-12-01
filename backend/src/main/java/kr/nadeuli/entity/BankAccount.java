@@ -14,11 +14,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,6 +41,6 @@ public class BankAccount {
   private String bankName;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "tag", referencedColumnName = "tag", nullable = false)
+  @JoinColumn(name = "tag", nullable = false)
   private Member member;
 }

@@ -11,7 +11,7 @@ import kr.nadeuli.mapper.MemberMapper;
 import kr.nadeuli.oauthinfo.OAuth2CustomUser;
 import kr.nadeuli.oauthinfo.OAuthAttributes;
 import kr.nadeuli.service.member.MemberService;
-import kr.nadeuli.service.member.impl.MemberRepository;
+import kr.nadeuli.service.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -97,7 +97,7 @@ public class CustomOauth2MemberServiceImpl implements OAuth2UserService<OAuth2Us
    */
   private void saveUser(OAuthAttributes attributes) throws Exception {
     MemberDTO memberDTO = attributes.toEntity(attributes.getOauth2UserInfo());
-    memberDTO.setTag(memberService.generateUniqueTag()); // 변경
+    memberDTO.setTag(memberService.addTag()); // 변경
     memberRepository.save(memberMapper.memberDTOToMember(memberDTO));
   }
 }
