@@ -31,7 +31,7 @@ public class Comment extends Base{
     @JoinColumn(name = "writer_tag")
     private Member writer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "ref_comment_id")
     private Comment refComment;
 

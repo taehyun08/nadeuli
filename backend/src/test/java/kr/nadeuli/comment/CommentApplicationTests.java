@@ -56,9 +56,9 @@ public class CommentApplicationTests {
         System.out.println(commentList);
     }
 
-    //@Test
+    @Test
     public void testDeleteComment() throws Exception{
-        long commentID = 3L;
+        long commentID = 2L;
         commentService.deleteComment(commentID);
     }
 
@@ -68,7 +68,7 @@ public class CommentApplicationTests {
     //@Test
     public void testUpdateComment() throws Exception {
         CommentDTO commentDTO = CommentDTO.builder()
-                .commentId(4L)
+                .commentId(2L)
                 .content("있겠냐???")
                 .timeAgo("방금 전")
                 .post(PostDTO.builder().postId(1L).build())
