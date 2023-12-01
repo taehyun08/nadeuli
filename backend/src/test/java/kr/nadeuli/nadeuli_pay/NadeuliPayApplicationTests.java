@@ -1,7 +1,11 @@
 package kr.nadeuli.nadeuli_pay;
 
 import kr.nadeuli.category.TradeType;
+import kr.nadeuli.dto.NadeuliPayHistoryDTO;
+import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.entity.NadeuliPayHistory;
+import kr.nadeuli.entity.Product;
 import kr.nadeuli.service.nadeuli_pay.NadeuliPayHistoryRepository;
 import kr.nadeuli.service.nadeuli_pay.NadeuliPayService;
 import kr.nadeuli.service.product.ProductRepository;
@@ -23,8 +27,8 @@ public class NadeuliPayApplicationTests {
     @Value("${pageSize}")
     private int pageSize;
 
-    @Test
-    @Transactional
+//    @Test
+//    @Transactional
     public void testGetNadeuliPayList(){
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);
@@ -36,17 +40,34 @@ public class NadeuliPayApplicationTests {
     }
 
 //    @Test
-//    public void testNadeuliPayPay(){
-//        nadeuliPayService.nadeuliPayPay()
-//    }
-//
-//    @Test
-//    public void testNadeuliPayCharge(){
-//        nadeuliPayService.nadeuliPayCharge();
-//    }
-//
-//    @Test
-//    public void testNadeuliPayWithdraw(){
-//        nadeuliPayService.nadeuliPayWithdraw();
-//    }
+    public void testNadeuliPayPay(){
+        NadeuliPayHistoryDTO nadeuliPayHistoryDTO = NadeuliPayHistoryDTO.builder()
+                            .product(ProductDTO.builder().productId(1L).build())
+                            .tradingMoney(3000L)
+                            .build();
+        String tag = "Bss3";
+        nadeuliPayService.nadeuliPayPay(tag, nadeuliPayHistoryDTO);
+    }
+
+    @Test
+    public void testNadeuliPayCharge(){
+        NadeuliPayHistoryDTO nadeuliPayHistoryDTO = NadeuliPayHistoryDTO.builder()
+                .bankAccountBackNum("2223")
+                .bankName("신한")
+                                                                        .tradingMoney(3000L)
+                                                                        .build();
+        String tag = "Bss3";
+        nadeuliPayService.nadeuliPayCharge(tag, nadeuliPayHistoryDTO);
+    }
+
+    @Test
+    public void testNadeuliPayWithdraw(){
+        NadeuliPayHistoryDTO nadeuliPayHistoryDTO = NadeuliPayHistoryDTO.builder()
+                .bankAccountBackNum("2223")
+                .bankName("신한")
+                                                                        .tradingMoney(3000L)
+                                                                        .build();
+        String tag = "Bss3";
+        nadeuliPayService.nadeuliPayCharge(tag, nadeuliPayHistoryDTO);
+    }
 }

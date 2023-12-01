@@ -74,7 +74,9 @@ public interface PostMapper {
             return null;
         }
         return images.stream().map(imageName -> {
-            return Image.builder().imageName(imageName).build();
+            return Image.builder()
+                    .imageName(imageName)
+                    .build();
         }).collect(Collectors.toList());
     }
 
