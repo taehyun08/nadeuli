@@ -2,17 +2,15 @@ package kr.nadeuli.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SmsDTO {
-  //1. 휴대폰번호 인증을위한 DTO
-
-  private String cellphone;
-  private String authNumber;
-
+public class GpsDTO {
+  //1. js의 geolocation을통한 좌표를 저장하는 DTO
+  double x;
+  double y;
 }

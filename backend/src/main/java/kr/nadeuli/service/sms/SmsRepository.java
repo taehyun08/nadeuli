@@ -1,4 +1,4 @@
-package kr.nadeuli.sms.impl;
+package kr.nadeuli.service.sms;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package kr.nadeuli.service.jwt.impl;
 
 import java.util.HashMap;
 import java.util.Optional;
-import kr.nadeuli.common.Role;
+import kr.nadeuli.category.Role;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.RefreshTokenDTO;
 import kr.nadeuli.dto.TokenDTO;
@@ -13,13 +13,10 @@ import kr.nadeuli.security.CustomAuthenticationToken;
 import kr.nadeuli.service.jwt.AuthenticationService;
 import kr.nadeuli.service.jwt.JWTService;
 import kr.nadeuli.service.member.MemberService;
-import kr.nadeuli.service.member.impl.MemberRepository;
-import kr.nadeuli.sms.SmsService;
+import kr.nadeuli.service.member.MemberRepository;
+import kr.nadeuli.service.sms.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,7 +47,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       throw new IllegalArgumentException("이미 존재하는 회원입니다. 회원의 정보: " + existingMember.get());
     }else{
       // 회원이 존재하지 않는 경우
-      memberDTO.setTag(memberService.generateUniqueTag());
+      memberDTO.setTag(memberService.addTag());
+      //기본값이 유저이기떄문에 필요없음
       memberDTO.setRole(Role.USER);
       Member member = memberMapper.memberDTOToMember(memberDTO);
       memberRepository.save(member);
@@ -66,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     // 회원이 존재할 경우 jwt발급
     if (existingMember.isPresent()) {
-      smsService.sendOne(cellphone);
+//      smsService.sendOne(cellphone);
 
       MemberDTO existMember = existingMember.get();
       return accessToken(existMember);

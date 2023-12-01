@@ -2,7 +2,7 @@ package kr.nadeuli.oauthinfo;
 
 
 import java.util.Map;
-import kr.nadeuli.common.Role;
+import kr.nadeuli.category.Role;
 
 import kr.nadeuli.dto.MemberDTO;
 import lombok.AllArgsConstructor;
