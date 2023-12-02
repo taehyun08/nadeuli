@@ -7,19 +7,12 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import kr.nadeuli.dto.MemberDTO;
-import kr.nadeuli.dto.TokenDTO;
-import kr.nadeuli.mapper.MemberMapper;
 import kr.nadeuli.service.jwt.JWTService;
-import kr.nadeuli.service.member.impl.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +20,16 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @Service
 public class JWTServiceImpl implements JWTService {
+
+  @Value("${jwt.secretKey}")
+  private String secretKey;
+
+  @Value("${jwt.accessTokenExpirationTime}")
+  private long accessTokenExpirationTime;
+
+  @Value("${jwt.refreshTokenExpirationTime}")
+  private long refreshTokenExpirationTime;
+
 
   ///Method
   //1. 생성을 담당하는 토큰 생성 메서드
@@ -40,7 +43,7 @@ public class JWTServiceImpl implements JWTService {
     // - 압축메소드 호출
     return Jwts.builder().setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+        .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime))
         .signWith(getSignKey(), SignatureAlgorithm.HS256)
         .compact();
   }
@@ -52,7 +55,7 @@ public class JWTServiceImpl implements JWTService {
     return Jwts.builder()
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+        .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime))
         .signWith(getSignKey(), SignatureAlgorithm.HS256)
         .compact();
   }
@@ -66,7 +69,7 @@ public class JWTServiceImpl implements JWTService {
     // - 압축메소드 호출
     return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 604800000))
+        .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime))
         .signWith(getSignKey(), SignatureAlgorithm.HS256)
         .compact();
   }
@@ -75,7 +78,7 @@ public class JWTServiceImpl implements JWTService {
   private Key getSignKey(){
     // - JWT에서 제공하는 디코더를 사용하여 바이트리스트를 반환하는 키 할당
     // - 32자의 비밀키를 입력한 뒤 토큰 생성 메소드 호출 시 아래 값을 가져올 수 있다.
-    byte[] key = Decoders.BASE64.decode("413F4428472B4B6250655368566D5970337336763979244226452948404D6351");
+    byte[] key = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(key);
   }
 
@@ -138,4 +141,5 @@ public class JWTServiceImpl implements JWTService {
 
     //JwtAuthenticationFilter로 이동하여 토큰 유효성 확인
   }
+
 }

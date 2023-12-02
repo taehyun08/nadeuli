@@ -1,6 +1,6 @@
 package kr.nadeuli.security;
 
-import kr.nadeuli.service.member.impl.MemberRepository;
+import kr.nadeuli.service.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
