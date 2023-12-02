@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring")
 public interface BlockMapper {
 
-  @Mapping(target = "blockMember", source = "blockMember.tag")
+  @Mapping(target = "blockMember", source = "blockMember")
   BlockDTO blockToBlockDTO(Block block);
 
   Block blockDTOToBlock(BlockDTO blockDTO);

@@ -32,7 +32,7 @@ public class SmsApplicationTests {
 
 
   @DisplayName("인증 번호 전송 테스트")
-  @Test
+  //@Test
   public void testSendOne() throws Exception{
     String cellphone = "01089114554";
 

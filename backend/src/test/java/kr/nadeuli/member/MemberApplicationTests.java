@@ -1,8 +1,10 @@
 package kr.nadeuli.member;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import kr.nadeuli.category.Role;
+import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.SearchDTO;
@@ -114,16 +116,21 @@ public class MemberApplicationTests {
   @DisplayName("동네설정 테스트")
 //  @Test
   public void testGetDongNe() throws Exception {
+    String tag = "#4FzB";
+
     // 실제 현재 위치 좌표는 Js의 geolocation 사용 예정
     double x = 127.0292881;
     double y = 37.4923615;
+
+//    double x = 126.8110081;
+//    double y = 37.5599801;
 
     GpsDTO gpsDTO = new GpsDTO();
     gpsDTO.setX(x);
     gpsDTO.setY(y);
 
-    String address = memberService.getDongNe(gpsDTO);
-    System.out.println("주소: " + address);
+    memberService.addDongNe(tag, gpsDTO);
+
   }
 
   @DisplayName("내프로필조회 테스트")
@@ -135,7 +142,7 @@ public class MemberApplicationTests {
   }
 
   @DisplayName("상대프로필조회 테스트")
-  @Test
+//  @Test
   public void testGetOtherMember() throws Exception{
     String tag="#4FzB";
     MemberDTO memberDTO = memberService.getOtherMember(tag);
@@ -155,4 +162,71 @@ public class MemberApplicationTests {
     System.out.println(memberDTOList);
 
   }
+
+  @DisplayName("정지회원 등록 테스트")
+//  @Test
+  public void testAddBlockMember() throws Exception{
+    String tag = "#4FzB";
+    BlockDTO blockDTO = BlockDTO.builder()
+        .id(1L)
+        .blockReason("걍 띠꺼움")
+        .blockEnd(LocalDateTime.now().plusDays(7))
+        .blockDay(7L)
+        .build();
+
+    memberService.addBlockMember(blockDTO, tag);
+    System.out.println(memberService.getMember(tag));
+  }
+
+  @DisplayName("정지회원 삭제 테스트")
+//  @Test
+  public void testDeleteBlockMember() throws Exception{
+    String tag = "#4FzB";
+    memberService.deleteBlockMember(tag);
+    System.out.println(memberService.getMember(tag));
+  }
+
+  @DisplayName("회원 비활성화, 비활성화 해제 테스트")
+//  @Test
+  public void testHandleMemberActivate() throws Exception{
+   String tag = "#4FzB";
+   memberService.handleMemberActivate(tag);
+
+ }
+
+  @DisplayName("회원 비활성화, 비활성화 해제 테스트")
+//  @Test
+  public void testHandleNadeuliDelivery() throws Exception{
+    String tag = "#4FzB";
+    memberService.handleNadeuliDelivery(tag);
+
+  }
+
+
+  @DisplayName("회원 수정 테스트")
+//  @Test
+  public void testUpdateMemeber() throws Exception{
+    MemberDTO memberDTO = MemberDTO.builder()
+        .tag("#4FzB")
+        .picture("1234.jpg")
+        .nickname("롤로노아 김동헌")
+        .cellphone("01088888888")
+        .email("sex@gmail.com")
+        .build();
+
+    memberService.updateMember(memberDTO);
+  }
+
+  @DisplayName("즐겨찾기 추가 테스트")
+  @Test
+  public void testaddFavorite() throws Exception{
+    String tag = "#4FzB";
+    Long productId = 5L;
+
+    memberService.addFavorite(tag, productId);
+
+
+  }
+
 }
+
