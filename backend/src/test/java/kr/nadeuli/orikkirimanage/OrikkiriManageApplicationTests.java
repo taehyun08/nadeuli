@@ -61,22 +61,22 @@ public class OrikkiriManageApplicationTests {
         orikkiriManageService.deleteOrikkiri(orikkiriId);
     }
 
-    //@Test
-    //    @RepeatedTest(3)
-    public void testAddAnsQuestion() throws Exception {
-        long orikkiriId = 2L;
-        AnsQuestionDTO ansQuestionDTO = AnsQuestionDTO.builder()
-                .content("")
-                .orikkiri(OrikkiriDTO.builder().orikkiriId(2L).build())
-//                .oriScheMemChatFav(OriScheMemChatFavDTO.builder().oriScheMemChatFavId().build())
-
-                .build();
-
-        System.out.println(orikkiriDTO);
-
-        orikkiriManageService.addAnsQuestion(orikkiriDTO);
-        orikkiriManageService.updateAnsQuestion(orikkiriDTO);
-    }
+//    //@Test
+//    //    @RepeatedTest(3)
+//    public void testAddAnsQuestion() throws Exception {
+//        long orikkiriId = 2L;
+//        AnsQuestionDTO ansQuestionDTO = AnsQuestionDTO.builder()
+//                .content("")
+//                .orikkiri(OrikkiriDTO.builder().orikkiriId(2L).build())
+////                .oriScheMemChatFav(OriScheMemChatFavDTO.builder().oriScheMemChatFavId().build())
+//
+//                .build();
+//
+//        System.out.println(orikkiriDTO);
+//
+//        orikkiriManageService.addAnsQuestion(orikkiriDTO);
+//        orikkiriManageService.updateAnsQuestion(orikkiriDTO);
+//    }
 
     //    @Test
 //    @Transactional

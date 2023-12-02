@@ -11,7 +11,9 @@ import kr.nadeuli.dto.AddressDTO;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.ProductDTO;
+import kr.nadeuli.dto.ReportDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.OriScheMemChatFav;
@@ -20,10 +22,12 @@ import kr.nadeuli.mapper.BlockMapper;
 import kr.nadeuli.mapper.MemberMapper;
 import kr.nadeuli.mapper.OriScheMemChatFavMapper;
 import kr.nadeuli.mapper.ProductMapper;
+import kr.nadeuli.mapper.ReportMapper;
 import kr.nadeuli.scheduler.BlockScheduler;
 import kr.nadeuli.service.member.BlockRepository;
 import kr.nadeuli.service.member.MemberRepository;
 import kr.nadeuli.service.member.MemberService;
+import kr.nadeuli.service.member.ReportRepository;
 import kr.nadeuli.service.orikkiri.OriScheMenChatFavRepository;
 import kr.nadeuli.service.product.ProductService;
 import kr.nadeuli.service.sms.SmsService;
@@ -70,8 +74,15 @@ public class MemberServiceImpl implements MemberService{
 
   private final ProductMapper productMapper;
 
+  private final ReportRepository reportRepository;
+
+  private final ReportMapper reportMapper;
+
   @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
   String mapKey;
+
+  @Value("${affinity}")
+  String affinity;
 
   @Value("${kakao.map.api-url}")
   private String mapApiUrl;
@@ -292,6 +303,7 @@ public class MemberServiceImpl implements MemberService{
 
   }
 
+  //상품 즐겨찾기 추가
   @Override
   public void addFavorite(String tag, Long productId) throws Exception {
     Member member = memberMapper.memberDTOToMember(getMember(tag));
@@ -304,31 +316,35 @@ public class MemberServiceImpl implements MemberService{
     oriScheMenChatFavRepository.save(oriScheMemChatFav);
   }
 
+  //상품 즐겨찾기 해제
   @Override
   public void deleteFavorite(String tag, Long productId) throws Exception {
     Member member = memberMapper.memberDTOToMember(getMember(tag));
     Product product = productMapper.productDTOToProduct(productService.getProduct(productId));
-    OriScheMemChatFav oriScheMemChatFav = OriScheMemChatFav.builder()
-        .product(product)
-        .member(member)
-        .build();
 
-    oriScheMenChatFavRepository.save(oriScheMemChatFav);
+    oriScheMenChatFavRepository.deleteByMemberAndProduct(member,product);
   }
 
+  //상품 즐겨찾기 목록 조회
   @Override
-  public void getFavoriteList(String tag) throws Exception {
-
+  public List<OriScheMemChatFavDTO> getFavoriteList(String tag, SearchDTO searchDTO) throws Exception {
+    Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
+    return oriScheMenChatFavRepository.findProductsByMemberTag(tag, pageable)
+        .map(oriScheMemChatFavMapper::oriScheMemChatFavToOriScheMemChatFavDTO)
+        .toList();
   }
 
+  //신고
   @Override
-  public void report(String tag) throws Exception {
-
+  public void report(ReportDTO reportDTO) throws Exception {
+    log.info("ReportDTO는 {}",reportDTO);
+    reportRepository.save(reportMapper.reportDTOToReport(reportDTO));
   }
 
+  //친화력 툴팁
   @Override
-  public void getAffinityToolTip(String tag) throws Exception {
-
+  public String getAffinityToolTip() throws Exception {
+    return affinity;
   }
 
 
