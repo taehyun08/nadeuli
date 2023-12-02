@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"member", "ansQuestion", "orikkiri", "orikkiriSchedule", "product"})
+@ToString(exclude = {"member", "ansQuestions", "orikkiri", "orikkiriSchedule", "product"})
 @Table(name = "ori_sche_mem_chat_fav")
 public class OriScheMemChatFav {
 
