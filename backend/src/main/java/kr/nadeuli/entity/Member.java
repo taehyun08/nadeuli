@@ -135,7 +135,7 @@ public class Member implements UserDetails {
   @OneToMany(mappedBy = "deliveryPerson", fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeuliDeliveries;
 
-  @OneToMany(mappedBy = "buyer", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeulibuyers;
 
   //JWT UserDetails OverRiding

@@ -19,11 +19,24 @@ public interface MemberService {
 
   public List<MemberDTO> getMemberList(SearchDTO searchDTO) throws Exception;
 
-  public String getDongNe(GpsDTO gpsDTO) throws Exception;
+  public void addDongNe(String tag, GpsDTO gpsDTO) throws Exception;
 
-  public void addDisableMember(BlockDTO blockDTO, String tag) throws Exception;
+  public void addBlockMember(BlockDTO blockDTO, String tag) throws Exception;
 
-  public void deleteDisableMember(String tag) throws Exception;
+  public void deleteBlockMember(String tag) throws Exception;
 
+  public void handleMemberActivate(String tag) throws Exception;
+
+  public void handleNadeuliDelivery(String tag) throws Exception;
+
+  public void addFavorite(String tag, Long productId) throws Exception;
+
+  public void deleteFavorite(String tag, Long productId) throws Exception;
+
+  public void getFavoriteList(String tag) throws Exception;
+
+  public void report(String tag) throws Exception;
+
+  public void getAffinityToolTip(String tag) throws Exception;
 
 }
