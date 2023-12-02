@@ -36,6 +36,6 @@ public class OrikkiriSchedule {
     @JoinColumn(name = "orikkiri_id")
     private Orikkiri orikkiri;
 
-    @OneToMany(mappedBy = "orikkiriSchedule", fetch =  FetchType.LAZY)
+    @OneToMany(mappedBy = "orikkiriSchedule", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OriScheMemChatFav> OriScheMemChatFavs;
 }

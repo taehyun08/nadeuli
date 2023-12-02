@@ -1,5 +1,6 @@
 package kr.nadeuli.dto;
 
+import kr.nadeuli.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class OrikkiriDTO {
     private String orikkiriPicture;
     private String orikkiriIntroduction;
     private LocalDateTime orikkiriRegistTime;
+//    private Member tag;
 
 }

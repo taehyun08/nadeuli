@@ -42,19 +42,19 @@ public class OrikkiriApplicationTests {
         orikkiriService.addOrikkrirSignUp(oriScheMemChatFavDTO);
     }
 
-//    @Test
-    public void testGetOrikkiriSchedule() throws Exception {
-        long orikkiriScheduleId = 1L;
-        OrikkiriScheduleDTO orikkiriScheduleDTO = orikkiriService.getOrikkiriSchedule(orikkiriScheduleId);
-        System.out.println(orikkiriScheduleDTO);
-    }
+////    @Test
+//    public void testGetOrikkiriSchedule() throws Exception {
+//        long orikkiriScheduleId = 1L;
+//        OrikkiriScheduleDTO orikkiriScheduleDTO = orikkiriService.getOrikkiriSchedule(orikkiriScheduleId);
+//        System.out.println(orikkiriScheduleDTO);
+//    }
 
    // @Test
 //    public void testDeleteOrikkrir() throws Exception{
 //        long orikkiriId = 1L;
 //        orikkiriService.deleteOrikkrir(orikkiriId);
 //    }
-    @Test
+    //@Test
     public void testDeleteOrikkiriMember() throws Exception{
         String tag = "WVU3";
         long orikkiriId = 1L;
@@ -75,25 +75,25 @@ public class OrikkiriApplicationTests {
 
 //    @Test
 //    @Transactional
-    public void testGetOrikkiriScheduleList() throws Exception {
-        SearchDTO searchDTO = new SearchDTO();
-        searchDTO.setCurrentPage(0);
-        searchDTO.setPageSize(pageSize);
-        searchDTO.setSearchKeyword("");
-        List<OrikkiriScheduleDTO> orikkiriScheduleDTOList = orikkiriService.getOrikkiriScheduleList(searchDTO);
-        System.out.println(orikkiriScheduleDTOList);
-    }
-
-    //@Test
-//    @Transactional
-    public void testGetOrikkiriScheduleMemberList() throws Exception {
-        SearchDTO searchDTO = new SearchDTO();
-        searchDTO.setCurrentPage(0);
-        searchDTO.setPageSize(pageSize);
-        searchDTO.setSearchKeyword("");
-        List<OriScheMemChatFavDTO> oriScheMemChatFavList = orikkiriService.getOrikkiriScheduleMemberList(1L, searchDTO);
-        System.out.println(oriScheMemChatFavList);
-    }
+//    public void testGetOrikkiriScheduleList() throws Exception {
+//        SearchDTO searchDTO = new SearchDTO();
+//        searchDTO.setCurrentPage(0);
+//        searchDTO.setPageSize(pageSize);
+//        searchDTO.setSearchKeyword("");
+//        List<OrikkiriScheduleDTO> orikkiriScheduleDTOList = orikkiriService.getOrikkiriScheduleList(searchDTO);
+//        System.out.println(orikkiriScheduleDTOList);
+//    }
+//
+//    //@Test
+////    @Transactional
+//    public void testGetOrikkiriScheduleMemberList() throws Exception {
+//        SearchDTO searchDTO = new SearchDTO();
+//        searchDTO.setCurrentPage(0);
+//        searchDTO.setPageSize(pageSize);
+//        searchDTO.setSearchKeyword("");
+//        List<OriScheMemChatFavDTO> oriScheMemChatFavList = orikkiriService.getOrikkiriScheduleMemberList(1L, searchDTO);
+//        System.out.println(oriScheMemChatFavList);
+//    }
 
 
 

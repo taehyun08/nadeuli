@@ -1,9 +1,6 @@
 package kr.nadeuli.service.orikkiri;
 
-import kr.nadeuli.entity.Member;
-import kr.nadeuli.entity.OriScheMemChatFav;
-import kr.nadeuli.entity.Orikkiri;
-import kr.nadeuli.entity.OrikkiriSchedule;
+import kr.nadeuli.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +11,10 @@ public interface OriScheMenChatFavRepository extends JpaRepository<OriScheMemCha
 
     Page<OriScheMemChatFav> findByOrikkiriSchedule(OrikkiriSchedule orikkiriSchedule, Pageable pageable);
 
-    void deleteByMemberAndOrikkiri(Member build, Orikkiri build1);
+    Page<OriScheMemChatFav> findByAnsQuestions(AnsQuestion ansQuestion, Pageable pageable);
+
+    Page<OriScheMemChatFav> findByMemberAndOrikkiriNotNull(Member member, Orikkiri orikkiri, Pageable pageable);
+
+    void deleteByMemberAndOrikkiri(Member member, Orikkiri orikkiriId);
+
 }
