@@ -3,10 +3,7 @@ package kr.nadeuli.service.orikkiri.impl;
 import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.OrikkiriScheduleDTO;
 import kr.nadeuli.dto.SearchDTO;
-import kr.nadeuli.entity.Member;
-import kr.nadeuli.entity.OriScheMemChatFav;
-import kr.nadeuli.entity.Orikkiri;
-import kr.nadeuli.entity.OrikkiriSchedule;
+import kr.nadeuli.entity.*;
 import kr.nadeuli.mapper.OriScheMemChatFavMapper;
 import kr.nadeuli.mapper.OrikkiriScheduleMapper;
 import kr.nadeuli.service.orikkiri.OriScheMenChatFavRepository;
@@ -30,9 +27,9 @@ public class OrikkiriServiceImpl implements OrikkiriService {
 
     private final OriScheMenChatFavRepository oriScheMenChatFavRepository;
     private final OriScheMemChatFavMapper oriScheMemChatFavMapper;
+
     private final OrikkiriScheduleRepository orikkiriScheduleRepository;
     private final OrikkiriScheduleMapper orikkiriScheduleMapper;
-
 
     @Override
     public void addOrikkrirSignUp(OriScheMemChatFavDTO oriScheMemChatFavDTO) throws Exception {
@@ -41,11 +38,25 @@ public class OrikkiriServiceImpl implements OrikkiriService {
         oriScheMenChatFavRepository.save(oriScheMemChatFav);
     }
 
-//    @Override
-//    public void deleteOrikkrir(long orikkiriId) throws Exception {
-//        log.info(orikkiriId);
-//        oriScheMenChatFavRepository.deleteById(orikkiriId);
-//    }
+    @Override
+    public List<OriScheMemChatFavDTO> getOrikkiriSignUpList(long ansQuestionId, SearchDTO searchDTO) throws Exception {
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
+        Page<OriScheMemChatFav> oriScheMemChatFavPage;
+        oriScheMemChatFavPage = oriScheMenChatFavRepository.findByAnsQuestions(AnsQuestion.builder().ansQuestionId(ansQuestionId).build(), pageable);
+        log.info(oriScheMemChatFavPage);
+        return oriScheMemChatFavPage.map(oriScheMemChatFavMapper::oriScheMemChatFavToOriScheMemChatFavDTO).toList();
+    }
+
+    @Override
+    public List<OriScheMemChatFavDTO> getMyOrikkiriList(String tag, long orikkiriId, SearchDTO searchDTO) throws Exception {
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
+        Page<OriScheMemChatFav> oriScheMemChatFavPage;
+        oriScheMemChatFavPage = oriScheMenChatFavRepository
+                .findByMemberAndOrikkiriNotNull(Member.builder().tag(tag).build(), Orikkiri.builder().orikkiriId(orikkiriId).build(), pageable);
+        log.info(oriScheMemChatFavPage);
+        return oriScheMemChatFavPage.map(oriScheMemChatFavMapper::oriScheMemChatFavToOriScheMemChatFavDTO).toList();
+
+    }
 
     @Override
     public void deleteOrikkiriMember(String tag, long orikkiriId) throws Exception {
@@ -67,24 +78,16 @@ public class OrikkiriServiceImpl implements OrikkiriService {
         return oriScheMemChatFavPage.map(oriScheMemChatFavMapper::oriScheMemChatFavToOriScheMemChatFavDTO).toList();
     }
 
-    //스케쥴 구분 하기위한 수정 필요
-    @Override
-    public List<OrikkiriScheduleDTO> getOrikkiriScheduleList(SearchDTO searchDTO) throws Exception {
-        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
-        Page<OrikkiriSchedule> orikkiriSchedulePage;
-        orikkiriSchedulePage = orikkiriScheduleRepository.findAll(pageable);
-
-        log.info(orikkiriSchedulePage);
-        return orikkiriSchedulePage.map(orikkiriScheduleMapper::orikkiriScheduleToOrikkiriScheduleDTO).toList();
-    }
-
-    @Override
-    public OrikkiriScheduleDTO getOrikkiriSchedule(long orikkiriScheduleId) throws Exception {
-        return orikkiriScheduleRepository.findById(orikkiriScheduleId).map(orikkiriScheduleMapper::orikkiriScheduleToOrikkiriScheduleDTO).orElse(null);
-    }
 
     @Override
     public void addOrikkiriScheduleMember(OriScheMemChatFavDTO oriScheMemChatFavDTO) throws Exception {
+        OriScheMemChatFav oriScheMemChatFav = oriScheMemChatFavMapper.oriScheMemChatFavDTOToOriScheMemChatFav(oriScheMemChatFavDTO);
+        log.info(oriScheMemChatFav);
+        oriScheMenChatFavRepository.save(oriScheMemChatFav);
+    }
+
+    @Override
+    public void addOrikkiriMember(OriScheMemChatFavDTO oriScheMemChatFavDTO) throws Exception {
         OriScheMemChatFav oriScheMemChatFav = oriScheMemChatFavMapper.oriScheMemChatFavDTOToOriScheMemChatFav(oriScheMemChatFavDTO);
         log.info(oriScheMemChatFav);
         oriScheMenChatFavRepository.save(oriScheMemChatFav);
@@ -98,6 +101,44 @@ public class OrikkiriServiceImpl implements OrikkiriService {
         log.info(oriScheMemChatFavPage);
         return oriScheMemChatFavPage.map(oriScheMemChatFavMapper::oriScheMemChatFavToOriScheMemChatFavDTO).toList();
     }
+
+    @Override
+    public void addOrikkiriSchedule(OrikkiriScheduleDTO orikkiriScheduleDTO) throws Exception {
+        OrikkiriSchedule orikkiriSchedule = orikkiriScheduleMapper.orikkiriScheduleDTOToOrikkiriSchedule(orikkiriScheduleDTO);
+        log.info(orikkiriSchedule);
+        orikkiriScheduleRepository.save(orikkiriSchedule);
+    }
+
+    //스케쥴 구분 하기위한 수정 필요
+    @Override
+    public List<OrikkiriScheduleDTO> getOrikkiriScheduleList(long orikkiriId, SearchDTO searchDTO) throws Exception {
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
+        Page<OrikkiriSchedule> orikkiriSchedulePage;
+        orikkiriSchedulePage = orikkiriScheduleRepository.findByOrikkiri(Orikkiri.builder().orikkiriId(orikkiriId).build(), pageable);
+
+        log.info(orikkiriSchedulePage);
+        return orikkiriSchedulePage.map(orikkiriScheduleMapper::orikkiriScheduleToOrikkiriScheduleDTO).toList();
+    }
+
+    @Override
+    public OrikkiriScheduleDTO getOrikkiriSchedule(long orikkiriScheduleId) throws Exception {
+        return orikkiriScheduleRepository.findById(orikkiriScheduleId).map(orikkiriScheduleMapper::orikkiriScheduleToOrikkiriScheduleDTO).orElse(null);
+    }
+
+
+    @Override
+    public void updateOrikkiriSchedule(OrikkiriScheduleDTO orikkiriScheduleDTO) throws Exception {
+        OrikkiriSchedule orikkiriSchedule = orikkiriScheduleMapper.orikkiriScheduleDTOToOrikkiriSchedule(orikkiriScheduleDTO);
+        log.info(orikkiriSchedule);
+        orikkiriScheduleRepository.save(orikkiriSchedule);
+    }
+
+    @Override
+    public void deleteOrikkiriSchedule(long orikkiriScheduleId) throws Exception {
+        log.info(orikkiriScheduleId);
+        orikkiriScheduleRepository.findById(orikkiriScheduleId);
+    }
+
 
 
 }
