@@ -7,15 +7,18 @@ import kr.nadeuli.category.Role;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.OriScheMemChatFavDTO;
+import kr.nadeuli.dto.ProductDTO;
+import kr.nadeuli.dto.ReportDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.dto.SmsDTO;
-import kr.nadeuli.entity.Member;
 import kr.nadeuli.mapper.MemberMapper;
 import kr.nadeuli.service.jwt.AuthenticationService;
-import kr.nadeuli.service.member.MemberService;
 import kr.nadeuli.service.member.MemberRepository;
-import kr.nadeuli.service.sms.SmsService;
+import kr.nadeuli.service.member.MemberService;
+import kr.nadeuli.service.product.ProductService;
 import kr.nadeuli.service.sms.SmsRepository;
+import kr.nadeuli.service.sms.SmsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -44,6 +47,9 @@ public class MemberApplicationTests {
 
   @Autowired
   SmsRepository smsRepository;
+
+  @Autowired
+  ProductService productService;
 
   @Value("${pageSize}")
   private int pageSize;
@@ -218,15 +224,56 @@ public class MemberApplicationTests {
   }
 
   @DisplayName("즐겨찾기 추가 테스트")
-  @Test
+//  @Test
   public void testaddFavorite() throws Exception{
+    String tag = "#4FzB";
+    Long productId = 6L;
+
+    memberService.addFavorite(tag, productId);
+  }
+
+  @DisplayName("즐겨찾기 삭제 테스트")
+//  @Test
+  public void testDeleteFavorite() throws Exception{
     String tag = "#4FzB";
     Long productId = 5L;
 
-    memberService.addFavorite(tag, productId);
+    memberService.deleteFavorite(tag, productId);
+  }
 
+  @DisplayName("즐겨찾기 목록 조회 테스트")
+//  @Test
+  public void testGetFavoriteList() throws Exception{
+    SearchDTO searchDTO = new SearchDTO();
+    searchDTO.setCurrentPage(0);
+    searchDTO.setPageSize(pageSize);
+    searchDTO.setSearchKeyword("");
+    List<OriScheMemChatFavDTO> oriScheMemChatFavDTOList = memberService.getFavoriteList("#4FzB", searchDTO);
+    System.out.println(oriScheMemChatFavDTOList);
 
   }
 
+  @DisplayName("친화력 툴팁 테스트")
+//  @Test
+  public void testGetAffinityToolTip() throws Exception {
+    System.out.println(memberService.getAffinityToolTip());
+
+  }
+
+  @DisplayName("신고 테스트")
+//  @Test
+  public void testReport() throws Exception{
+    MemberDTO memberDTO = memberService.getMember("#4FzB");
+    ProductDTO productDTO = productService.getProduct(5L);
+    ReportDTO reportDTO = ReportDTO.builder()
+        .reportId(1L)
+        .content("걍 개띠꺼움")
+        .reporter(memberDTO)
+        .product(productDTO)
+        .build();
+
+    memberService.report(reportDTO);
+
+  }
 }
 
