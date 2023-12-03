@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnsQuestionRepository extends JpaRepository<AnsQuestion, Long> {
 
-    Page<AnsQuestion> findByAnsQuestionId(Orikkiri orikkiri, Pageable pageable);
+    Page<AnsQuestion> findByOrikkiri(Orikkiri orikkiri, Pageable pageable);
 }

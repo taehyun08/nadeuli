@@ -10,7 +10,7 @@ public interface OrikkiriService {
 
     List<OriScheMemChatFavDTO> getOrikkiriSignUpList(long ansQuestionId, SearchDTO searchDTO) throws Exception;
 
-    List<OriScheMemChatFavDTO> getMyOrikkiriList(String tag, long orikkiriId, SearchDTO searchDTO) throws Exception;
+    List<OriScheMemChatFavDTO> getMyOrikkiriList(String tag, SearchDTO searchDTO) throws Exception;
 
     List<OriScheMemChatFavDTO> getOrikkiriMemberList(long orikkiriId, SearchDTO searchDTO) throws Exception;
 
