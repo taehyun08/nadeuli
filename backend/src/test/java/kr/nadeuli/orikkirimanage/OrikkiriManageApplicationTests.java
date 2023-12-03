@@ -12,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 public class OrikkiriManageApplicationTests {
@@ -55,90 +57,54 @@ public class OrikkiriManageApplicationTests {
         System.out.println(orikkiriDTO);
     }
 
-    @Test
+//    @Test
     public void testDeleteOrikkiri() throws Exception{
         long orikkiriId = 1L;
         orikkiriManageService.deleteOrikkiri(orikkiriId);
     }
 
     //@Test
-    //    @RepeatedTest(3)
     public void testAddAnsQuestion() throws Exception {
         long orikkiriId = 2L;
         AnsQuestionDTO ansQuestionDTO = AnsQuestionDTO.builder()
-                .content("")
-                .orikkiri(OrikkiriDTO.builder().orikkiriId(2L).build())
-//                .oriScheMemChatFav(OriScheMemChatFavDTO.builder().oriScheMemChatFavId().build())
-
+//                .ansQuestionId(2L)
+                .content("자 이건 질문입니다.")
+                .orikkiri(OrikkiriDTO.builder().orikkiriId(orikkiriId).build())
+                .oriScheMemChatFav(OriScheMemChatFavDTO.builder().oriScheMemChatFavId(19L).build())
                 .build();
+        System.out.println(ansQuestionDTO);
 
-        System.out.println(orikkiriDTO);
-
-        orikkiriManageService.addAnsQuestion(orikkiriDTO);
-        orikkiriManageService.updateAnsQuestion(orikkiriDTO);
+        orikkiriManageService.addAnsQuestion(ansQuestionDTO);
+//        orikkiriManageService.updateAnsQuestion(ansQuestionDTO);
     }
 
-    //    @Test
-//    @Transactional
-//    public void testGetOrikkiriMemberList() throws Exception {
-//        SearchDTO searchDTO = new SearchDTO();
-//        searchDTO.setCurrentPage(0);
-//        searchDTO.setPageSize(pageSize);
-//        searchDTO.setSearchKeyword("");
-//        List<OriScheMemChatFavDTO> oriScheMemChatFavDTOList = orikkiriService.getOrikkiriMemberList(1L,searchDTO);
-//        System.out.println(oriScheMemChatFavDTOList);
-//    }
 
-//     @Test
-//    public void testDeleteOrikkrir() throws Exception{
-//        long orikkiriId = 1L;
-//        orikkiriService.deleteOrikkrir(orikkiriId);
-//    }
-//
 //    @Test
-//    public void testDeleteOrikkiriMember() throws Exception{
-//        String tag = "WVU3";
-//        long orikkiriId = 1L;
-//        orikkiriService.deleteOrikkiriMember(tag, orikkiriId);
-//    }
+    public void testGetAnsQuestion() throws Exception {
+        long ansQuestionId = 5L;
+        AnsQuestionDTO ansQuestionDTO = orikkiriManageService.getAnsQuestion(ansQuestionId);
+        System.out.println(ansQuestionDTO);
+    }
 
-
-
-    //    @Test
-//    @Transactional
-//    public void testGetOrikkiriMemberList() throws Exception {
-//        SearchDTO searchDTO = new SearchDTO();
-//        searchDTO.setCurrentPage(0);
-//        searchDTO.setPageSize(pageSize);
-//        searchDTO.setSearchKeyword("");
-//        List<OriScheMemChatFavDTO> oriScheMemChatFavDTOList = orikkiriService.getOrikkiriMemberList(1L,searchDTO);
-//        System.out.println(oriScheMemChatFavDTOList);
-//    }
 
 
 //    @Test
 //    @Transactional
-//    public void testGetOrikkiriScheduleList() throws Exception {
-//        SearchDTO searchDTO = new SearchDTO();
-//        searchDTO.setCurrentPage(0);
-//        searchDTO.setPageSize(pageSize);
-//        searchDTO.setSearchKeyword("");
-//        List<OrikkiriScheduleDTO> orikkiriScheduleDTOList = orikkiriService.getOrikkiriScheduleList(searchDTO);
-//        System.out.println(orikkiriScheduleDTOList);
-//    }
-//
-//    //@Test
-////    @Transactional
-//    public void testGetOrikkiriScheduleMemberList() throws Exception {
-//        SearchDTO searchDTO = new SearchDTO();
-//        searchDTO.setCurrentPage(0);
-//        searchDTO.setPageSize(pageSize);
-//        searchDTO.setSearchKeyword("");
-//        List<OriScheMemChatFavDTO> oriScheMemChatFavList = orikkiriService.getOrikkiriScheduleMemberList(1L, searchDTO);
-//        System.out.println(oriScheMemChatFavList);
-//    }
+    public void testGetAnsQuestionList() throws Exception {
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCurrentPage(0);
+        searchDTO.setPageSize(pageSize);
+        searchDTO.setSearchKeyword("");
+        long orikkiriId = 2L;
+        List<AnsQuestionDTO> ansQuestionDTOList = orikkiriManageService.getAnsQuestionList(orikkiriId,searchDTO);
+        System.out.println(ansQuestionDTOList);
+    }
 
-
+//    @Test
+    public void testDeleteAnsQuestion() throws Exception{
+        long ansQuestionId = 5L;
+        orikkiriManageService.deleteAnsQuestion(ansQuestionId);
+    }
 
 }
 

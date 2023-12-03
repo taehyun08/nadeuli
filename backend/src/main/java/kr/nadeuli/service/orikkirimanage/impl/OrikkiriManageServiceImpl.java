@@ -81,7 +81,7 @@ public class OrikkiriManageServiceImpl implements OrikkiriManageService {
     public List<AnsQuestionDTO> getAnsQuestionList(long orikkiriId, SearchDTO searchDTO) throws Exception {
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
         Page<AnsQuestion> ansQuestionPage;
-        ansQuestionPage = ansQuestionRepository.findByAnsQuestionId(Orikkiri.builder().orikkiriId(orikkiriId).build(), pageable);
+        ansQuestionPage = ansQuestionRepository.findByOrikkiri(Orikkiri.builder().orikkiriId(orikkiriId).build(), pageable);
         log.info(ansQuestionPage);
         return ansQuestionPage.map(ansQuestionMapper::ansQuestionToAnsQuestionDTO).toList();
     }
@@ -89,7 +89,7 @@ public class OrikkiriManageServiceImpl implements OrikkiriManageService {
     @Override
     public void deleteAnsQuestion(long ansQuestionId) throws Exception {
         log.info(ansQuestionId);
-        orikkiriManageRepository.findById(ansQuestionId);
+        ansQuestionRepository.deleteById(ansQuestionId);
     }
 
 

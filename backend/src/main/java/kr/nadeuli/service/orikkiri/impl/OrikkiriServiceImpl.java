@@ -48,11 +48,11 @@ public class OrikkiriServiceImpl implements OrikkiriService {
     }
 
     @Override
-    public List<OriScheMemChatFavDTO> getMyOrikkiriList(String tag, long orikkiriId, SearchDTO searchDTO) throws Exception {
+    public List<OriScheMemChatFavDTO> getMyOrikkiriList(String tag, SearchDTO searchDTO) throws Exception {
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
         Page<OriScheMemChatFav> oriScheMemChatFavPage;
         oriScheMemChatFavPage = oriScheMenChatFavRepository
-                .findByMemberAndOrikkiriNotNull(Member.builder().tag(tag).build(), Orikkiri.builder().orikkiriId(orikkiriId).build(), pageable);
+                .findByMemberAndOrikkiriNotNull(Member.builder().tag(tag).build(), pageable);
         log.info(oriScheMemChatFavPage);
         return oriScheMemChatFavPage.map(oriScheMemChatFavMapper::oriScheMemChatFavToOriScheMemChatFavDTO).toList();
 
@@ -136,7 +136,7 @@ public class OrikkiriServiceImpl implements OrikkiriService {
     @Override
     public void deleteOrikkiriSchedule(long orikkiriScheduleId) throws Exception {
         log.info(orikkiriScheduleId);
-        orikkiriScheduleRepository.findById(orikkiriScheduleId);
+        orikkiriScheduleRepository.deleteById(orikkiriScheduleId);
     }
 
 
