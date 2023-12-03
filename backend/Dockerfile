@@ -9,3 +9,4 @@ COPY build/libs/ROOT.jar /usr/local/tomcat/
 EXPOSE 80
 
 #CMD ["java", "-jar", "ROOT.jar"]
+ENTRYPOINT ["java","-jar","/ROOT.jar"]
