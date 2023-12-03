@@ -4,6 +4,8 @@ import java.util.List;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.OriScheMemChatFavDTO;
+import kr.nadeuli.dto.ReportDTO;
 import kr.nadeuli.dto.SearchDTO;
 
 
@@ -33,10 +35,10 @@ public interface MemberService {
 
   public void deleteFavorite(String tag, Long productId) throws Exception;
 
-  public void getFavoriteList(String tag) throws Exception;
+  public List<OriScheMemChatFavDTO> getFavoriteList(String tag, SearchDTO searchDTO) throws Exception;
 
-  public void report(String tag) throws Exception;
+  public void report(ReportDTO reportDTO) throws Exception;
 
-  public void getAffinityToolTip(String tag) throws Exception;
+  public String getAffinityToolTip() throws Exception;
 
 }

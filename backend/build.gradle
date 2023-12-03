@@ -5,8 +5,10 @@ plugins {
 }
 
 group = 'kr'
-version = '0.0.1-SNAPSHOT'
-
+//version = '0.0.1-SNAPSHOT'
+bootJar{
+archiveFileName = "ROOT.jar"
+}
 java {
     sourceCompatibility = '17'
 }

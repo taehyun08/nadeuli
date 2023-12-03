@@ -62,7 +62,7 @@ public class OrikkiriManageApplicationTests {
         long orikkiriId = 1L;
         orikkiriManageService.deleteOrikkiri(orikkiriId);
     }
-
+    
     //@Test
     public void testAddAnsQuestion() throws Exception {
         long orikkiriId = 2L;
