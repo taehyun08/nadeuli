@@ -267,7 +267,7 @@ public class MemberApplicationTests {
     ProductDTO productDTO = productService.getProduct(5L);
     ReportDTO reportDTO = ReportDTO.builder()
         .reportId(1L)
-        .content("걍 개띠꺼움")
+        .content("걍 개띠꺼움d")
         .reporter(memberDTO)
         .product(productDTO)
         .build();
