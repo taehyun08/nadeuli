@@ -31,7 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @DynamicUpdate
 @ToString(exclude = {"blocks", "bankAccounts", "reports", "oriScheMemChatFavs",
     "sellerProducts", "buyerProducts", "tradeReviews", "nadeuliPayHistories", "posts",
-    "comments", "nadeuliDeliveries"})
+    "comments", "nadeuliDeliveries","nadeulibuyers"})
 @Table(name="member")
 public class Member implements UserDetails {
   //1. Security 유저정보를 구현한 회원 Entity
@@ -55,19 +55,19 @@ public class Member implements UserDetails {
   @Column(name = "dong_ne", nullable = false)
   private String dongNe;
 
-  @Column(name = "picture", nullable = false)
+  @Column(name = "picture", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'empty.jpg'")
   private String picture;
 
   @Column(name = "nadeuli_pay_balance", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
   private Long nadeuliPayBalance;
 
-  @Column(name = "is_activate", nullable = false)
+  @Column(name = "is_activate", nullable = false, columnDefinition = "BIT DEFAULT 0")
   private boolean isActivate;
 
-  @Column(name = "is_nadeuli_delivery", nullable = false)
+  @Column(name = "is_nadeuli_delivery", nullable = false, columnDefinition = "BIT DEFAULT 0")
   private boolean isNadeuliDelivery;
 
-  @Column(name = "role", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+  @Column(name = "role", nullable = false, columnDefinition = "BIGINT DEFAULT 0 CHECK (role BETWEEN 0 AND 1)")
   private Role role;
 
   @Column(name = "gu", nullable = false)

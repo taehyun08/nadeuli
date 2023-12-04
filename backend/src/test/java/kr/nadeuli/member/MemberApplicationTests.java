@@ -3,10 +3,14 @@ package kr.nadeuli.member;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import kr.nadeuli.category.DeliveryState;
 import kr.nadeuli.category.Role;
+import kr.nadeuli.category.TradeType;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.NadeuliDeliveryDTO;
+import kr.nadeuli.dto.NadeuliPayHistoryDTO;
 import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.ReportDTO;
@@ -278,6 +282,31 @@ public class MemberApplicationTests {
         .build();
 
     memberService.report(reportDTO);
+
+  }
+
+  @DisplayName("나드리페이 계산 테스트")
+//  @Test
+  public void testHandleNadeuliPayBalance() throws Exception{
+    NadeuliPayHistoryDTO nadeuliPayHistoryDTO = NadeuliPayHistoryDTO.builder()
+        .nadeuliPayHistoryId(1L)
+        .tradingMoney(500L)
+//        .tradingMoney(4000L)
+//        .tradeType(TradeType.CHARGE)
+//        .tradeType(TradeType.PAYMENT)
+        .tradeType(TradeType.WITHDRAW)
+        .build();
+
+    NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
+        .nadeuliDeliveryId(1L)
+        .deposit(100L)
+        .deliveryState(DeliveryState.CANCEL_DELIVERY)
+        .deliveryState(DeliveryState.DELIVERY_ORDER)
+        .build();
+    String tag = "#1qZL";
+
+//    memberService.handleNadeuliPayBalance(tag,null,nadeuliDeliveryDTO);
+//    memberService.handleNadeuliPayBalance(tag,nadeuliPayHistoryDTO,null);
 
   }
 }

@@ -1,9 +1,12 @@
 package kr.nadeuli.service.member;
 
 import java.util.List;
+import kr.nadeuli.dto.AddressDTO;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.NadeuliDeliveryDTO;
+import kr.nadeuli.dto.NadeuliPayHistoryDTO;
 import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.ReportDTO;
 import kr.nadeuli.dto.SearchDTO;
@@ -21,7 +24,7 @@ public interface MemberService {
 
   public List<MemberDTO> getMemberList(SearchDTO searchDTO) throws Exception;
 
-  public void addDongNe(String tag, GpsDTO gpsDTO) throws Exception;
+  public AddressDTO addDongNe(String tag, GpsDTO gpsDTO) throws Exception;
 
   public void addBlockMember(BlockDTO blockDTO, String tag) throws Exception;
 
@@ -40,5 +43,7 @@ public interface MemberService {
   public void report(ReportDTO reportDTO) throws Exception;
 
   public String getAffinityToolTip() throws Exception;
+
+  public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception;
 
 }

@@ -53,11 +53,11 @@ public class AuthenticationRestController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<TokenDTO> login(@RequestParam String cellphone) throws Exception {
+  public ResponseEntity<TokenDTO> login(@RequestBody Map<String, String> requestBody) throws Exception {
     log.info("/member/login : POST");
-    log.info("login에서 받은 cellphone은 {}", cellphone);
+    log.info("login에서 받은 cellphone은 {}", requestBody.get("cellphone"));
 
-    TokenDTO tokenDTO = authenticationService.login(cellphone);
+    TokenDTO tokenDTO = authenticationService.login(requestBody.get("cellphone"));
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + tokenDTO.getAccessToken());
