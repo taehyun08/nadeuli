@@ -16,23 +16,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberRestController {
 
 
-  @GetMapping
-  public ResponseEntity<String> sayHello(){
-    return ResponseEntity.ok("반갑습니다 회원님");
-  }
+//  @GetMapping
+//  public ResponseEntity<String> sayHello(){
+//    return ResponseEntity.ok("반갑습니다 회원님");
+//  }
 
-  @GetMapping("/google")
-  public Map<String, Object> getUser(@AuthenticationPrincipal
-  OAuth2User oAuth2User){
-
-    return oAuth2User.getAttributes();
-
-  }
+//  @GetMapping("/google")
+//  public Map<String, Object> getUser(@AuthenticationPrincipal
+//  OAuth2User oAuth2User){
+//
+//    return oAuth2User.getAttributes();
+//
+//  }
 
   @PostMapping
   public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {

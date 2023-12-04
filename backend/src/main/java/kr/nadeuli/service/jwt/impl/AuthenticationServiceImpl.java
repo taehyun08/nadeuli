@@ -3,6 +3,7 @@ package kr.nadeuli.service.jwt.impl;
 import java.util.HashMap;
 import java.util.Optional;
 import kr.nadeuli.category.Role;
+import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.RefreshTokenDTO;
 import kr.nadeuli.dto.TokenDTO;
@@ -37,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   private final SmsService smsService;
 
-  public TokenDTO addMember(MemberDTO memberDTO) throws Exception {
+  public TokenDTO addMember(MemberDTO memberDTO, GpsDTO gpsDTO) throws Exception {
     // findByCellphone로 회원을 찾음
     Optional<MemberDTO> existingMember = memberRepository.findByCellphone(memberDTO.getCellphone())
         .map(memberMapper::memberToMemberDTO);
@@ -48,11 +49,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }else{
       // 회원이 존재하지 않는 경우
       memberDTO.setTag(memberService.addTag());
+      memberDTO.setAffinity(50L);
       //기본값이 유저이기떄문에 필요없음
       memberDTO.setRole(Role.USER);
       Member member = memberMapper.memberDTOToMember(memberDTO);
       memberRepository.save(member);
       MemberDTO existMember = memberRepository.findByTag(memberDTO.getTag()).map(memberMapper::memberToMemberDTO).orElseThrow(()-> new IllegalArgumentException("없는 태그입니다."));
+      memberService.addDongNe(existMember.getTag(), gpsDTO);
       return accessToken(existMember);
     }
   }
@@ -62,16 +65,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     Optional<MemberDTO> existingMember = memberRepository.findByCellphone(cellphone)
         .map(memberMapper::memberToMemberDTO);
 
-    // 회원이 존재할 경우 jwt발급
-    if (existingMember.isPresent()) {
-//      smsService.sendOne(cellphone);
-
       MemberDTO existMember = existingMember.get();
       return accessToken(existMember);
-    }else{
-      // 회원이 존재하지 않을 경우 예외를 던짐
-      throw new IllegalArgumentException("존재하지않는 회원입니다.");
-    }
+
   }
 
   @Override

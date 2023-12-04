@@ -1,6 +1,9 @@
 package kr.nadeuli.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.RefreshTokenDTO;
 import kr.nadeuli.dto.TokenDTO;
@@ -8,37 +11,60 @@ import kr.nadeuli.service.jwt.AuthenticationService;
 import kr.nadeuli.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 @Log4j2
 public class AuthenticationRestController {
   //1. Jwt 토큰 발급을 위한 RestController
-
   private final AuthenticationService authenticationService;
 
+  private final MemberService memberService;
+
+  @Autowired
+  private ObjectMapper objectMapper;  // ObjectMapper 주입
+
   @PostMapping("/addMember")
-  public TokenDTO addUser(@RequestBody MemberDTO memberDTO) throws Exception {
+  public ResponseEntity<TokenDTO> addMember(@RequestBody Map<String, Object> requestData) throws Exception {
+    log.info("/member/login : POST");
 
-    log.info("/api/v1/auth/json/addMember : POST");
-    log.info("addUser에서 받은 user는 {}",memberDTO);
+    MemberDTO memberDTO = objectMapper.convertValue(requestData.get("memberDTO"), MemberDTO.class);
+    GpsDTO gpsDTO = objectMapper.convertValue(requestData.get("gpsDTO"), GpsDTO.class);
 
-    return authenticationService.addMember(memberDTO);
+    log.info("addMember에서 받은 memberDTO는 {}", memberDTO);
+    log.info("addMember에서 받은 gpsDTO는 {}", gpsDTO);
+
+    TokenDTO tokenDTO = authenticationService.addMember(memberDTO, gpsDTO);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + tokenDTO.getAccessToken());
+
+    return new ResponseEntity<>(tokenDTO, headers, HttpStatus.OK);
   }
 
   @PostMapping("/login")
-  public TokenDTO login(@RequestBody MemberDTO memberDTO) throws Exception {
+  public ResponseEntity<TokenDTO> login(@RequestParam String cellphone) throws Exception {
+    log.info("/member/login : POST");
+    log.info("login에서 받은 cellphone은 {}", cellphone);
 
-    log.info("/api/v1/auth/json/login : POST");
-    log.info("login에서 받은 memberDTO는 {}",memberDTO);
+    TokenDTO tokenDTO = authenticationService.login(cellphone);
 
-    return authenticationService.accessToken(memberDTO);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + tokenDTO.getAccessToken());
+
+    return new ResponseEntity<>(tokenDTO, headers, HttpStatus.OK);
   }
+
 
   @PostMapping("/refresh")
   public TokenDTO refresh(@RequestBody RefreshTokenDTO refreshTokenDTO) throws Exception {
