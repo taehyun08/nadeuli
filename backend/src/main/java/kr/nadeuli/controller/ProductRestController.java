@@ -4,6 +4,7 @@ import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
+@Log4j2
 public class ProductRestController {
     private final ProductService productService;
 
@@ -21,6 +23,7 @@ public class ProductRestController {
     // tag 받는 부분 확인 필요
     @GetMapping("/home/{currentPage}/{keyword}")
     public List<ProductDTO> getProductList(String tag, @PathVariable SearchDTO searchDTO) throws Exception {
+        System.out.println("1231");
         searchDTO.setPageSize(pageSize);
         return productService.getProductList(tag, searchDTO);
     }
