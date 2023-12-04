@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, String> {
 
   Optional<Member> findByCellphone(String cellphone);
+
   Optional<Member> findByTag(String tag);
   Optional<Member> findBySocialId(String SocialId);
 

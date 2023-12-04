@@ -3,6 +3,7 @@ package kr.nadeuli.config;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.nadeuli.category.Role;
+import kr.nadeuli.security.CustomAuthenticationManager;
 import kr.nadeuli.security.CustomUserDetailsService;
 import kr.nadeuli.security.OAuth2LoginFailureHandler;
 import kr.nadeuli.security.OAuth2LoginSuccessHandler;
@@ -36,8 +37,19 @@ public class SecurityConfig {
   *  1. 사용자의 로그인 정보,인증요청이 담긴 Http Request를 수신한다
   *  2. AuthenticationFilter가 요청을 가로챈다(Jwt를 사용하기때문에 JwtAuthenticationFilter를 커스텀)
   *  2-1. 가로챈 정보를 통해 UsernamePasswordAuthenticationToken의 인증용 객체를 생성한다.
-  *  3-1. AuthenticationManager을
-  *
+  *  3-1. AuthenticationManager을 구현한 ProviderManager에게 생성한 UsernamePasswordToken객체 전달
+  *  4. AutenticationManger는 등록된 AuthenticationProvider들을 조회하며 인증을 요구
+  *  5. 실제 데이터베이스에서 사용자 인증정보를 가져오는 UserDetailsService에 사용자 정보를 넘김
+  *  6. UserDetails를 이용해 User객체에 대한 정보 탐색
+  *  6-1. 넘겨받은 사용자 정보를 통해 데이터베이스에서 찾아낸 사용자 정보인 UserDetails 객체를 만든다.
+  *  7. User 객체의 정보들을 UserDetails가 UserDetailsService(LoginService)로 전달
+  *  7-1. AuthenticaitonProvider들은 UserDetails를 넘겨받고 사용자 정보를 비교한다.
+  *  8. 인증이 완료되면 권한 등의 사용자 정보를 담은 Authentication 객체를 반환한다.
+  *  9. 인증이 끝나면 다시 최초의 AuthenticationFilter에 Authentication 객체가 반환된다
+  *  10. SecurityContext에 인증 객체를 설정
+  *  10-1. Authentication 객체를 Security Context에 저장한다.
+  *  10-2. 최종적으로는 SecurityContextHolder는 세션 영역에 있는 SecurityContext에 Authentication 객체를 저장.
+  *        사용자 정보를 저장한다는 것은 스프링 시큐리티가 전통적인 세선-쿠키 기반의 인증 방식을 사용한다는 것을 의미.
   *
   *
   *
@@ -56,6 +68,8 @@ public class SecurityConfig {
 
   //5. Oauth2MemberService를 커스텀한 서비스
   private final CustomOauth2MemberServiceImpl customOauth2MemberService;
+
+  private final CustomAuthenticationManager customAuthenticationManager;
 
 
   ///Method
@@ -101,8 +115,8 @@ public class SecurityConfig {
         //사용자 인증을 처리
         //사용자의 인증을 검증하고 사용자 정보를 가져오는 역할
         //사용자의 JWT 토큰을 검증하고, 사용자를 인증
-        .authenticationProvider(authenticationProvider()).addFilterBefore(
-            jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .authenticationManager(customAuthenticationManager)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .logout(logout -> logout
             .logoutUrl("/api/v1/member/logout")  // 로그아웃 URL 지정
             .logoutSuccessHandler((request, response, authentication) -> {
