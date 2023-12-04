@@ -15,5 +15,6 @@ public class DeliveryNotificationDTO {
     private Long deliveryNotificationId;
     private String notificationContent;
     private boolean isRead;
-    private NadeuliDelivery nadeuliDelivery;
+    private NadeuliDeliveryDTO nadeuliDelivery;
+    private String timeAgo;
 }

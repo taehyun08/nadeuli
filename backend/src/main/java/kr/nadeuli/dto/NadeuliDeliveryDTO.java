@@ -1,5 +1,6 @@
 package kr.nadeuli.dto;
 
+import kr.nadeuli.category.DeliveryState;
 import kr.nadeuli.entity.DeliveryNotification;
 import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Product;
@@ -28,17 +29,19 @@ public class NadeuliDeliveryDTO {
     private Long deposit;
     private String departure;
     private String arrival;
+    private LocalDateTime regDate;
     private LocalDateTime orderCancelDate;
     private LocalDateTime orderAcceptDate;
     private LocalDateTime deliveryCancelDate;
     private LocalDateTime deliveryCompleteDate;
-    private Long deliveryState;
-    private Member deliveryPerson;
-    private Member buyer;
-    private Product product;
-    private List<String> imageNames;
+    private DeliveryState deliveryState;
+    private String imageName;
+    private MemberDTO deliveryPerson;
+    private MemberDTO buyer;
+    private ProductDTO product;
+    private List<String> images;
     private List<DeliveryNotification> deliveryNotifications;
     private List<Report> reports;
-    private Long timeAgo;
+    private String timeAgo;
 
 }
