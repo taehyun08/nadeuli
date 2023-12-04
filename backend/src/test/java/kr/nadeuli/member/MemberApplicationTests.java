@@ -66,6 +66,11 @@ public class MemberApplicationTests {
         .cellphone(cellPhone)
         .build();
 
+    GpsDTO gpsDTO = GpsDTO.builder()
+        .x(127.0292881)
+        .y(37.4923615)
+        .build();
+
     // 1. 휴대폰 번호 인증 후 로그인이 가능하기때문에 SmsService의 목 객체(mock) 생성
     SmsService mockSmsService = Mockito.mock(SmsService.class);
 
@@ -87,7 +92,7 @@ public class MemberApplicationTests {
           .role(Role.USER)
           .build();
 
-      System.out.println(authenticationService.addMember(memberDTO));
+      System.out.println(authenticationService.addMember(memberDTO,gpsDTO));
     } else {
       System.out.println("휴대폰 인증을 완료해야합니다..");
     }
