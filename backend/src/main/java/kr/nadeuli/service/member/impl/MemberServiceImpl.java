@@ -357,7 +357,7 @@ public class MemberServiceImpl implements MemberService{
   //나드리페이 입금
   //nadeuliPayCharge
   @Override
-  public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
+  public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception {
     log.info("전달받은 tag와 nadeuliPayHistoryDTO와 nadeuliDeliveryDTO는 {},{},{}", tag, nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
     //1. 전달받은 tag로 현재 멤버 잔액 조회
     MemberDTO memberDTO = getMember(tag);
@@ -371,12 +371,27 @@ public class MemberServiceImpl implements MemberService{
     //4. 나드리부름DTO가 null이아닐떄 부름상태를 가져옴
     DeliveryState deliveryState = (nadeuliDeliveryDTO != null) ? nadeuliDeliveryDTO.getDeliveryState() : null;
 
-    //5. 나드리페이 입금이 참이면 현재잔액에 +
-    if (depositNadeuliPayBalance(tradeType, deliveryState)) {
+    //5. 나드리페이 입금, 출금이 참이면 beforeDeposit 을 +, 이후 새 deposit 금액을 현재 잔액에서 -
+    if (withdrawAndDepositNadeuliPayBalance(beforeDeposit)) {
+
+      Long afterDeposit = getHandleMoney(nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
+      Long result = memberNadeuliPayBalance + beforeDeposit - afterDeposit;
+      // 잔액 부족 예외 처리
+      if (result < 0) {
+        throw new Exception("잔액이 부족합니다.");
+      }
+      // 나드리페이 계산결과를 잔액에 set
+      memberDTO.setNadeuliPayBalance(result);
+    }
+
+    //6. 나드리페이 입금이 참이면 현재잔액에 +
+    else if (depositNadeuliPayBalance(tradeType, deliveryState)) {
       Long tradingMoney = getHandleMoney(nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
       memberDTO.setNadeuliPayBalance(memberNadeuliPayBalance + tradingMoney);
-    //6. 나드리페이 출금이 참이면 현재잔액에 -
-    } else if (withdrawNadeuliPayBalance(tradeType, deliveryState)) {
+    }
+
+    //7. 나드리페이 출금이 참이면 현재잔액에 -
+    else if (withdrawNadeuliPayBalance(tradeType, deliveryState)) {
       Long tradingMoney = getHandleMoney(nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
       Long result = memberNadeuliPayBalance - tradingMoney;
 
@@ -384,7 +399,7 @@ public class MemberServiceImpl implements MemberService{
       if (result < 0) {
         throw new Exception("잔액이 부족합니다.");
       }
-      //7. 나드리페이 계산결과를 잔액에 set
+      // 나드리페이 계산결과를 잔액에 set
       memberDTO.setNadeuliPayBalance(result);
     }
 
@@ -415,6 +430,11 @@ public class MemberServiceImpl implements MemberService{
   private boolean withdrawNadeuliPayBalance(TradeType tradeType, DeliveryState deliveryState) {
     return (tradeType == TradeType.PAYMENT || tradeType == TradeType.WITHDRAW) ||
         (deliveryState != null && deliveryState == DeliveryState.DELIVERY_ORDER);
+  }
+
+  // 이전 보증금이 null 이 아닐 때 참
+  private boolean withdrawAndDepositNadeuliPayBalance(Long beforeDeposit) {
+    return beforeDeposit != null;
   }
 
 }
