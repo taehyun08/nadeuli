@@ -1,7 +1,7 @@
 package kr.nadeuli.dto;
 
 import java.time.LocalDateTime;
-import kr.nadeuli.common.Role;
+import kr.nadeuli.category.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

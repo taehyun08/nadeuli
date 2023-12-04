@@ -71,6 +71,7 @@ public class PostApplicationTests {
     }
 
 
+    // 주소 단위만 테스트 필요
 //   @Test
 //   @Transactional
     public void testGetPostList() throws Exception {

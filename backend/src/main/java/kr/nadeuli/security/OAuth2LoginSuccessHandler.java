@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import kr.nadeuli.oauthinfo.OAuth2CustomUser;
 import kr.nadeuli.service.jwt.JWTService;
-import kr.nadeuli.service.member.MemberService;
-import kr.nadeuli.service.member.impl.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

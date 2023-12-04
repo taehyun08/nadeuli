@@ -1,6 +1,7 @@
 package kr.nadeuli.dto;
 
 
+import kr.nadeuli.entity.AnsQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class OriScheMemChatFavDTO {
     private OrikkiriDTO orikkiri;
     private OrikkiriScheduleDTO orikkiriSchedule;
     private ProductDTO product;
-    private List<String> ansQuestions;
+    private List<AnsQuestion> ansQuestions;
 }

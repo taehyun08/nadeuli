@@ -1,7 +1,6 @@
 package kr.nadeuli.controller;
 
 
-import jakarta.servlet.http.HttpServletResponse;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.RefreshTokenDTO;
 import kr.nadeuli.dto.TokenDTO;
@@ -9,7 +8,6 @@ import kr.nadeuli.service.jwt.AuthenticationService;
 import kr.nadeuli.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Log4j2
-public class AuthenticationController {
+public class AuthenticationRestController {
+  //1. Jwt 토큰 발급을 위한 RestController
 
   private final AuthenticationService authenticationService;
-
-  private final MemberService memberService;
 
   @PostMapping("/addMember")
   public TokenDTO addUser(@RequestBody MemberDTO memberDTO) throws Exception {

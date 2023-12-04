@@ -10,12 +10,13 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import kr.nadeuli.common.Role;
+import kr.nadeuli.category.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,16 +24,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@DynamicInsert
-//@ToString(exclude = {"blocks", "bankAccounts", "reports", "oriScheMemChatFavs",
-//    "sellerProducts", "buyerProducts", "tradeReviews", "nadeuliPayHistories", "posts",
-//    "comments", "nadeuliDeliveries"})
+@ToString(exclude = {"blocks", "bankAccounts", "reports", "oriScheMemChatFavs",
+    "sellerProducts", "buyerProducts", "tradeReviews", "nadeuliPayHistories", "posts",
+    "comments", "nadeuliDeliveries"})
 @Table(name="member")
 public class Member implements UserDetails {
+  //1. Security 유저정보를 구현한 회원 Entity
 
   @Id
   @Column(name = "tag", length = 20, nullable = false)
@@ -65,7 +67,7 @@ public class Member implements UserDetails {
   @Column(name = "is_nadeuli_delivery", nullable = false)
   private boolean isNadeuliDelivery;
 
-  @Column(name = "role", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+  @Column(name = "role", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
   private Role role;
 
   @Column(name = "gu", nullable = false)
@@ -86,68 +88,71 @@ public class Member implements UserDetails {
   @Column(name = "block_day")
   private Long blockDay;
 
+  // 소셜로그인 식별자 값 (자체 로그인인 경우 null)
   @Column(name = "social_id")
-  private String socialId; // 로그인한 소셜 타입의 식별자 값 (일반 로그인인 경우 null)
+  private String socialId;
 
   //정지
-  @OneToMany(mappedBy = "blockMember", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "blockMember", fetch = FetchType.LAZY)
   private List<Block> blocks;
 
   //계좌
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   private List<BankAccount> bankAccounts;
 
   //신고
-  @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "reporter", fetch = FetchType.LAZY)
   private List<Report> reports;
 
   //오리스케멤챗페브
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   private List<OriScheMemChatFav> oriScheMemChatFavs;
 
   //상품
-  @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
   private List<Product> sellerProducts;
 
-  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
   private List<Product> buyerProducts;
 
   //거래후기
-  @OneToMany(mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "trader", fetch = FetchType.LAZY)
   private List<TradeReview> tradeReviews;
 
   //나드리페이 내역
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   private List<NadeuliPayHistory> nadeuliPayHistories;
 
   //게시물
-  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
   private List<Post> posts;
 
   //댓글
-  @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
   private List<Comment> comments;
 
   //나드리 부름
-  @OneToMany(mappedBy = "deliveryPerson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "deliveryPerson", fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeuliDeliveries;
 
-  @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "buyer", fetch = FetchType.LAZY)
   private List<NadeuliDelivery> nadeulibuyers;
 
   //JWT UserDetails OverRiding
   //권한을 가져올 메소드
+  //단순권한부여를 리스트로 반환
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role.name())); //단순권한부여를 리스트로 반환
+    return List.of(new SimpleGrantedAuthority(role.name()));
   }
 
+  //비밀번호는 없기때문에 null로 설정
   @Override
   public String getPassword() {
     return null;
   }
 
-  //이메일을 가져올 메소드(유저네임이지만 이메일만 가져올수있다.)
+  //식별자를 가져올 메소드
   @Override
   public String getUsername() {
     return tag;

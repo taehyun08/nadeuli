@@ -2,6 +2,7 @@ package kr.nadeuli.service.post;
 
 import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.entity.Post;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ public interface PostService {
 
     void deletePost(long postId) throws Exception;
 
-
+    PostDTO addStreamingChannel(PostDTO postDTO) throws Exception;
 }

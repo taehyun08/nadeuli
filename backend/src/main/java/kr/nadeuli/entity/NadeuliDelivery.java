@@ -1,6 +1,7 @@
 package kr.nadeuli.entity;
 
 import jakarta.persistence.*;
+import kr.nadeuli.category.DeliveryState;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,13 +10,14 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicUpdate
-@ToString(exclude = {"deliveryPerson", "buyer", "product", "deliveryNotifications", "images", "reports"})
+@ToString(exclude = {"deliveryPerson", "buyer", "product"})
 @Table(name = "nadeuli_delivery")
-public class NadeuliDelivery extends Base {
+public class NadeuliDelivery {
 
     // 나드리부름 아이디
     @Id
@@ -59,25 +61,30 @@ public class NadeuliDelivery extends Base {
     @Column(nullable = false)
     private String arrival;
 
+    // 주문 등록 시간 (주문 등록 시 최초 저장)
+    @Column(name = "reg_date", nullable = false, updatable = false)
+    private LocalDateTime regDate;
+
     // 주문 취소 시간 (이벤트 발생 시 별도 INSERT)
-    @Column(name = "order_cancel_date", updatable = false)
+    @Column(name = "order_cancel_date")
     private LocalDateTime orderCancelDate;
 
     // 주문 수락 시간 (이벤트 발생 시 별도 INSERT)
-    @Column(name = "order_accept_date", updatable = false)
+    @Column(name = "order_accept_date")
     private LocalDateTime orderAcceptDate;
 
     // 배달 취소 시간 (이벤트 발생 시 별도 INSERT)
-    @Column(name = "delivery_cancel_date", updatable = false)
+    @Column(name = "delivery_cancel_date")
     private LocalDateTime deliveryCancelDate;
 
     // 배달 완료 시간 (이벤트 발생 시 별도 INSERT)
-    @Column(name = "delivery_complete_date", updatable = false)
+    @Column(name = "delivery_complete_date")
     private LocalDateTime deliveryCompleteDate;
 
     // 주문 상태 {0 : 주문등록, 1 : 주문취소, 2 : 주문수락, 3 : 배달취소, 4 : 배달완료}
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "delivery_state", nullable = false)
-    private Long deliveryState;
+    private DeliveryState deliveryState;
 
     // 사진 이름
     @Column(name = "image_name", nullable = false)
@@ -107,14 +114,15 @@ public class NadeuliDelivery extends Base {
     private Product product;
 
     // 부름 알림
-    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DeliveryNotification> deliveryNotifications;
 
     // 상품 사진
-    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Image> images;
 
     // 신고
-    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Report> reports;
+
 }

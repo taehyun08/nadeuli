@@ -2,10 +2,11 @@ package kr.nadeuli.mapper;
 
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.entity.Member;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(builder = @Builder(disableBuilder = true),componentModel = "spring")
 public interface MemberMapper {
 
   @Mapping(target = "blocks", ignore = true)
@@ -20,6 +21,7 @@ public interface MemberMapper {
   @Mapping(target = "comments", ignore = true)
   @Mapping(target = "nadeuliDeliveries", ignore = true)
   @Mapping(target = "nadeulibuyers", ignore = true)
+  @Mapping(target = "authorities", ignore = true)
   Member memberDTOToMember(MemberDTO memberDTO);
 
   MemberDTO memberToMemberDTO(Member member);

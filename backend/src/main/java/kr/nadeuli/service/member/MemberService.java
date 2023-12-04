@@ -1,19 +1,44 @@
 package kr.nadeuli.service.member;
 
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import kr.nadeuli.dto.BlockDTO;
+import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import kr.nadeuli.dto.OriScheMemChatFavDTO;
+import kr.nadeuli.dto.ReportDTO;
+import kr.nadeuli.dto.SearchDTO;
 
 
 public interface MemberService {
-  //jwt Authentication
-//  public void addMember(MemberDTO memberDTO, HttpServletResponse response) throws Exception ;
 
+  public String addTag() throws Exception;
 
-  public boolean isTagUnique(String tag) throws Exception;
+  public void updateMember(MemberDTO memberDTO) throws Exception;
 
-  public String generateRandomTag() throws Exception;
+  public MemberDTO getMember(String tag) throws Exception;
 
-  public String generateUniqueTag() throws Exception;
+  public MemberDTO getOtherMember(String tag) throws Exception;
+
+  public List<MemberDTO> getMemberList(SearchDTO searchDTO) throws Exception;
+
+  public void addDongNe(String tag, GpsDTO gpsDTO) throws Exception;
+
+  public void addBlockMember(BlockDTO blockDTO, String tag) throws Exception;
+
+  public void deleteBlockMember(String tag) throws Exception;
+
+  public void handleMemberActivate(String tag) throws Exception;
+
+  public void handleNadeuliDelivery(String tag) throws Exception;
+
+  public void addFavorite(String tag, Long productId) throws Exception;
+
+  public void deleteFavorite(String tag, Long productId) throws Exception;
+
+  public List<OriScheMemChatFavDTO> getFavoriteList(String tag, SearchDTO searchDTO) throws Exception;
+
+  public void report(ReportDTO reportDTO) throws Exception;
+
+  public String getAffinityToolTip() throws Exception;
 
 }

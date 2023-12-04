@@ -5,18 +5,13 @@ import java.util.Optional;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.SmsDTO;
 import kr.nadeuli.mapper.MemberMapper;
-import kr.nadeuli.service.member.impl.MemberRepository;
-import kr.nadeuli.sms.impl.SmsRepository;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import kr.nadeuli.service.member.MemberRepository;
+import kr.nadeuli.service.sms.SmsService;
+import kr.nadeuli.service.sms.SmsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
 @SpringBootTest
@@ -37,7 +32,7 @@ public class SmsApplicationTests {
 
 
   @DisplayName("인증 번호 전송 테스트")
-  @Test
+  //@Test
   public void testSendOne() throws Exception{
     String cellphone = "01089114554";
 

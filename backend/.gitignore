@@ -24,6 +24,7 @@ application-monggo.properties
 application-oauth.properties
 application-redis.properties
 application-coolsms.properties
+application-ncloud.properties
 .idea
 *.iws
 *.iml
