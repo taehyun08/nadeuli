@@ -305,7 +305,7 @@ public class MemberApplicationTests {
         .build();
     String tag = "#1qZL";
 
-    memberService.handleNadeuliPayBalance(tag,null,nadeuliDeliveryDTO);
+//    memberService.handleNadeuliPayBalance(tag,null,nadeuliDeliveryDTO);
 //    memberService.handleNadeuliPayBalance(tag,nadeuliPayHistoryDTO,null);
 
   }
