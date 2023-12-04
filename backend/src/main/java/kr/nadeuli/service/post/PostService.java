@@ -11,11 +11,11 @@ public interface PostService {
 
     PostDTO getPost(long postId) throws Exception;
 
-    List<PostDTO> getPostList(SearchDTO searchDTO) throws Exception;
+    List<PostDTO> getPostList(String gu, SearchDTO searchDTO) throws Exception;
 
     void updatePost(PostDTO postDTO) throws Exception;
 
     void deletePost(long postId) throws Exception;
 
-    PostDTO addStreamingChannel(PostDTO postDTO) throws Exception;
+//    PostDTO addStreamingChannel(PostDTO postDTO) throws Exception;
 }
