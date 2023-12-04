@@ -27,6 +27,7 @@ public class ProductRestController {
 
     @GetMapping("/getProduct/{productId}")
     public ProductDTO getProduct(Long productId) throws Exception {
+        return productService.getProduct(productId);
     }
 
     @PostMapping("/updateProduct")
