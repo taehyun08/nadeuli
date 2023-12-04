@@ -116,8 +116,8 @@ public class OrikkiriRestController {
     }
 
     @GetMapping("/getCommentList")
-    public List<CommentDTO> getCommentList(@RequestBody PostDTO postDTO) throws Exception {
-        return commentService.getCommentList(postDTO);
+    public List<CommentDTO> getCommentList(long postId, SearchDTO searchDTO) throws Exception {
+        return commentService.getCommentList(postId, searchDTO);
     }
 
     @PutMapping("/updateComment")

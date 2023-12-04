@@ -72,14 +72,14 @@ public class PostApplicationTests {
 
 
     // 주소 단위만 테스트 필요
-//   @Test
-//   @Transactional
+   @Test
+   @Transactional
     public void testGetPostList() throws Exception {
-        String gu = "강남구";
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);
         searchDTO.setPageSize(pageSize);
-        searchDTO.setSearchKeyword("내용");
+        searchDTO.setSearchKeyword("");
+        String gu = "송파구";
         List<PostDTO> postDTOList = postService.getPostList(gu, searchDTO);
         System.out.println(postDTOList);
     }

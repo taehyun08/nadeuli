@@ -48,6 +48,8 @@ public interface PostMapper {
             return null;
         }
         return MemberDTO.builder().tag(member.getTag())
+                .nickname(member.getNickname())
+                .gu(member.getGu())
                 .build();
     }
 
@@ -65,6 +67,9 @@ public interface PostMapper {
             return null;
         }
         return OrikkiriDTO.builder().orikkiriId(orikkiri.getOrikkiriId())
+                .orikkiriName(orikkiri.getOrikkiriName())
+                .orikkiriPicture(orikkiri.getOrikkiriPicture())
+                .orikkiriIntroduction(orikkiri.getOrikkiriIntroduction())
                 .build();
     }
 

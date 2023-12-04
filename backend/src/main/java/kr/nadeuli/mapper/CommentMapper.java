@@ -19,12 +19,12 @@ public interface CommentMapper {
 
     @Mapping(source = "post", target = "post", qualifiedByName = "postDTOToPost")
     @Mapping(source = "writer", target = "writer", qualifiedByName = "memberDTOToMember")
-//    @Mapping(source = "refComment", target = "refComment", qualifiedByName = "commentDTOToComment")
+    @Mapping(source = "refComment", target = "refComment", qualifiedByName = "refcommentDTOToRefComment")
     Comment commentDTOToComment(CommentDTO commentDTO);
 
     @Mapping(source = "post", target = "post", qualifiedByName = "postToPostDTO")
     @Mapping(source = "writer", target = "writer", qualifiedByName = "memberToMemberDTO")
-//    @Mapping(source = "refComment", target = "refComment", qualifiedByName = "commentToCommentDTO")
+    @Mapping(source = "refComment", target = "refComment", qualifiedByName = "refcommentToRefCommentDTO")
     @Mapping(source = "regDate", target = "timeAgo", qualifiedByName = "regDateToTimeAgo")
     CommentDTO commentToCommentDTO(Comment comment);
 
@@ -61,22 +61,22 @@ public interface CommentMapper {
                 .build();
     }
 
-//    @Named("commentDTOToComment")
-//    default Comment commentDTOToComment(CommentDTO commentDTO){
-//        if(commentDTO == null){
-//            return null;
-//        }
-//        return Comment.builder().commentId(commentDTO.getCommentId()).build();
-//    }
-//
-//    @Named("commentToCommentDTO")
-//    default CommentDTO commentToCommentDTO(Comment comment){
-//        if(comment == null){
-//            return null;
-//        }
-//        return CommentDTO.builder().commentId(comment.getCommentId())
-//                .build();
-//    }
+    @Named("refcommentDTOToRefComment")
+    default Comment refcommentDTOToRefComment(CommentDTO commentDTO){
+        if(commentDTO == null){
+            return null;
+        }
+        return Comment.builder().commentId(commentDTO.getCommentId()).build();
+    }
+
+    @Named("refcommentToRefCommentDTO")
+    default CommentDTO refcommentToRefCommentDTO(Comment comment){
+        if(comment == null){
+            return null;
+        }
+        return CommentDTO.builder().commentId(comment.getCommentId())
+                .build();
+    }
 
 
     @Named("regDateToTimeAgo")

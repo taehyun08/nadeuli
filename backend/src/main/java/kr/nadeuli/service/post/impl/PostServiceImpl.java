@@ -2,6 +2,7 @@ package kr.nadeuli.service.post.impl;
 
 import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Post;
 import kr.nadeuli.mapper.PostMapper;
 import kr.nadeuli.service.post.PostRepository;
@@ -12,17 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.List;
 
 
@@ -54,12 +47,9 @@ public class PostServiceImpl implements PostService {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Post> postPage;
-        if(searchDTO.getSearchKeyword() == null || searchDTO.getSearchKeyword().isEmpty()){
-            postPage = postRepository.findAll(pageable);
-        }else{
-            postPage = postRepository.findByGuAndTitleContainingOrContentContaining(gu,searchDTO.getSearchKeyword(), searchDTO.getSearchKeyword(), pageable);
-        }
+        postPage = postRepository.findByGuAndTitleOrContentContaining(gu, searchDTO.getSearchKeyword(), pageable);
         log.info(postPage);
+        System.out.println(postPage);
         return postPage.map(postMapper::postToPostDTO).toList();
     }
 

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.nadeuli.dto.CommentDTO;
 import kr.nadeuli.dto.MemberDTO;
 import kr.nadeuli.dto.PostDTO;
+import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Comment;
 import kr.nadeuli.entity.Post;
 import kr.nadeuli.service.comment.CommentRepository;
@@ -11,6 +12,7 @@ import kr.nadeuli.service.comment.CommentService;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -22,6 +24,9 @@ public class CommentApplicationTests {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Value("${pageSize}")
+    private int pageSize;
 
 //    @Test
 //    @RepeatedTest(3)
@@ -49,14 +54,16 @@ public class CommentApplicationTests {
 //    @Test
 //    @Transactional
     public void testGetCommentList() throws Exception {
-        PostDTO postDTO = new PostDTO();
-        postDTO.setPostId(1L);
-
-        List<CommentDTO> commentList = commentService.getCommentList(postDTO);
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCurrentPage(0);
+        searchDTO.setPageSize(pageSize);
+        searchDTO.setSearchKeyword("목");
+        long postId= 9L;
+        List<CommentDTO> commentList = commentService.getCommentList(postId, searchDTO);
         System.out.println(commentList);
     }
 
-    @Test
+    //@Test
     public void testDeleteComment() throws Exception{
         long commentID = 2L;
         commentService.deleteComment(commentID);

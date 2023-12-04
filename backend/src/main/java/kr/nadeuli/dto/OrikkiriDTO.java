@@ -21,6 +21,6 @@ public class OrikkiriDTO {
     private String orikkiriPicture;
     private String orikkiriIntroduction;
     private LocalDateTime orikkiriRegistTime;
-//    private Member tag;
+    private String masterTag;
 
 }

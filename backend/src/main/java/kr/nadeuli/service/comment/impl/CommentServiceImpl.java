@@ -2,14 +2,21 @@ package kr.nadeuli.service.comment.impl;
 
 import kr.nadeuli.dto.CommentDTO;
 import kr.nadeuli.dto.PostDTO;
+import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.entity.Comment;
+import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Post;
+import kr.nadeuli.entity.Product;
 import kr.nadeuli.mapper.CommentMapper;
 import kr.nadeuli.service.comment.CommentRepository;
 import kr.nadeuli.service.comment.CommentService;
 import kr.nadeuli.service.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
-    private final PostRepository postRepository;
+
 
     @Override
     public void addComment(CommentDTO commentDTO) throws Exception {
@@ -39,10 +46,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> getCommentList(PostDTO postDTO) throws Exception {
-        Post initializedPost = postRepository.findById(postDTO.getPostId()).orElseThrow(() -> new Exception("Post not found"));
-        List<Comment> comments = commentRepository.findByPost(initializedPost);
-        return comments.stream().map(commentMapper::commentToCommentDTO).collect(Collectors.toList());
+    public List<CommentDTO> getCommentList(long postId, SearchDTO searchDTO) throws Exception {
+        Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
+        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
+        Page<Comment> commentPage;
+        commentPage = commentRepository.findByPost(Post.builder().postId(postId).build(), pageable);
+        log.info(commentPage);
+        return commentPage.map(commentMapper::commentToCommentDTO).toList();
     }
 
     @Override

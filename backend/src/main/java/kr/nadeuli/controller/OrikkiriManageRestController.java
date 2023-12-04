@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orikkirimanage")
+@RequestMapping("/orikkiriManage")
 @RequiredArgsConstructor
 @Log4j2
 public class OrikkiriManageRestController {
@@ -19,13 +19,15 @@ public class OrikkiriManageRestController {
     private final OrikkiriManageService orikkiriManageService;
 
     @PostMapping("/addOrikkiri")
-    public void addOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
+    public String addOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
         orikkiriManageService.addOrikkiri(orikkiriDTO);
+        return "{\"success\": true}";
     }
 
-    @PutMapping("/updateOrikkiri")
-    public void updateOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
+    @PostMapping("/updateOrikkiri")
+    public String updateOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
         orikkiriManageService.updateOrikkiri(orikkiriDTO);
+        return "{\"success\": true}";
     }
 
     @GetMapping("/getOrikkiri/{orikkiriId}")
@@ -33,19 +35,22 @@ public class OrikkiriManageRestController {
         return orikkiriManageService.getOrikkiri(orikkiriId);
     }
 
-    @DeleteMapping("/deleteOrikkiri/{orikkiriId}")
-    public void deleteOrikkiri(@PathVariable long orikkiriId) throws Exception {
+    @GetMapping("/deleteOrikkiri/{orikkiriId}")
+    public String deleteOrikkiri(@PathVariable long orikkiriId) throws Exception {
         orikkiriManageService.deleteOrikkiri(orikkiriId);
+        return "{\"success\": true}";
     }
 
     @PostMapping("/addAnsQuestion")
-    public void addAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
+    public String addAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
         orikkiriManageService.addAnsQuestion(ansQuestionDTO);
+        return "{\"success\": true}";
     }
 
-    @PutMapping("/updateAnsQuestion")
-    public void updateAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
+    @PostMapping("/updateAnsQuestion")
+    public String updateAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
         orikkiriManageService.updateAnsQuestion(ansQuestionDTO);
+        return "{\"success\": true}";
     }
 
     @GetMapping("/getAnsQuestion/{ansQuestionId}")
@@ -58,11 +63,11 @@ public class OrikkiriManageRestController {
         return orikkiriManageService.getAnsQuestionList(orikkiriId, searchDTO);
     }
 
-    @DeleteMapping("/deleteAnsQuestion/{ansQuestionId}")
-    public void deleteAnsQuestion(@PathVariable long ansQuestionId) throws Exception {
+    @GetMapping("/deleteAnsQuestion/{ansQuestionId}")
+    public String deleteAnsQuestion(@PathVariable long ansQuestionId) throws Exception {
         orikkiriManageService.deleteAnsQuestion(ansQuestionId);
+        return "{\"success\": true}";
     }
-
 
 
 }
