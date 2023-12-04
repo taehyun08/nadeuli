@@ -50,14 +50,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getPostList(SearchDTO searchDTO) throws Exception {
+    public List<PostDTO> getPostList(String gu, SearchDTO searchDTO) throws Exception {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Post> postPage;
         if(searchDTO.getSearchKeyword() == null || searchDTO.getSearchKeyword().isEmpty()){
             postPage = postRepository.findAll(pageable);
         }else{
-            postPage = postRepository.findByTitleContainingOrContentContaining(searchDTO.getSearchKeyword(), searchDTO.getSearchKeyword(), pageable);
+            postPage = postRepository.findByGuAndTitleContainingOrContentContaining(gu,searchDTO.getSearchKeyword(), searchDTO.getSearchKeyword(), pageable);
         }
         log.info(postPage);
         return postPage.map(postMapper::postToPostDTO).toList();
@@ -76,49 +76,49 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(postId);
     }
 
-    @Override
-    public PostDTO addStreamingChannel(PostDTO postDTO) throws Exception {
-        Long time = System.currentTimeMillis();
-        String accessKey = "A7YXXDFuySF3KfWwBjQg";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("x-ncp-apigw-timestamp", time.toString());
-        headers.set("x-ncp-iam-access-key", accessKey);
-        headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
-        return postDTO;
-    }
-
-    public String makeSignature(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-
-        String space = " ";					// 공백
-        String newLine = "\n";  				// 줄바꿈
-//        String method = "GET";  				// HTTP 메서드
-        String method = "POST";  				// HTTP 메서드
-        String url = "/api/v2/channels";	// 도메인을 제외한 "/" 아래 전체 url (쿼리스트링 포함)
-        String accessKey = "A7YXXDFuySF3KfWwBjQg";		// access key id (from portal or Sub Account)
-        String secretKey = "BoekwrkmB32dJJCRSNSYrdkguTVLFZs50Vkh17Fx";		// secret key (from portal or Sub Account)
-        String timestamp = String.valueOf(System.currentTimeMillis());		// 현재 타임스탬프 (epoch, millisecond)
-
-        String message = new StringBuilder()
-                .append(method)
-                .append(space)
-                .append(url)
-                .append(newLine)
-                .append(timestamp)
-                .append(newLine)
-                .append(accessKey)
-                .toString();
-
-        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
-        Mac mac = Mac.getInstance("HmacSHA256");
-        mac.init(signingKey);
-
-        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-        String encodeBase64String = Base64.getEncoder().encodeToString(rawHmac);
-
-        return encodeBase64String;
-    }
+//    @Override
+//    public PostDTO addStreamingChannel(PostDTO postDTO) throws Exception {
+//        Long time = System.currentTimeMillis();
+//        String accessKey = "A7YXXDFuySF3KfWwBjQg";
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        headers.set("x-ncp-apigw-timestamp", time.toString());
+//        headers.set("x-ncp-iam-access-key", accessKey);
+//        headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
+//        return postDTO;
+//    }
+//
+//    public String makeSignature(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+//
+//        String space = " ";					// 공백
+//        String newLine = "\n";  				// 줄바꿈
+////        String method = "GET";  				// HTTP 메서드
+//        String method = "POST";  				// HTTP 메서드
+//        String url = "/api/v2/channels";	// 도메인을 제외한 "/" 아래 전체 url (쿼리스트링 포함)
+//        String accessKey = "A7YXXDFuySF3KfWwBjQg";		// access key id (from portal or Sub Account)
+//        String secretKey = "BoekwrkmB32dJJCRSNSYrdkguTVLFZs50Vkh17Fx";		// secret key (from portal or Sub Account)
+//        String timestamp = String.valueOf(System.currentTimeMillis());		// 현재 타임스탬프 (epoch, millisecond)
+//
+//        String message = new StringBuilder()
+//                .append(method)
+//                .append(space)
+//                .append(url)
+//                .append(newLine)
+//                .append(timestamp)
+//                .append(newLine)
+//                .append(accessKey)
+//                .toString();
+//
+//        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+//        Mac mac = Mac.getInstance("HmacSHA256");
+//        mac.init(signingKey);
+//
+//        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
+//        String encodeBase64String = Base64.getEncoder().encodeToString(rawHmac);
+//
+//        return encodeBase64String;
+//    }
 
 
 
