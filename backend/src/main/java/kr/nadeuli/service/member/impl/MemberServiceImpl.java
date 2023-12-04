@@ -7,10 +7,14 @@ import jakarta.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import kr.nadeuli.category.DeliveryState;
+import kr.nadeuli.category.TradeType;
 import kr.nadeuli.dto.AddressDTO;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.NadeuliDeliveryDTO;
+import kr.nadeuli.dto.NadeuliPayHistoryDTO;
 import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.ReportDTO;
@@ -157,10 +161,12 @@ public class MemberServiceImpl implements MemberService{
    memberRepository.save(memberMapper.memberDTOToMember(existMember));
   }
 
+
   //내 프로필 조회
   @Override
   public MemberDTO getMember(String tag) throws Exception {
     return memberRepository.findByTag(tag).map(memberMapper::memberToMemberDTO).orElse(null);
+
   }
 
   //상대 프로필 조회
@@ -197,7 +203,7 @@ public class MemberServiceImpl implements MemberService{
 
   //회원가입시 동네 설정, 동네 수정
   @Override
-  public void addDongNe(String tag, GpsDTO gpsDTO) throws Exception {
+  public AddressDTO addDongNe(String tag, GpsDTO gpsDTO) throws Exception {
     WebClient webClient = webClientBuilder.baseUrl(mapApiUrl)
         .defaultHeader(HttpHeaders.AUTHORIZATION, "KakaoAK " + mapKey)
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -233,6 +239,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
 //    return addressDTO.getDocuments().get(1).getAddressName() + addressDTO.getDocuments().get(1).getRegion2depthName();
+    return addressDTO;
   }
 
   //회원 정지
@@ -347,6 +354,68 @@ public class MemberServiceImpl implements MemberService{
     return affinity;
   }
 
+  //나드리페이 입금
+  //nadeuliPayCharge
+  @Override
+  public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
+    log.info("전달받은 tag와 nadeuliPayHistoryDTO와 nadeuliDeliveryDTO는 {},{},{}", tag, nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
+    //1. 전달받은 tag로 현재 멤버 잔액 조회
+    MemberDTO memberDTO = getMember(tag);
+    log.info("조회한 memberDTO는 {}", memberDTO);
+
+    //2. 멤버 잔액 변수에 저장
+    Long memberNadeuliPayBalance = memberDTO.getNadeuliPayBalance();
+
+    //3. 나드리페이거래내역DTO가 null이아닐떄 거래타입을 가져옴
+    TradeType tradeType = (nadeuliPayHistoryDTO != null) ? nadeuliPayHistoryDTO.getTradeType() : null;
+    //4. 나드리부름DTO가 null이아닐떄 부름상태를 가져옴
+    DeliveryState deliveryState = (nadeuliDeliveryDTO != null) ? nadeuliDeliveryDTO.getDeliveryState() : null;
+
+    //5. 나드리페이 입금이 참이면 현재잔액에 +
+    if (depositNadeuliPayBalance(tradeType, deliveryState)) {
+      Long tradingMoney = getHandleMoney(nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
+      memberDTO.setNadeuliPayBalance(memberNadeuliPayBalance + tradingMoney);
+    //6. 나드리페이 출금이 참이면 현재잔액에 -
+    } else if (withdrawNadeuliPayBalance(tradeType, deliveryState)) {
+      Long tradingMoney = getHandleMoney(nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
+      Long result = memberNadeuliPayBalance - tradingMoney;
+
+      // 잔액 부족 예외 처리
+      if (result < 0) {
+        throw new Exception("잔액이 부족합니다.");
+      }
+      //7. 나드리페이 계산결과를 잔액에 set
+      memberDTO.setNadeuliPayBalance(result);
+    }
+
+    //8. 멤버 잔액 업데이트
+    updateMember(memberDTO);
+  }
+
+
+  // DTO별로 null체크해서 계산할 금액 가져오기
+  private Long getHandleMoney(NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO) {
+    if (nadeuliPayHistoryDTO != null) {
+      return nadeuliPayHistoryDTO.getTradingMoney();
+    } else if (nadeuliDeliveryDTO != null) {
+      return nadeuliDeliveryDTO.getDeposit();
+    }
+    return 0L;
+  }
+
+  //나드리페이 입금일 때 참
+  private boolean depositNadeuliPayBalance(TradeType tradeType, DeliveryState deliveryState) {
+    return tradeType == TradeType.CHARGE ||
+        (deliveryState != null && (deliveryState == DeliveryState.CANCEL_ORDER ||
+            deliveryState == DeliveryState.CANCEL_DELIVERY ||
+            deliveryState == DeliveryState.COMPLETE_DELIVERY));
+  }
+
+  //나드리페이 출금일 때 참
+  private boolean withdrawNadeuliPayBalance(TradeType tradeType, DeliveryState deliveryState) {
+    return (tradeType == TradeType.PAYMENT || tradeType == TradeType.WITHDRAW) ||
+        (deliveryState != null && deliveryState == DeliveryState.DELIVERY_ORDER);
+  }
 
 }
 

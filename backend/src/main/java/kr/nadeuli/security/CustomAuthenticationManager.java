@@ -24,7 +24,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     //2. 전달된 Authentication 객체에서 사용자 이름을 추출하여 UserDetails를 가져옴
     UserDetails userDetails = customUserDetailsService.loadUserByUsername(authentication.getName());
-
+    log.info("아씨발");
     //3. 각종 처리를 구현
     //3-1. 기본만 구현할 것이기 때문에 나중을위해 커스텀한것
     //3-2. UserDetails에서 사용자 이름과 권한을 추출하여 UsernamePasswordAuthenticationToken을 생성함

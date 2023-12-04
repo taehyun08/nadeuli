@@ -102,22 +102,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(jwtService.isTokenValid(jwt, userDetails)){
           //12-2. 토큰이 유효하다면 현재 사용자의 인증 정보를 저장하는데 사용되는 SecurityContext 생성
           SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-          log.info("securityContext: {}", securityContext);
 
           //12-3. 사용자 정보, 암호화된 비밀번호(여기서는 null), 및 권한(authorities)을 설정
           UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
               userDetails, null, userDetails.getAuthorities()
           );
-
+          log.info("token은 {}",token);
           //13. 웹 요청과 관련된 정보를 포함시킴.
           //14. 이 정보는 사용자의 인증 요청과 관련하여 로그인 시도에 대한 자세한 정보를 기록하는 데 사용
           token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
           //15. securityContext에 앞에서 생성한 토큰을 설정
           securityContext.setAuthentication(token);
-
+          log.info("securityContext은 {}",securityContext);
           //16. Spring Security의 SecurityContextHolder에 저장하여 현재 사용자의 인증 정보를 업데이트
           SecurityContextHolder.setContext(securityContext);
+          log.info("securityContext은 {}",securityContext);
         }
       }
     }
@@ -125,6 +125,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 필터를 연결하고 다음 시나리오로 이동
     // 보안 구성 및 관련 저장소를 추가할 것임
     // SecurityConfig로 이동해보자
+    log.info("다음");
     filterChain.doFilter(request,response);
   }
 }
