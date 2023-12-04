@@ -38,6 +38,9 @@ public class Orikkiri {
     @Column(name = "orikkiri_regist_time", nullable = false)
     private LocalDateTime orikkiriRegistTime;
 
+    @Column(name = "master_tag", nullable = false, length = 20)
+    private String masterTag;
+
     @OneToMany(mappedBy = "orikkiri", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AnsQuestion> ansQuestions;
 
