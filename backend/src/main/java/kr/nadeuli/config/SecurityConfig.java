@@ -2,6 +2,7 @@ package kr.nadeuli.config;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import kr.nadeuli.category.Role;
 import kr.nadeuli.security.CustomAuthenticationManager;
 import kr.nadeuli.security.CustomUserDetailsService;
@@ -9,6 +10,7 @@ import kr.nadeuli.security.OAuth2LoginFailureHandler;
 import kr.nadeuli.security.OAuth2LoginSuccessHandler;
 import kr.nadeuli.service.oauth.impl.CustomOauth2MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -17,18 +19,23 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
-  /* 번호를 잘 따라갈것. 용어설명부터 시작하여 흐름을 제공하겠다.
+  /** 번호를 잘 따라갈것. 용어설명부터 시작하여 흐름을 제공하겠다.
   *  1. 인증및 권한을 부여, 보호하는 기능을 제공
   *  1-1. credential(principal -> username, credential -> password) 방식을 사용
   *       securityFilterChain을 기반으로 동작한다.
@@ -79,15 +86,39 @@ public class SecurityConfig {
   *       AuthenticationManager를 구현했기때문에 기능은 같다.
   *       부가적으로 Authentication의 객체타입을 지정하는 supports 메서드도 가진다.
   *       UsernamePasswordAuthenticationToken를 지원한다.
-   *
   *
+  *  6. ProviderManager 컴포넌트
   *
+  *  6-1. 여러 개의 AuthenticationProvider를 관리하고 순서대로 시도하여 인증을 시도하는 매니저
+  *       여러 인증 프로바이더가 등록되어 있을 때 각각에 대해 시도하며, 첫 번째로 성공한 프로바이더의 결과를 반환
+  *       authenticate 메서드를 호출하여 사용자 인증을 시도하면, 등록된 AuthenticationProvider들이 순서대로 호출
+  *
+  *  7. UserDetailsService 컴포넌트
+  *
+  *  7-1. 사용자 정보를 데이터베이스나 다른 저장소에서 가져오기 위한 인터페이스이며
+  *       인터페이스를 구현하여 사용자 정보를 로드하고, Spring Security가 이 정보를 활용하여 인증을 수행
+  *       UserDetailsService의 주요 메서드는 loadUserByUsername다.
+  *       사용자 이름(또는 식별자)을 받아 해당 사용자의 정보를 로드하고 UserDetails 객체로 반환
+  *
+  *  8. UserDetails 컴포넌트
+  *
+  *  8-1. 사용자의 정보를 나타내는 인터페이스이며 구현한 객체는 사용자의 자격 증명 및 권한 정보를 제공한다.
+  *       보통 User 클래스를 사용하여 UserDetails를 구현한다.
+  *       인증에 성공하여 생성된 UserDetails클래스는 Authentication 객체를 구현한
+  *       UsernamePasswordAuthenticationToken을 생성하기 위해 사용된다.
+  *
+  *  9. AuthenticationFilter 컴포넌트
+  *
+  *  9-1. 사용자의 인증(Authentication)을 처리하는 역할을하고
+  *       사용자가 로그인하거나 특정 자원에 접근할 때 인증을 수행하는 데에 쓰인다.
+  *       인증 요청을 가로채고, Authentication 객체를 만든 뒤 AuthenticationManager에게 인증 역할을 위임함
+  *       로그인 URL, 로그인 성공/실패 핸들러, 필터 순서 등을 조정할 수 있다
   *
   * */
 
 
 
-  /* Spring Security 흐름
+  /** Spring Security 흐름
   *  1. 사용자의 로그인 정보,인증요청이 담긴 Http Request를 수신한다
   *
   *  2. AuthenticationFilter가 요청을 가로챈다(Jwt를 사용하기때문에 JwtAuthenticationFilter를 커스텀)
@@ -116,46 +147,82 @@ public class SecurityConfig {
   * */
 
   ///Field
-  //2. JWT가 유효한지 체크하는 인증필터
+  // JWT가 유효한지 체크하는 인증필터
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-  //3. UserDetailsService를 커스텀한 서비스
+  // UserDetailsService를 커스텀한 서비스
   private final CustomUserDetailsService customUserDetailsService;
 
-  //4. 소셜로그인 OAuth2Login의 성공/실패에 대한 처리
+  // 소셜로그인 OAuth2Login의 성공/실패에 대한 처리
   private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
   private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
-  //5. Oauth2MemberService를 커스텀한 서비스
+  // Oauth2MemberService를 커스텀한 서비스
   private final CustomOauth2MemberServiceImpl customOauth2MemberService;
 
+  // AuthenticationManager를 커스텀
   private final CustomAuthenticationManager customAuthenticationManager;
 
-
   ///Method
+  /**
+   * 이 메서드는 정적 자원에 대해 보안을 적용하지 않도록 설정한다.
+   * 정적 자원은 보통 HTML, CSS, JavaScript, 이미지 파일 등을 의미하며,
+   * 이들에 대해 보안을 적용하지 않음으로써 성능을 향상시킬 수 있다.
+   */
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return web -> web.ignoring()
+        .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("*"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+    configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Content-Type", "Authorization", "X-XSRF-token"));
+    configuration.setAllowCredentials(false);
+    configuration.setMaxAge(3600L);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    configuration.addExposedHeader("Authorization");
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
   //6. SecurityFilterChain을 반환하는 메소드 생성
   //6-1. 보안설정에대해서 어떻게 처리해나갈지 흐름 제공
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         //7. CSRF(Cross-Site Request Forgery) 공격을 비활성화하여 보안문제를 방지하고 웹 애플리케이션의 안전성을 강화
-        //7-1. csrf를 비활성화하기위해 AbstractHttpConfigurer를 disable
+        //7-1. 웹 애플리케이션의 취약점 중 하나로, 사용자가 자신의 의지와는 무관하게 공격자가 의도한 행위를 하도록 만드는 공격
+        //7-2. csrf를 비활성화하기위해 AbstractHttpConfigurer를 disable
         .csrf(AbstractHttpConfigurer::disable)
+        /**
+         * CORS(Cross-Origin Resource Sharing)는 다른 도메인의 리소스에 웹 페이지가 접근할 수 있도록 브라우저에게 권한을 부여하는 메커니즘이다.
+         * 아래의 설정은 특정 CORS 구성 소스(corsConfigurationSource())를 사용하여 CORS 설정을 적용한다.
+         * */
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         //8. HTTP 요청에 대한 접근 권한을 설정
         .authorizeHttpRequests((request) -> request
             //8-1. .permitAll()에 해당하는 URI는 인증되지않은 회원도 접근 가능
-            .requestMatchers("/api/v1/auth/**","/javascript/**","/css/**","/images/**","/addMember","/index.html","/nadeulidelivery/**","/product/**","/nadeuliPay/**","/trade/**","/orikkiri/**","/orikkiriManage/**","/member/**","/dongNe/**").permitAll()
+            .requestMatchers("/api/v1/auth/**","/resources/**","/nadeulidelivery/**","/product/**","/nadeuliPay/**","/trade/**","/orikkiri/**","/orikkiriManage/**","/member/**","/dongNe/**").permitAll()
             //8-2. ADMIN만 접근가능
             .requestMatchers("/api/v1/admin/**").hasAnyAuthority(Role.ADMIN.name())
             //8-3. USER만 접근가능
             .requestMatchers("/api/v1/member/**").hasAnyAuthority(Role.USER.name())
             //8-4. 모든 요청에 대해 인증이 필요함
             .anyRequest().authenticated())
-        .httpBasic(Customizer.withDefaults()) // httpBasic 사용 X
         //세션관리 비활성화,상태를 저장하지 않는 세션을 사용하며
         //모든 요청은 세션에 의존하지 않는다. 이는 주로 토큰 기반의 인증을 사용할 때 사용
         .sessionManagement(
             manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .formLogin(login -> login
+            .loginPage("/login")
+            .successHandler(new SimpleUrlAuthenticationSuccessHandler("/index.html"))
+            .permitAll()
+        )
+        .httpBasic(Customizer.withDefaults()) // httpBasic 사용 X
         .oauth2Login(oauth2Configurer -> oauth2Configurer
                          .loginPage("/index.html")  // OAuth2 로그인 페이지 설정
                          .userInfoEndpoint(userInfo -> userInfo
@@ -164,14 +231,7 @@ public class SecurityConfig {
                          .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
                          .defaultSuccessUrl("/index.html", true)  // OAuth2 로그인 성공 시 기본 이동 경로
         )
-        .formLogin(login -> login
-            .loginPage("/user/login")  // 로그인 페이지 설정
-            .loginProcessingUrl("/user/login")  // 로그인 처리 URL 설정
-//            .usernameParameter("userId")  // 사용자 아이디 파라미터명 설정
-//            .passwordParameter("password")  // 비밀번호 파라미터명 설정
-//            .defaultSuccessUrl("/", true)  // 로그인 성공 시 기본 이동 경로
-            .permitAll()  // 로그인 페이지 접근 허용
-        )
+
         //사용자 인증을 처리
         //사용자의 인증을 검증하고 사용자 정보를 가져오는 역할
         //사용자의 JWT 토큰을 검증하고, 사용자를 인증

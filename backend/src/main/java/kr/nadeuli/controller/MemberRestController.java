@@ -45,7 +45,7 @@ public class MemberRestController {
   public MemberDTO getMember(@PathVariable String tag) throws Exception{
     log.info("getMember에서 받은 tag는 {}",tag);
 
-    return memberService.getMember(tag);
+    return memberService.getMember("#"+tag);
 
   }
 }
