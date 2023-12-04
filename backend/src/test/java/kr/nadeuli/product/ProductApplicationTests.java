@@ -66,7 +66,8 @@ public class ProductApplicationTests {
         searchDTO.setCurrentPage(0);
         searchDTO.setPageSize(pageSize);
         searchDTO.setSearchKeyword("목");
-        List<ProductDTO> productDTOList = productService.getProductList(searchDTO);
+        String tag = "";
+        List<ProductDTO> productDTOList = productService.getProductList(tag, searchDTO);
         System.out.println(productDTOList);
     }
 

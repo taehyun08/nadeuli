@@ -53,8 +53,9 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId).map(productMapper::productToProductDTO).orElse(null);
     }
 
+    // 수정필요
     @Override
-    public List<ProductDTO> getProductList(SearchDTO searchDTO) throws Exception {
+    public List<ProductDTO> getProductList(String tag, SearchDTO searchDTO) throws Exception {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Product> productPage;
