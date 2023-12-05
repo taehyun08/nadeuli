@@ -6,6 +6,9 @@ import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.service.orikkirimanage.OrikkiriManageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,16 +21,25 @@ public class OrikkiriManageRestController {
 
     private final OrikkiriManageService orikkiriManageService;
 
+    @Value("${pageSize}")
+    private int pageSize;
+
+    //todo 리턴 타입 아래처럼 수정
+    // public ResponseEntity<String> getData() {
+    //        String jsonData = "{\"message\": \"Hello, World!\"}";
+    //        return ResponseEntity.status(HttpStatus.OK).body(jsonData);
+    //    }
+
     @PostMapping("/addOrikkiri")
-    public String addOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
+    public ResponseEntity<String> addOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
         orikkiriManageService.addOrikkiri(orikkiriDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/updateOrikkiri")
-    public String updateOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
+    public ResponseEntity<String> updateOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
         orikkiriManageService.updateOrikkiri(orikkiriDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/getOrikkiri/{orikkiriId}")
@@ -36,21 +48,21 @@ public class OrikkiriManageRestController {
     }
 
     @GetMapping("/deleteOrikkiri/{orikkiriId}")
-    public String deleteOrikkiri(@PathVariable long orikkiriId) throws Exception {
+    public ResponseEntity<String> deleteOrikkiri(@PathVariable long orikkiriId) throws Exception {
         orikkiriManageService.deleteOrikkiri(orikkiriId);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/addAnsQuestion")
-    public String addAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
+    public ResponseEntity<String> addAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
         orikkiriManageService.addAnsQuestion(ansQuestionDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/updateAnsQuestion")
-    public String updateAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
+    public ResponseEntity<String> updateAnsQuestion(@RequestBody AnsQuestionDTO ansQuestionDTO) throws Exception {
         orikkiriManageService.updateAnsQuestion(ansQuestionDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/getAnsQuestion/{ansQuestionId}")
@@ -58,15 +70,16 @@ public class OrikkiriManageRestController {
         return orikkiriManageService.getAnsQuestion(ansQuestionId);
     }
 
-    @GetMapping("/getAnsQuestionList/{orikkiriId}")
-    public List<AnsQuestionDTO> getAnsQuestionList(@PathVariable long orikkiriId, SearchDTO searchDTO) throws Exception {
+    @GetMapping("/getAnsQuestionList")
+    public List<AnsQuestionDTO> getAnsQuestionList(long orikkiriId, SearchDTO searchDTO) throws Exception {
+        searchDTO.setPageSize(pageSize);
         return orikkiriManageService.getAnsQuestionList(orikkiriId, searchDTO);
     }
 
     @GetMapping("/deleteAnsQuestion/{ansQuestionId}")
-    public String deleteAnsQuestion(@PathVariable long ansQuestionId) throws Exception {
+    public ResponseEntity<String> deleteAnsQuestion(@PathVariable long ansQuestionId) throws Exception {
         orikkiriManageService.deleteAnsQuestion(ansQuestionId);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
 

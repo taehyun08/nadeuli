@@ -88,8 +88,8 @@ public class OrikkiriManageApplicationTests {
 
 
 
-//    @Test
-//    @Transactional
+    @Test
+    @Transactional
     public void testGetAnsQuestionList() throws Exception {
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);

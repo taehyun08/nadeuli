@@ -8,6 +8,8 @@ import kr.nadeuli.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,10 +27,17 @@ public class DongNeRestController {
     @Value("${pageSize}")
     int pageSize;
 
+    //todo 리턴 타입 아래처럼 수정
+    // public ResponseEntity<String> getData() {
+    //        String jsonData = "{\"message\": \"Hello, World!\"}";
+    //        return ResponseEntity.status(HttpStatus.OK).body(jsonData);
+    //    }
+
+
     @PostMapping("/addPost")
-    public String addPost(@RequestBody PostDTO postDTO) throws Exception {
+    public ResponseEntity<String> addPost(@RequestBody PostDTO postDTO) throws Exception {
         postService.addPost(postDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/getPost/{postId}")
@@ -44,23 +53,23 @@ public class DongNeRestController {
         return postService.getPostList(gu, searchDTO);
 
     }
-//todo
+
     @PostMapping("/updatePost")
-    public String updatePost(@RequestBody PostDTO postDTO) throws Exception {
+    public ResponseEntity<String> updatePost(@RequestBody PostDTO postDTO) throws Exception {
         postService.updatePost(postDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/deletePost/{postId}")
-    public String deletePost(@PathVariable long postId) throws Exception {
+    public ResponseEntity<String> deletePost(@PathVariable long postId) throws Exception {
         postService.deletePost(postId);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/addComment")
-    public String addComment(@RequestBody CommentDTO commentDTO) throws Exception {
+    public ResponseEntity<String> addComment(@RequestBody CommentDTO commentDTO) throws Exception {
         commentService.addComment(commentDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/getComment/{commentId}")
@@ -75,15 +84,15 @@ public class DongNeRestController {
     }
 
     @PostMapping("/updateComment")
-    public String updateComment(@RequestBody CommentDTO commentDTO) throws Exception {
+    public ResponseEntity<String> updateComment(@RequestBody CommentDTO commentDTO) throws Exception {
         commentService.updateComment(commentDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/deleteComment/{commentId}")
-    public String deleteComment(@PathVariable long commentId) throws Exception {
+    public ResponseEntity<String> deleteComment(@PathVariable long commentId) throws Exception {
         commentService.deleteComment(commentId);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
 }

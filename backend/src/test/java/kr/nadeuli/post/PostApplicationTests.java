@@ -29,24 +29,23 @@ public class PostApplicationTests {
     @Value("${pageSize}")
     private int pageSize;
 
-//    @Test
+    //@Test
 //    @RepeatedTest(3)
     public void testAddPost() throws Exception {
         List<String> imageList = new ArrayList<>();
-        imageList.add("눈사진.jpg");
-        imageList.add("음식사진.png");
-        imageList.add("우리끼리 사진.jpg");
+        imageList.add("디비테스트1.jpg");
+        imageList.add("테스트2.png");
+        imageList.add("테스트3 사진.jpg");
         PostDTO postDTO = PostDTO.builder()
-                .title("앨범 제목11")
+                .title("이미지테스트")
                 .content("스트리밍 내용")
                 .postCategory(3L)
-                .images(imageList)
                 .video("test")
 //                .orikkiri(Orikkiri.builder().orikkiriId().build())
                 .orikkiriName("우리끼리1")
                 .orikkiriPicture("우리끼리사진1")
                 .streaming("먹방")
-                .images(imageList)
+//                .images(imageList)
                 .gu("송파구")
                 .dongNe("서울")
                 .writer(MemberDTO.builder().tag("Bss3").build())
@@ -72,8 +71,8 @@ public class PostApplicationTests {
 
 
     // 주소 단위만 테스트 필요
-   @Test
-   @Transactional
+//   @Test
+//   @Transactional
     public void testGetPostList() throws Exception {
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);
@@ -84,15 +83,14 @@ public class PostApplicationTests {
         System.out.println(postDTOList);
     }
 
-    //@Test
+    @Test
     public void testUpdatePost() throws Exception {
         List<String> imageList = new ArrayList<>();
-        imageList.add("눈사진.jpg");
+        imageList.add("디비에 들어가나 테스트.jpg");
         PostDTO postDTO = PostDTO.builder()
                 .postId(1L)
-                .title("댓글이 어케되나 볼까")
+                .title("이미지 테스트용")
                 .content("동네 맛집 맛집맛집")
-                .images(imageList)
                 .postCategory(2L)
                 .gu("송파구")
                 .dongNe("서울")

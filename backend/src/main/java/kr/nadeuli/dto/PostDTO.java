@@ -28,6 +28,6 @@ public class PostDTO {
     private String timeAgo;
     private MemberDTO writer;
     private OrikkiriDTO orikkiri;
-    private List<String> images;
+//    private List<String> images;
 
 }
