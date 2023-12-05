@@ -12,7 +12,7 @@ import java.util.List;
 
      ProductDTO getProduct(long productId) throws Exception;
 
-     List<ProductDTO> getProductList(String tag, SearchDTO searchDTO) throws Exception;
+     List<ProductDTO> getProductList(String gu, SearchDTO searchDTO) throws Exception;
 
      List<ProductDTO> getMyProductList(String sellerTag, SearchDTO searchDTO) throws Exception;
 
