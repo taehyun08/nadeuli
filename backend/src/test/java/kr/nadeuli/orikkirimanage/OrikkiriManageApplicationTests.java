@@ -57,11 +57,16 @@ public class OrikkiriManageApplicationTests {
         System.out.println(orikkiriDTO);
     }
 
+<<<<<<< Updated upstream
 //    @Test
+=======
+   // @Test
+>>>>>>> Stashed changes
     public void testDeleteOrikkiri() throws Exception{
         long orikkiriId = 1L;
         orikkiriManageService.deleteOrikkiri(orikkiriId);
     }
+<<<<<<< Updated upstream
     
     //@Test
     public void testAddAnsQuestion() throws Exception {
@@ -71,11 +76,29 @@ public class OrikkiriManageApplicationTests {
                 .content("자 이건 질문입니다.")
                 .orikkiri(OrikkiriDTO.builder().orikkiriId(orikkiriId).build())
                 .oriScheMemChatFav(OriScheMemChatFavDTO.builder().oriScheMemChatFavId(19L).build())
+=======
+
+    @Test
+    //    @RepeatedTest(3)
+    public void testAddAnsQuestion() throws Exception {
+        long orikkiriId = 2L;
+        AnsQuestionDTO ansQuestionDTO = AnsQuestionDTO.builder()
+                .content("")
+                .orikkiri(OrikkiriDTO.builder().orikkiriId(orikkiriId).build())
+//                .oriScheMemChatFav(OriScheMemChatFavDTO.builder().oriScheMemChatFavId().build())
+>>>>>>> Stashed changes
                 .build();
         System.out.println(ansQuestionDTO);
 
+<<<<<<< Updated upstream
         orikkiriManageService.addAnsQuestion(ansQuestionDTO);
 //        orikkiriManageService.updateAnsQuestion(ansQuestionDTO);
+=======
+        System.out.println(ansQuestionDTO);
+
+        orikkiriManageService.addAnsQuestion(ansQuestionDTO);
+//        orikkiriManageService.updateAnsQuestion(orikkiriDTO);
+>>>>>>> Stashed changes
     }
 
 
@@ -88,8 +111,8 @@ public class OrikkiriManageApplicationTests {
 
 
 
-//    @Test
-//    @Transactional
+    @Test
+    @Transactional
     public void testGetAnsQuestionList() throws Exception {
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);
