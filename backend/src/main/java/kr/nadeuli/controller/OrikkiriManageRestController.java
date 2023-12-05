@@ -24,12 +24,6 @@ public class OrikkiriManageRestController {
     @Value("${pageSize}")
     private int pageSize;
 
-    //todo 리턴 타입 아래처럼 수정
-    // public ResponseEntity<String> getData() {
-    //        String jsonData = "{\"message\": \"Hello, World!\"}";
-    //        return ResponseEntity.status(HttpStatus.OK).body(jsonData);
-    //    }
-
     @PostMapping("/addOrikkiri")
     public ResponseEntity<String> addOrikkiri(@RequestBody OrikkiriDTO orikkiriDTO) throws Exception {
         orikkiriManageService.addOrikkiri(orikkiriDTO);

@@ -2,7 +2,6 @@ package kr.nadeuli.service.post.impl;
 
 import kr.nadeuli.dto.PostDTO;
 import kr.nadeuli.dto.SearchDTO;
-import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.Post;
 import kr.nadeuli.mapper.PostMapper;
 import kr.nadeuli.service.post.PostRepository;
@@ -31,10 +30,11 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public void addPost(PostDTO postDTO) throws Exception {
+    public Long addPost(PostDTO postDTO) throws Exception {
         Post post = postMapper.postDTOToPost(postDTO);
         log.info(post);
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        return savedPost.getPostId();
     }
 
     @Override
@@ -54,10 +54,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(PostDTO postDTO) throws Exception {
+    public Long updatePost(PostDTO postDTO) throws Exception {
         Post post = postMapper.postDTOToPost(postDTO);
         log.info(post);
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        return savedPost.getPostId();
     }
 
     @Override

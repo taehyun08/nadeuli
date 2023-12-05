@@ -15,7 +15,9 @@ public interface ImageService {
 
     List<ImageDTO> getImagesList(long ImageId, SearchDTO searchDTO) throws Exception;
 
-    void updateImages(ImageDTO imageDTO) throws Exception;
+    void deletePostImage(long postId) throws Exception;
+    void deleteProductImage(long productId) throws Exception;
+    void deleteNadeuliDeliveryImage(long nadeuliDeliveryId) throws Exception;
 
     void deleteImage(long imageId) throws Exception;
 

@@ -18,4 +18,9 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Page<Image> findByNadeuliDelivery(NadeuliDelivery nadeuliDelivery, Pageable pageable);
 
 
+    void deleteByPost(Post post);
+
+    void deleteByProduct(Product product);
+
+    void deleteByNadeuliDelivery(NadeuliDelivery nadeuliDelivery);
 }

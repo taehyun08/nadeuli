@@ -1,9 +1,8 @@
 package kr.nadeuli.controller;
 
-import kr.nadeuli.dto.CommentDTO;
-import kr.nadeuli.dto.PostDTO;
-import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.dto.*;
 import kr.nadeuli.service.comment.CommentService;
+import kr.nadeuli.service.image.ImageService;
 import kr.nadeuli.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,23 +20,26 @@ import java.util.List;
 public class DongNeRestController {
 
     private final PostService postService;
+    private final ImageService imageService;
     private final CommentService commentService;
+
 
 
     @Value("${pageSize}")
     int pageSize;
 
-    //todo 리턴 타입 아래처럼 수정
-    // public ResponseEntity<String> getData() {
-    //        String jsonData = "{\"message\": \"Hello, World!\"}";
-    //        return ResponseEntity.status(HttpStatus.OK).body(jsonData);
-    //    }
-
-
     @PostMapping("/addPost")
     public ResponseEntity<String> addPost(@RequestBody PostDTO postDTO) throws Exception {
-        postService.addPost(postDTO);
-        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
+        Long postId = postService.addPost(postDTO);
+        for(String image : postDTO.getImages()){
+            imageService.addImage(ImageDTO.builder()
+                    .imageName(image)
+                    .post(PostDTO.builder()
+                            .postId(postId)
+                            .build())
+                    .build());
+        }
+      return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/getPost/{postId}")
@@ -51,18 +53,29 @@ public class DongNeRestController {
         System.out.println(gu);
         System.out.println(searchDTO);
         return postService.getPostList(gu, searchDTO);
-
     }
 
     @PostMapping("/updatePost")
     public ResponseEntity<String> updatePost(@RequestBody PostDTO postDTO) throws Exception {
-        postService.updatePost(postDTO);
+        Long postId = postService.updatePost(postDTO);
+
+        imageService.deletePostImage(postId);
+
+        for(String image : postDTO.getImages()){
+            imageService.addImage(ImageDTO.builder()
+                    .imageName(image)
+                    .post(PostDTO.builder()
+                            .postId(postDTO.getPostId())
+                            .build())
+                    .build());
+        }
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @GetMapping("/deletePost/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable long postId) throws Exception {
         postService.deletePost(postId);
+        imageService.deletePostImage(postId);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 

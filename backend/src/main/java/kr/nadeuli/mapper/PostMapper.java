@@ -22,16 +22,15 @@ public interface PostMapper {
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "reports", ignore = true)
-    @Mapping(target = "images", ignore = true)
     @Mapping(target = "regDate", ignore = true)
     @Mapping(source = "writer", target = "writer", qualifiedByName = "memberDTOToMember")
     @Mapping(source = "orikkiri", target = "orikkiri", qualifiedByName = "orikkiriDTOToOrikkiri")
-//    @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
+    @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
     Post postDTOToPost(PostDTO postDTO);
 
     @Mapping(source = "writer", target = "writer", qualifiedByName = "memberToMemberDTO")
     @Mapping(source = "orikkiri", target = "orikkiri", qualifiedByName = "orikkiriToOrikkiriDTO")
-//    @Mapping(source = "images", target = "images", qualifiedByName = "imageToString")
+    @Mapping(source = "images", target = "images", qualifiedByName = "imageToString")
     @Mapping(source = "regDate", target = "timeAgo", qualifiedByName = "regDateToTimeAgo")
     PostDTO postToPostDTO(Post post);
 
