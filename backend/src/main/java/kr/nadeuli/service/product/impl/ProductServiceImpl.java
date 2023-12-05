@@ -42,13 +42,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductDTO productDTO) throws Exception {
+    public Long updateProduct(ProductDTO productDTO) throws Exception {
         Product product = productMapper.productDTOToProduct(productDTO);
         log.info(product);
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
         if(productDTO.isPremium()){
-            premiumTimeScheduler.startPremiumTimeScheduler(product.getProductId());
+            premiumTimeScheduler.startPremiumTimeScheduler(savedProduct.getProductId());
         }
+        log.info(savedProduct);
+        return savedProduct.getProductId();
     }
 
     @Override

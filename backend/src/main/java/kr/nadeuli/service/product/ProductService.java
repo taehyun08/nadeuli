@@ -8,7 +8,7 @@ import java.util.List;
  public interface ProductService {
      Long addProduct(ProductDTO productDTO) throws Exception;
 
-     void updateProduct(ProductDTO productDTO) throws Exception;
+     Long updateProduct(ProductDTO productDTO) throws Exception;
 
      ProductDTO getProduct(long productId) throws Exception;
 

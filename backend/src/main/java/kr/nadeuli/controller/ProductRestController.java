@@ -61,6 +61,15 @@ public class ProductRestController {
                                                                                                  .build());
         }
         productService.updateProduct(productDTO);
+        // 한번에 딜릿
+        for(String image : productDTO.getImages()){
+            imageService.addImage(ImageDTO.builder()
+                                          .imageName(image)
+                                          .product(ProductDTO.builder()
+                                                             .productId(productDTO.getProductId())
+                                                             .build())
+                                          .build());
+        }
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
@@ -83,7 +92,6 @@ public class ProductRestController {
                                           .build());
         }
 
-
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
@@ -105,6 +113,7 @@ public class ProductRestController {
     @GetMapping("/deleteProduct/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws Exception {
         productService.deleteProduct(productId);
+        // 이미지 서비스 완성되면 할것 딜리트 프로덕트
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
