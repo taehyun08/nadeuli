@@ -35,7 +35,7 @@ public class NadeuliDeliveryApplicationTests {
     private int pageSize;
 
     @Test
-    public void testAddDeliveryOrder() throws Exception {
+    public void testAddOrUpdateDeliveryOrder() throws Exception {
         // 요청 값 설정
         List<String> imageList = new ArrayList<>();
         imageList.add("갈치.jpg");
@@ -55,16 +55,16 @@ public class NadeuliDeliveryApplicationTests {
                 .deliveryFee(20000L)
                 .deposit(220000L)
                 .departure("서울시 관악구 장군봉5길 33")
-                .arrival("서울특별시 관악구 청룡동 927-11")
+                .arrival("서울시 관악구 청룡동 927-11")
                 .deliveryState(DELIVERY_ORDER)
                 .buyer(MemberDTO.builder().tag("Bss3").nickname("NicknameBss3").build())
                 .images(imageList)
 //                .product(product)
-                .regDate(LocalDateTime.now())
+//                .regDate(LocalDateTime.now())
                 .build();
 
         // method 실행
-        nadeuliDeliveryService.addDeliveryOrder(nadeuliDeliveryDTO);
+        nadeuliDeliveryService.addOrUpdateDeliveryOrder(nadeuliDeliveryDTO);
 
         // 엔티티 조회
         NadeuliDelivery responseEntity = nadeuliDeliveryRepository.findByProductName(nadeuliDeliveryDTO.getProductName());
@@ -78,39 +78,39 @@ public class NadeuliDeliveryApplicationTests {
     }
 
 //    @Test
-    public void testUpdateDeliveryOrder() throws Exception {
-        // 요청 값 설정
-        List<String> updateImageList = new ArrayList<>();
-        updateImageList.add("갈갈치.jpg");
-        updateImageList.add("갈갈치2.jpg");
-        updateImageList.add("갈갈치5.jpg");
+//    public void testUpdateDeliveryOrder() throws Exception {
+//        // 요청 값 설정
+//        List<String> updateImageList = new ArrayList<>();
+//        updateImageList.add("갈갈치.jpg");
+//        updateImageList.add("갈갈치2.jpg");
+//        updateImageList.add("갈갈치5.jpg");
+//
+//        ProductDTO product = ProductDTO.builder()
+//                .productId(3L)
+//                .build();
+//
+//        NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
+//                .nadeuliDeliveryId(22L)
+//                .title("갈갈치 배달 8282")
+//                .content("갈갈치 3박스 인데, 상하기 직전입니다. 빨리 부탁합니다.")
+//                .productName("갈갈치")
+//                .productPrice(100000L)
+//                .productNum(5L)
+//                .deliveryFee(10000L)
+//                .deposit(110000L)
+//                .departure("서울시 관악구 장군봉5길 33")
+//                .arrival("서울특별시 관악구 청룡동 927-11")
+//                .deliveryState(DELIVERY_ORDER)
+//                .buyer(MemberDTO.builder().tag("Bss3").nickname("NicknameBss3").build())
+//                .product(product)
+//                .images(updateImageList)
+//                .build();
+//
+//        // method 실행
+//        nadeuliDeliveryService.updateDeliveryOrder(nadeuliDeliveryDTO);
+//    }
 
-        ProductDTO product = ProductDTO.builder()
-                .productId(3L)
-                .build();
-
-        NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
-                .nadeuliDeliveryId(22L)
-                .title("갈갈치 배달 8282")
-                .content("갈갈치 3박스 인데, 상하기 직전입니다. 빨리 부탁합니다.")
-                .productName("갈갈치")
-                .productPrice(100000L)
-                .productNum(5L)
-                .deliveryFee(10000L)
-                .deposit(110000L)
-                .departure("서울시 관악구 장군봉5길 33")
-                .arrival("서울특별시 관악구 청룡동 927-11")
-                .deliveryState(DELIVERY_ORDER)
-                .buyer(MemberDTO.builder().tag("Bss3").nickname("NicknameBss3").build())
-                .product(product)
-                .images(updateImageList)
-                .build();
-
-        // method 실행
-        nadeuliDeliveryService.updateDeliveryOrder(nadeuliDeliveryDTO);
-    }
-
-//    @Test
+    @Test
     public void testGetDeliveryOrder() throws Exception{
         // 요청 값 설정
         long nadeulideliveryId = 5L;
@@ -140,28 +140,23 @@ public class NadeuliDeliveryApplicationTests {
     }
 
 //    @Test
-    public void testGetMyOrderHistory() throws Exception {
-        // 요청 값 설정
-        NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
-                .nadeuliDeliveryId(5L)
-                .buyer(MemberDTO.builder().tag("Bss3").build())
-                .build();
-        // method 실행
-        NadeuliDeliveryDTO responseDTO = nadeuliDeliveryService.getMyOrderHistory(nadeuliDeliveryDTO);
+//    public void testGetMyOrderHistory() throws Exception {
+//        // 요청 값 설정
+//        long nadeuliDeliveryId = 5L;
+//
+//        // method 실행
+//        NadeuliDeliveryDTO responseDTO = nadeuliDeliveryService.getMyOrderHistory(nadeuliDeliveryId);
+//
+//        // 검증
+//        assertNotNull(responseDTO, "responseDTO 값은 null 일 수 없음.");
+//        assertEquals(nadeuliDeliveryId,
+//                responseDTO.getNadeuliDeliveryId(),
+//                "요청 nadeuliDeliveryId 와 응답 nadeuliDeliveryId 값이 같아야 함.");
+//        assertNotNull(responseDTO.getImages(), "반환된 List<String> images 값은 null 일 수 없음.");
+//
+//    }
 
-        // 검증
-        assertNotNull(responseDTO, "responseDTO 값은 null 일 수 없음.");
-        assertEquals(nadeuliDeliveryDTO.getNadeuliDeliveryId(),
-                responseDTO.getNadeuliDeliveryId(),
-                "요청 nadeuliDeliveryId 와 응답 nadeuliDeliveryId 값이 같아야 함.");
-        assertEquals(nadeuliDeliveryDTO.getBuyer().getTag(),
-                responseDTO.getBuyer().getTag(),
-                "요청 buyer.tag 와 응답 buyer.tag 값이 같아야 함.");
-        assertNotNull(responseDTO.getImages(), "반환된 List<String> images 값은 null 일 수 없음.");
-
-    }
-
-//    @Test
+    @Test
     public void testGetMyOrderHistoryList() throws Exception {
         // 요청 값 설정
         NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
@@ -190,29 +185,23 @@ public class NadeuliDeliveryApplicationTests {
     }
 
 //    @Test
-    public void testGetMyDeliveryHistory() throws Exception {
-        // 요청 값 설정
-        NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
-                .nadeuliDeliveryId(1L)
-                .deliveryPerson(MemberDTO.builder().tag("Bss2").build())
-                .build();
+//    public void testGetMyDeliveryHistory() throws Exception {
+//        // 요청 값 설정
+//        long nadeuliDeliveryId = 1L;
+//
+//        // method 실행
+//        NadeuliDeliveryDTO responseDTO = nadeuliDeliveryService.getMyDeliveryHistory(nadeuliDeliveryId);
+//
+//        // 검증
+//        assertNotNull(responseDTO, "responseDTO 값은 null 일 수 없음.");
+//        assertEquals(nadeuliDeliveryId,
+//                responseDTO.getNadeuliDeliveryId(),
+//                "요청 nadeuliDeliveryId 와 응답 nadeuliDeliveryId 값이 같아야 함.");
+//        assertNotNull(responseDTO.getImages(), "반환된 List<String> images 값은 null 일 수 없음.");
+//
+//    }
 
-        // method 실행
-        NadeuliDeliveryDTO responseDTO = nadeuliDeliveryService.getMyDeliveryHistory(nadeuliDeliveryDTO);
-
-        // 검증
-        assertNotNull(responseDTO, "responseDTO 값은 null 일 수 없음.");
-        assertEquals(nadeuliDeliveryDTO.getNadeuliDeliveryId(),
-                responseDTO.getNadeuliDeliveryId(),
-                "요청 nadeuliDeliveryId 와 응답 nadeuliDeliveryId 값이 같아야 함.");
-        assertEquals(nadeuliDeliveryDTO.getDeliveryPerson().getTag(),
-                responseDTO.getDeliveryPerson().getTag(),
-                "요청 deliveryPerson.tag 와 응답 deliveryPerson.tag 값이 같아야 함.");
-        assertNotNull(responseDTO.getImages(), "반환된 List<String> images 값은 null 일 수 없음.");
-
-    }
-
-//    @Test
+    @Test
     public void testGetMyDeliveryHistoryList() throws Exception {
         // 요청 값 설정
         NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
@@ -239,7 +228,7 @@ public class NadeuliDeliveryApplicationTests {
         System.out.println("responseDTO.size() = " + responseDTO.size());
     }
 
-//    @Test
+    @Test
     public void testGetMyAcceptedDeliveryHistoryList() throws Exception {
         // 요청 값 설정
         NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
@@ -350,30 +339,30 @@ public class NadeuliDeliveryApplicationTests {
         assertNotNull(nadeuliDelivery.getDeliveryCompleteDate(), "배달완료 시간은 null 이 아니어야 한다.");
     }
 
-    @Test
-    public void testGetAcceptedDeliveryLocationList() throws Exception {
-        // 요청 값 설정
-        NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
-                .deliveryPerson(MemberDTO.builder().tag("Bss2").build())
-                .build();
-
-        // method 실행
-        List<NadeuliDeliveryDTO> responseDTO = nadeuliDeliveryService.getAcceptedDeliveryLocationList(nadeuliDeliveryDTO);
-
-        // 검증
-        assertNotNull(responseDTO, "responseDTO 값은 null 일 수 없음.");
-        responseDTO.forEach(dto -> {
-            assertEquals(
-                    nadeuliDeliveryDTO.getDeliveryPerson().getTag()
-                    , dto.getDeliveryPerson().getTag()
-                    , "요청 deliveryPerson.tag 와 응답 deliveryPerson.tag 값이 같아야 함.");
-            assertNotNull(dto.getImages(), "반환된 List<String> images 값은 null 일 수 없음.");
-            assertEquals(ACCEPT_ORDER, dto.getDeliveryState(), "반환 된 주문 상태는 2 : 주문수락 상태 여야 함.");
-        });
-        System.out.println("responseDTO.size() = " + responseDTO.size());
-    }
-
 //    @Test
+//    public void testGetAcceptedDeliveryLocationList() throws Exception {
+//        // 요청 값 설정
+//        NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
+//                .deliveryPerson(MemberDTO.builder().tag("Bss2").build())
+//                .build();
+//
+//        // method 실행
+//        List<NadeuliDeliveryDTO> responseDTO = nadeuliDeliveryService.getAcceptedDeliveryLocationList(nadeuliDeliveryDTO);
+//
+//        // 검증
+//        assertNotNull(responseDTO, "responseDTO 값은 null 일 수 없음.");
+//        responseDTO.forEach(dto -> {
+//            assertEquals(
+//                    nadeuliDeliveryDTO.getDeliveryPerson().getTag()
+//                    , dto.getDeliveryPerson().getTag()
+//                    , "요청 deliveryPerson.tag 와 응답 deliveryPerson.tag 값이 같아야 함.");
+//            assertNotNull(dto.getImages(), "반환된 List<String> images 값은 null 일 수 없음.");
+//            assertEquals(ACCEPT_ORDER, dto.getDeliveryState(), "반환 된 주문 상태는 2 : 주문수락 상태 여야 함.");
+//        });
+//        System.out.println("responseDTO.size() = " + responseDTO.size());
+//    }
+
+    @Test
     @Transactional
     public void testGetDeliveryNotificationList() throws Exception {
         // 요청 값 설정

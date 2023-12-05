@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring")
 public interface NadeuliDeliveryMapper {
     @Mapping(target = "deliveryNotifications", ignore = true)
+    @Mapping(target = "reports", ignore = true)
     @Mapping(source = "product", target = "product", qualifiedByName = "ProductDTOToProduct")
     @Mapping(source = "buyer", target = "buyer", qualifiedByName = "buyerDTOToBuyer")
     @Mapping(source = "deliveryPerson", target = "deliveryPerson", qualifiedByName = "deliveryPersonDTOToDeliveryPerson")
@@ -25,13 +26,17 @@ public interface NadeuliDeliveryMapper {
     @Mapping(source = "deliveryPerson", target = "deliveryPersonNickName", qualifiedByName = "deliveryPersonDTOToDeliveryPersonNickName")
     @Mapping(source = "images", target = "images", qualifiedByName = "stringToImage")
     @Mapping(source = "images", target = "imageName", qualifiedByName = "stringImageListToImageName")
+    @Mapping(target = "regDate", qualifiedByName = "createRegDate")
     NadeuliDelivery nadeuliDeliveryDTOToNadeuliDelivery(NadeuliDeliveryDTO nadeuliDeliveryDTO);
 
+
+
+    @Mapping(target = "deliveryNotifications", ignore = true)
+    @Mapping(target = "reports", ignore = true)
     @Mapping(source = "product", target = "product", qualifiedByName = "ProductToProductDTO")
     @Mapping(source = "buyer", target = "buyer", qualifiedByName = "buyerToBuyerDTO")
     @Mapping(source = "deliveryPerson", target = "deliveryPerson", qualifiedByName = "deliveryPersonToDeliveryPersonDTO")
     @Mapping(source = "imageName", target = "images", qualifiedByName = "imageNameToStringImageList")
-//    @Mapping(source = "images", target = "images", qualifiedByName = "imageToString")
     @Mapping(source = "regDate", target = "timeAgo", qualifiedByName = "regDateToTimeAgo")
     NadeuliDeliveryDTO nadeuliDeliveryToNadeuliDeliveryDTO(NadeuliDelivery nadeuliDelivery);
 
@@ -140,6 +145,11 @@ public interface NadeuliDeliveryMapper {
             return null;
         }
         return ProductDTO.builder().productId(product.getProductId()).build();
+    }
+
+    @Named("createRegDate")
+    default LocalDateTime createRegDate(LocalDateTime regDate) {
+        return LocalDateTime.now();
     }
 
 }
