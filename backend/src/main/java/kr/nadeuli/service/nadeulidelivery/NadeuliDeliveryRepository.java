@@ -21,8 +21,8 @@ public interface NadeuliDeliveryRepository extends JpaRepository<NadeuliDelivery
 
     Page<NadeuliDelivery> findAllByDeliveryPersonTagAndDeliveryState(String deliveryPersonTag, DeliveryState deliveryState, Pageable pageable);
 
-    @Query("SELECT nd FROM NadeuliDelivery nd WHERE nd.deliveryPerson.tag = :deliveryPersonTag AND nd.deliveryState = :deliveryState")
-    List<NadeuliDelivery> findByDeliveryPersonTagAndState(@Param("deliveryPersonTag") String deliveryPersonTag, @Param("deliveryState") DeliveryState deliveryState);
+//    @Query("SELECT nd FROM NadeuliDelivery nd WHERE nd.deliveryPerson.tag = :deliveryPersonTag AND nd.deliveryState = :deliveryState")
+//    List<NadeuliDelivery> findByDeliveryPersonTagAndState(@Param("deliveryPersonTag") String deliveryPersonTag, @Param("deliveryState") DeliveryState deliveryState);
 
 
     NadeuliDelivery findByProductName(String productName);

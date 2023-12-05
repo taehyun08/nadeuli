@@ -25,7 +25,7 @@ public class OrikkiriApplicationTests {
     @Value("${pageSize}")
     private int pageSize;
 
-//    @Test
+    //@Test
     public void testAddOrikkrirSignUp() throws Exception {
         long ansQuestionId = 3L;
         OriScheMemChatFavDTO oriScheMemChatFavDTO = OriScheMemChatFavDTO.builder()
@@ -41,8 +41,8 @@ public class OrikkiriApplicationTests {
     }
 
 
-//        @Test
-//    @Transactional
+    //@Test
+    @Transactional
     public void testGetOrikkiriSignUpList() throws Exception {
         long ansQuestionId = 3L;
         SearchDTO searchDTO = new SearchDTO();
@@ -95,7 +95,7 @@ public class OrikkiriApplicationTests {
 
         orikkiriService.addOrikkiriScheduleMember(oriScheMemChatFavDTO);
     }
-//    @Test
+    @Test
     public void testAddOrikkiriMember() throws Exception {
         OriScheMemChatFavDTO oriScheMemChatFavDTO = OriScheMemChatFavDTO.builder()
                 .member(MemberDTO.builder().tag("Bss3").build())

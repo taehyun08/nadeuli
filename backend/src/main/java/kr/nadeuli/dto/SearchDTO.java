@@ -16,4 +16,6 @@ public class SearchDTO {
     private boolean isSold;
     private boolean isBuyer;
     private boolean isWriter;
+    private boolean isPost;
+    private boolean isProduct;
 }

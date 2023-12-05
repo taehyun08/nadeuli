@@ -92,6 +92,4 @@ public class OrikkiriManageServiceImpl implements OrikkiriManageService {
         ansQuestionRepository.deleteById(ansQuestionId);
     }
 
-
-
 }
