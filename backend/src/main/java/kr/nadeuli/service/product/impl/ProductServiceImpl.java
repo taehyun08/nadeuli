@@ -30,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addProduct(ProductDTO productDTO) throws Exception {
+        productDTO.setViewNum(0L);
         Product product = productMapper.productDTOToProduct(productDTO);
         log.info(product);
         productRepository.save(product);
@@ -50,10 +51,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProduct(long productId) throws Exception {
-        return productRepository.findById(productId).map(productMapper::productToProductDTO).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
+        if(product == null){
+            return null;
+        }
+        product.setViewNum(product.getViewNum()+1);
+        productRepository.save(product);
+        return productMapper.productToProductDTO(product);
     }
 
-    // 수정필요
     @Override
     public List<ProductDTO> getProductList(String gu, SearchDTO searchDTO) throws Exception {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
@@ -73,6 +79,8 @@ public class ProductServiceImpl implements ProductService {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Product> productPage;
+        log.info(searchDTO);
+        log.info(tag);
         if(!searchDTO.isBuyer()){
             productPage = productRepository.findBySellerAndIsSold(Member.builder().tag(tag).build(), searchDTO.isSold(), pageable);
         }else{
