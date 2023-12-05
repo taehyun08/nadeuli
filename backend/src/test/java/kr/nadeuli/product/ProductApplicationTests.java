@@ -26,8 +26,8 @@ public class ProductApplicationTests {
     @Value("${pageSize}")
     private int pageSize;
 
-    //@Test
-    //@Transactional
+    @Test
+    @Transactional
     public void testAddProduct() throws Exception{
         List<String> imageList = new ArrayList<>();
         imageList.add("당근사진.jpg");
