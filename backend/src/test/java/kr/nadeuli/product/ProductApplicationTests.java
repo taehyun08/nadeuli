@@ -60,14 +60,15 @@ public class ProductApplicationTests {
         System.out.println(productDTO);
     }
 
-    //@Test
+    @Test
+    @Transactional
     public void testGetProductList() throws Exception{
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);
         searchDTO.setPageSize(pageSize);
         searchDTO.setSearchKeyword("목");
-        String tag = "";
-        List<ProductDTO> productDTOList = productService.getProductList(tag, searchDTO);
+        String gu = "강남구";
+        List<ProductDTO> productDTOList = productService.getProductList(gu, searchDTO);
         System.out.println(productDTOList);
     }
 

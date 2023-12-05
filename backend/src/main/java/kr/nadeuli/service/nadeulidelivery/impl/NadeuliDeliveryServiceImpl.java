@@ -2,8 +2,14 @@ package kr.nadeuli.service.nadeulidelivery.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import kr.nadeuli.category.DeliveryState;
-import kr.nadeuli.dto.*;
-import kr.nadeuli.entity.*;
+import kr.nadeuli.dto.DeliveryNotificationDTO;
+import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.NadeuliDeliveryDTO;
+import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.entity.DeliveryNotification;
+import kr.nadeuli.entity.Image;
+import kr.nadeuli.entity.Member;
+import kr.nadeuli.entity.NadeuliDelivery;
 import kr.nadeuli.mapper.DeliveryNotificationMapper;
 import kr.nadeuli.mapper.NadeuliDeliveryMapper;
 import kr.nadeuli.service.nadeulidelivery.DeliveryNotificationRepository;
@@ -20,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import static kr.nadeuli.category.DeliveryState.ACCEPT_ORDER;
 
@@ -36,23 +41,18 @@ public class NadeuliDeliveryServiceImpl implements NadeuliDeliveryService {
     private final DeliveryNotificationMapper deliveryNotificationMapper;
 
     @Override
-    public void addDeliveryOrder(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
+    public void addOrUpdateDeliveryOrder(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
+        // 나드리부름 게시물을 등록/수정한다.
 
         NadeuliDelivery nadeuliDelivery = nadeuliDeliveryMapper.nadeuliDeliveryDTOToNadeuliDelivery(nadeuliDeliveryDTO);
+
+        // images 에 각 nadeuliDeliveryId 추가
+        List<Image> images = nadeuliDelivery.getImages();
+        images.forEach(image -> image.setNadeuliDelivery(nadeuliDelivery));
 
         // NadeuliDelivery 엔티티 저장
         nadeuliDeliveryRepository.save(nadeuliDelivery);
         log.info(nadeuliDelivery);
-    }
-
-    @Override
-    public void updateDeliveryOrder(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
-
-        NadeuliDelivery nadeuliDelivery = nadeuliDeliveryMapper.nadeuliDeliveryDTOToNadeuliDelivery(nadeuliDeliveryDTO);
-
-        log.info(nadeuliDelivery);
-        nadeuliDeliveryRepository.save(nadeuliDelivery);
-
     }
 
     @Override
@@ -81,25 +81,20 @@ public class NadeuliDeliveryServiceImpl implements NadeuliDeliveryService {
                 .toList();
     }
 
-    @Override
-    public NadeuliDeliveryDTO getMyOrderHistory(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
-        String buyerTag = nadeuliDeliveryDTO.getBuyer().getTag();
-        long nadeuliDeliveryId = nadeuliDeliveryDTO.getNadeuliDeliveryId();
-
-        if (buyerTag == null || buyerTag.isEmpty()) {
-            throw new NullPointerException("구매자를 찾을 수 없습니다." + nadeuliDeliveryDTO);
-        } else {
-            // 요청 DTO
-            log.info(nadeuliDeliveryDTO);
-            NadeuliDeliveryDTO responseDTO = nadeuliDeliveryRepository.findById(nadeuliDeliveryId)
-                    .map(nadeuliDeliveryMapper::nadeuliDeliveryToNadeuliDeliveryDTO)
-                    .orElse(null);
-            // 반환 DTO
-            log.info(responseDTO);
-
-            return responseDTO;
-        }
-    }
+//    @Override
+//    public NadeuliDeliveryDTO getMyOrderHistory(long nadeuliDeliveryId) throws Exception {
+//
+//        // 요청 Id
+//        log.info(nadeuliDeliveryId);
+//        NadeuliDeliveryDTO responseDTO = nadeuliDeliveryRepository.findById(nadeuliDeliveryId)
+//                .map(nadeuliDeliveryMapper::nadeuliDeliveryToNadeuliDeliveryDTO)
+//                .orElse(null);
+//        // 반환 DTO
+//        log.info(responseDTO);
+//
+//        return responseDTO;
+//
+//    }
 
     @Override
     public List<NadeuliDeliveryDTO> getMyOrderHistoryList(NadeuliDeliveryDTO nadeuliDeliveryDTO, SearchDTO searchDTO) throws Exception {
@@ -123,24 +118,19 @@ public class NadeuliDeliveryServiceImpl implements NadeuliDeliveryService {
         return returnPage;
     }
 
-    @Override
-    public NadeuliDeliveryDTO getMyDeliveryHistory(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
-        String deliveryPersonTag = nadeuliDeliveryDTO.getDeliveryPerson().getTag();
-        long nadeuliDeliveryId = nadeuliDeliveryDTO.getNadeuliDeliveryId();
-        // 같은 방식의 method 합치기
-        if (deliveryPersonTag == null || deliveryPersonTag.isEmpty()) {
-            throw new NullPointerException("배송자를 찾을 수 없습니다." + nadeuliDeliveryDTO);
-        } else {
-            // 요청 DTO
-            log.info(nadeuliDeliveryDTO);
-            NadeuliDeliveryDTO responseDTO = nadeuliDeliveryRepository.findById(nadeuliDeliveryId)
-                    .map(nadeuliDeliveryMapper::nadeuliDeliveryToNadeuliDeliveryDTO)
-                    .orElse(null);
-            // 반환 DTO
-            log.info(responseDTO);
-            return responseDTO;
-        }
-    }
+//    @Override
+//    public NadeuliDeliveryDTO getMyDeliveryHistory(long nadeuliDeliveryId) throws Exception {
+//
+//        // 요청 DTO
+//        log.info(nadeuliDeliveryId);
+//        NadeuliDeliveryDTO responseDTO = nadeuliDeliveryRepository.findById(nadeuliDeliveryId)
+//                .map(nadeuliDeliveryMapper::nadeuliDeliveryToNadeuliDeliveryDTO)
+//                .orElse(null);
+//        // 반환 DTO
+//        log.info(responseDTO);
+//        return responseDTO;
+//
+//    }
 
     @Override
     public List<NadeuliDeliveryDTO> getMyDeliveryHistoryList(NadeuliDeliveryDTO nadeuliDeliveryDTO, SearchDTO searchDTO) throws Exception {
@@ -284,16 +274,16 @@ public class NadeuliDeliveryServiceImpl implements NadeuliDeliveryService {
 
     // 알림 삭제 추가 필요
 
-    @Override
-    public List<NadeuliDeliveryDTO> getAcceptedDeliveryLocationList(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
-
-        List<NadeuliDeliveryDTO> nadeuliDeliveryLocationList = nadeuliDeliveryRepository.findByDeliveryPersonTagAndState(nadeuliDeliveryDTO.getDeliveryPerson().getTag(), ACCEPT_ORDER)
-                .stream().map(nadeuliDeliveryMapper::nadeuliDeliveryToNadeuliDeliveryDTO)
-                .toList();
-        log.info(nadeuliDeliveryLocationList);
-
-        return nadeuliDeliveryLocationList;
-    }
+//    @Override
+//    public List<NadeuliDeliveryDTO> getAcceptedDeliveryLocationList(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception {
+//
+//        List<NadeuliDeliveryDTO> nadeuliDeliveryLocationList = nadeuliDeliveryRepository.findByDeliveryPersonTagAndState(nadeuliDeliveryDTO.getDeliveryPerson().getTag(), ACCEPT_ORDER)
+//                .stream().map(nadeuliDeliveryMapper::nadeuliDeliveryToNadeuliDeliveryDTO)
+//                .toList();
+//        log.info(nadeuliDeliveryLocationList);
+//
+//        return nadeuliDeliveryLocationList;
+//    }
     @Override
     public List<DeliveryNotificationDTO> getDeliveryNotificationList(DeliveryNotificationDTO deliveryNotificationDTO, SearchDTO searchDTO) throws Exception {
         String buyerTag = deliveryNotificationDTO.getNadeuliDelivery().getBuyer().getTag();

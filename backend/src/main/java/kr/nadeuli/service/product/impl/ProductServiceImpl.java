@@ -55,14 +55,14 @@ public class ProductServiceImpl implements ProductService {
 
     // 수정필요
     @Override
-    public List<ProductDTO> getProductList(String tag, SearchDTO searchDTO) throws Exception {
+    public List<ProductDTO> getProductList(String gu, SearchDTO searchDTO) throws Exception {
         Sort sort = Sort.by(Sort.Direction.DESC, "regDate");
         Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize(), sort);
         Page<Product> productPage;
         if(searchDTO.getSearchKeyword() == null || searchDTO.getSearchKeyword().isEmpty()){
-            productPage = productRepository.findAll(pageable);
+            productPage = productRepository.findProductList(gu, pageable);
         }else{
-            productPage = productRepository.findByTitleContainingOrContentContaining(searchDTO.getSearchKeyword(), searchDTO.getSearchKeyword(), pageable);
+            productPage = productRepository.findProductListByKeyword(searchDTO.getSearchKeyword(), searchDTO.getSearchKeyword(), gu, pageable);
         }
         log.info(productPage);
         return productPage.map(productMapper::productToProductDTO).toList();
