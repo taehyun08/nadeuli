@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/nadeuli")
 @RequiredArgsConstructor
 @Log4j2
 public class AuthenticationRestController {
@@ -32,7 +32,7 @@ public class AuthenticationRestController {
   private final MemberService memberService;
 
   @Autowired
-  private ObjectMapper objectMapper;  // ObjectMapper 주입
+  private ObjectMapper objectMapper;
 
   @PostMapping("/addMember")
   public ResponseEntity<TokenDTO> addMember(@RequestBody Map<String, Object> requestData) throws Exception {

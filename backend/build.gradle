@@ -63,6 +63,9 @@ dependencies {
 
     //WebClient 사용해서 외부 API 호출하기위한 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    //쿼리문 확인을 위한 spy추가
+    implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.1'
 }
 
 tasks.named('bootBuildImage') {

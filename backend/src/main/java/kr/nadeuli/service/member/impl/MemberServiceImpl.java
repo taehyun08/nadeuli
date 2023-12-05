@@ -4,9 +4,12 @@ package kr.nadeuli.service.member.impl;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import kr.nadeuli.category.DeliveryState;
 import kr.nadeuli.category.TradeType;
 import kr.nadeuli.dto.AddressDTO;
@@ -19,6 +22,7 @@ import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.ReportDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.dto.TradeReviewDTO;
 import kr.nadeuli.entity.Member;
 import kr.nadeuli.entity.OriScheMemChatFav;
 import kr.nadeuli.entity.Product;
@@ -35,6 +39,7 @@ import kr.nadeuli.service.member.ReportRepository;
 import kr.nadeuli.service.orikkiri.OriScheMenChatFavRepository;
 import kr.nadeuli.service.product.ProductService;
 import kr.nadeuli.service.sms.SmsService;
+import kr.nadeuli.service.trade.TradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.DynamicUpdate;
@@ -42,6 +47,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -82,11 +88,13 @@ public class MemberServiceImpl implements MemberService{
 
   private final ReportMapper reportMapper;
 
+  private final TradeService tradeService;
+
   @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-  String mapKey;
+  private String mapKey;
 
   @Value("${affinity}")
-  String affinity;
+  private String affinity;
 
   @Value("${kakao.map.api-url}")
   private String mapApiUrl;
@@ -100,7 +108,7 @@ public class MemberServiceImpl implements MemberService{
       tag = generateRandomTag();
     } while (!isTagUnique(tag)); // 태그가 유니크한지 검사
 
-    return "#" + tag; // "#"를 추가하여 반환
+    return tag;
   }
 
   // 랜덤한 네 자리 알파벳 대/소문자 또는 숫자 생성 메소드
@@ -122,6 +130,7 @@ public class MemberServiceImpl implements MemberService{
   }
 
   //회원 프로필 수정
+  //todo 리팩토링 예정 -> record사용하여 코드중복제거
   @Override
   public void updateMember(MemberDTO memberDTO) throws Exception {
    log.info("받은 member는{}",memberDTO);
@@ -157,7 +166,6 @@ public class MemberServiceImpl implements MemberService{
       log.info("받은 NadeuliPayBalance는{}",memberDTO.getNadeuliPayBalance());
       existMember.setNadeuliPayBalance(memberDTO.getNadeuliPayBalance());
     }
-
    memberRepository.save(memberMapper.memberDTOToMember(existMember));
   }
 
@@ -190,6 +198,7 @@ public class MemberServiceImpl implements MemberService{
   //회원 목록 조회
   @Override
   public List<MemberDTO> getMemberList(SearchDTO searchDTO) throws Exception {
+    log.info("SearchDTO는 {} ",searchDTO);
     Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
     Page<Member> memberPage;
     if(searchDTO.getSearchKeyword() == null || searchDTO.getSearchKeyword().isEmpty()){
@@ -250,14 +259,18 @@ public class MemberServiceImpl implements MemberService{
 
     MemberDTO memberDTO = getMember(tag);
 
+    // 정지기간을 현재시간에 정지일수 추가
+    LocalDateTime blockEnd = LocalDateTime.now().plusDays(blockDTO.getBlockDay());
+    blockDTO.setBlockEnd(blockEnd);
+
     // BlockEnd가 있는 경우에만 정지하지 않도록 조건 추가
     if (memberDTO.getBlockEnd() == null) {
       // Block의 값을 가져와서 지속적인 Join 방지
       memberDTO.setBlockDay(blockDTO.getBlockDay());
-      memberDTO.setBlockEnd(blockDTO.getBlockEnd());
+      memberDTO.setBlockEnd(blockEnd);
       memberDTO.setBlockReason(blockDTO.getBlockReason());
 
-      updateMember(memberDTO);
+      memberRepository.save(memberMapper.memberDTOToMember(memberDTO));
 
       blockDTO.setBlockMember(memberDTO);
 
@@ -278,7 +291,8 @@ public class MemberServiceImpl implements MemberService{
     memberDTO.setBlockDay(null);
     memberDTO.setBlockEnd(null);
     memberDTO.setBlockReason(null);
-    updateMember(memberDTO);
+    memberRepository.save(memberMapper.memberDTOToMember(memberDTO));
+    blockRepository.deleteByBlockMemberTag(tag);
 
   }
 
@@ -407,7 +421,6 @@ public class MemberServiceImpl implements MemberService{
     updateMember(memberDTO);
   }
 
-
   // DTO별로 null체크해서 계산할 금액 가져오기
   private Long getHandleMoney(NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO) {
     if (nadeuliPayHistoryDTO != null) {
@@ -436,6 +449,49 @@ public class MemberServiceImpl implements MemberService{
   private boolean withdrawAndDepositNadeuliPayBalance(Long beforeDeposit) {
     return beforeDeposit != null;
   }
+
+  //거래후기 친화력점수 반영
+  @Override
+  public void updateAffinity(String tag) throws Exception {
+    MemberDTO memberDTO = getMember(tag);
+    //1. getTradeReviewList에 넘겨줄 검색조건
+    SearchDTO searchDTO = SearchDTO.builder()
+        .currentPage(0)
+        .pageSize(Integer.MAX_VALUE)
+        .build();
+
+    //2. 회원 태그에 해당하는 거래후기 전부를 가지고옴
+    List<TradeReviewDTO> tradeReviewDTOList = tradeService.getTradeReviewList(tag, searchDTO);
+
+    //3. 친화력 점수만 List로 반영
+    List<Long> affinityScoreList = new ArrayList<>(tradeReviewDTOList.stream()
+                                                       .map(TradeReviewDTO::getAffinityScore)
+                                                       .toList());
+    //3-1. 친화력점수에 회원의 기존 친화력 추가
+    affinityScoreList.add(memberDTO.getAffinity());
+    //4. 정수로 올림된 평균 계산
+    //4-1. affinityScores를 전부 Long에서 Double로 바꾸고 갯수로 평균을 구한다.
+    //4-2. Long에서 double로 바꾸는 이유는 평균계산을 간단하게해주는
+    //     DoubleStream을 사용하기위해서다.
+    Long averageAffinity = (long) Math.ceil(affinityScoreList.stream()
+                                                .mapToDouble(Long::valueOf)
+                                                .average()
+                                                .orElse(0.0));
+
+    //5. 친화력은 100을 넘어서는 안된다
+    memberDTO.setAffinity(Math.min(averageAffinity, 100L));
+
+    //5-1. 또한 0아래로 내려가면 안된다
+    memberDTO.setAffinity(Math.max(memberDTO.getAffinity(), 0L));
+
+//    log.info("거래후기의 친화력 점수: {}", affinityScoreList);
+//    log.info("평균 친화력: {}", averageAffinity);
+//    log.info("이전 친화력: {}", memberDTO.getAffinity());
+//    log.info("업데이트된 친화력: {}", memberDTO.getAffinity());
+
+    memberRepository.save(memberMapper.memberDTOToMember(memberDTO));
+  }
+
 
 }
 

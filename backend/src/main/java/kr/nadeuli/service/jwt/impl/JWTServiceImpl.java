@@ -41,7 +41,8 @@ public class JWTServiceImpl implements JWTService {
     // - 만료일을 원하는 시간대로 설정 => 하루로 설정함
     // - 서명은 HS256형식으로 signKey메소드를 활용하여 서명진행
     // - 압축메소드 호출
-    return Jwts.builder().setSubject(userDetails.getUsername())
+    return Jwts.builder()
+        .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime))
         .signWith(getSignKey(), SignatureAlgorithm.HS256)
@@ -67,7 +68,9 @@ public class JWTServiceImpl implements JWTService {
     // - 만료일을 원하는 시간대로 설정 => 하루로 설정함
     // - 서명은 HS256형식으로 signKey메소드를 활용하여 서명진행
     // - 압축메소드 호출
-    return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+    return Jwts.builder()
+        .setClaims(extraClaims)
+        .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime))
         .signWith(getSignKey(), SignatureAlgorithm.HS256)
