@@ -8,6 +8,8 @@ import kr.nadeuli.service.member.MemberService;
 import kr.nadeuli.service.nadeuli_pay.NadeuliPayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,24 +31,24 @@ public class NadeuliPayRestController {
     }
 
     @PostMapping("/nadeuliPayCharge")
-    public String nadeuliPayCharge(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
+    public ResponseEntity<String> nadeuliPayCharge(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
         nadeuliPayService.nadeuliPayCharge(memberDTO.getTag(), nadeuliPayHistoryDTO);
         //memberDTO.getNadeuliPayBalance()
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/nadeuliPayWithdraw")
-    public String nadeuliPayWithdraw(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
+    public ResponseEntity<String> nadeuliPayWithdraw(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
         nadeuliPayService.nadeuliPayWithdraw(memberDTO.getTag(), nadeuliPayHistoryDTO);
         //memberDTO.getNadeuliPayBalance()
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/nadeuliPayPay")
-    public String nadeuliPayPay(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
+    public ResponseEntity<String> nadeuliPayPay(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
         nadeuliPayService.nadeuliPayPay(memberDTO.getTag(), nadeuliPayHistoryDTO);
         //memberDTO.getNadeuliPayBalance()
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
 }

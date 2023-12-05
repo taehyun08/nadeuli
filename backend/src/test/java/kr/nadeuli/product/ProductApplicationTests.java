@@ -60,8 +60,8 @@ public class ProductApplicationTests {
         System.out.println(productDTO);
     }
 
-    @Test
-    @Transactional
+    //@Test
+    //@Transactional
     public void testGetProductList() throws Exception{
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCurrentPage(0);

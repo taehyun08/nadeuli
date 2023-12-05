@@ -7,10 +7,10 @@ import kr.nadeuli.service.member.MemberService;
 import kr.nadeuli.service.trade.TradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,49 +25,51 @@ public class TradeRestController {
     private int pageSize;
 
     @PostMapping("/addTradeReview")
-    public String addTradeReview(TradeReviewDTO tradeReviewDTO){
+    public ResponseEntity<String> addTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO){
+        // memberService.
         tradeService.addTradeReview(tradeReviewDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/updateTradeReview")
-    public String updateTradeReview(TradeReviewDTO tradeReviewDTO){
+    public ResponseEntity<String> updateTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO){
+        //memberService.
         tradeService.updateTradeReview(tradeReviewDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/getTradeReviewList")
-    public List<TradeReviewDTO> getTradeReviewList(String tag, SearchDTO searchDTO){
-        searchDTO.setPageSize(pageSize);
+    @GetMapping("/getTradeReviewList/{tag}/{currentPage}")
+    public List<TradeReviewDTO> getTradeReviewList(@PathVariable String tag, @PathVariable int currentPage, @RequestParam(defaultValue = "false") boolean isWriter){
+        SearchDTO searchDTO = SearchDTO.builder().currentPage(currentPage).pageSize(pageSize).isWriter(isWriter).build();
         return tradeService.getTradeReviewList(tag, searchDTO);
     }
 
-    @GetMapping("/deleteTradeReview")
-    public String deleteTradeReview(Long tradeReviewId){
+    @GetMapping("/deleteTradeReview/{tradeReviewId}")
+    public ResponseEntity<String> deleteTradeReview(@PathVariable Long tradeReviewId){
         tradeService.deleteTradeReivew(tradeReviewId);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/addTradingSchedule")
-    public String addTradingSchedule(TradeScheduleDTO tradeScheduleDTO){
+    public ResponseEntity<String> addTradingSchedule(@RequestBody TradeScheduleDTO tradeScheduleDTO){
         tradeService.addTradeSchedule(tradeScheduleDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/getTradingSchedule")
-    public TradeScheduleDTO getTradingSchedule(Long tradeScheduleId){
+    @GetMapping("/getTradingSchedule/{tradeScheduleId}")
+    public TradeScheduleDTO getTradingSchedule(@PathVariable Long tradeScheduleId){
         return tradeService.getTradeSchedule(tradeScheduleId);
     }
 
     @PostMapping("/updateTradingSchedule")
-    public String updateTradingSchedule(TradeScheduleDTO tradeScheduleDTO){
+    public ResponseEntity<String> updateTradingSchedule(@RequestBody TradeScheduleDTO tradeScheduleDTO){
         tradeService.updateTradeSchedule(tradeScheduleDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/getTradingScheduleList")
-    public List<TradeScheduleDTO> getTradingScheduleList(String tag, SearchDTO searchDTO){
-        searchDTO.setPageSize(pageSize);
+    @GetMapping("/getTradingScheduleList/{tag}/{currentPage}")
+    public List<TradeScheduleDTO> getTradingScheduleList(@PathVariable String tag, @PathVariable int currentPage){
+        SearchDTO searchDTO = SearchDTO.builder().currentPage(currentPage).pageSize(pageSize).build();
         return tradeService.getTradeScheduleList(tag, searchDTO);
     }
 }

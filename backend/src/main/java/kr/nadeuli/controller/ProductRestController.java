@@ -1,11 +1,16 @@
 package kr.nadeuli.controller;
 
+import kr.nadeuli.dto.NadeuliPayHistoryDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.service.nadeuli_pay.NadeuliPayService;
 import kr.nadeuli.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,50 +21,75 @@ import java.util.List;
 @Log4j2
 public class ProductRestController {
     private final ProductService productService;
+    private final NadeuliPayService nadeuliPayService;
 
     @Value("${pageSize}")
     private int pageSize;
 
+    @Value("${premiumPricePerHour}")
+    private int premiumPricePerHour;
+
     // tag 받는 부분 확인 필요
-    @GetMapping("/home/{currentPage}/{keyword}")
-    public List<ProductDTO> getProductList(String tag, @PathVariable SearchDTO searchDTO) throws Exception {
-        System.out.println("1231");
-        searchDTO.setPageSize(pageSize);
-        return productService.getProductList(tag, searchDTO);
+    @GetMapping("/home/{currentPage}/{gu}")
+    public List<ProductDTO> getProductList(@PathVariable int currentPage, @PathVariable String gu, @RequestParam(required = false) String keyword) throws Exception {
+        SearchDTO searchDTO = SearchDTO.builder()
+                .currentPage(currentPage)
+                .pageSize(pageSize)
+                .searchKeyword(keyword)
+                                       .build();
+        return productService.getProductList(gu, searchDTO);
     }
 
     @GetMapping("/getProduct/{productId}")
-    public ProductDTO getProduct(Long productId) throws Exception {
+    public ProductDTO getProduct(@PathVariable Long productId) throws Exception {
+        log.info(productId);
         return productService.getProduct(productId);
     }
 
     @PostMapping("/updateProduct")
-    public String updateProduct(@RequestBody ProductDTO productDTO) throws Exception {
+    public ResponseEntity<String> updateProduct(ProductDTO productDTO) throws Exception {
         productService.updateProduct(productDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/addProduct")
-    public String addProduct(@RequestBody ProductDTO productDTO) throws Exception {
+    @PostMapping("/addProduct")
+    public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) throws Exception {
+        if(productDTO.isPremium()){
+            nadeuliPayService.nadeuliPayPay(productDTO.getSeller().getTag(), NadeuliPayHistoryDTO.builder()
+                                     .productTitle(productDTO.getTitle())
+                                     .product(productDTO)
+                                     .tradingMoney(productDTO.getPremiumTime() * premiumPricePerHour)
+                                                                                                 .build());
+        }
         productService.addProduct(productDTO);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/getMyProductList")
-    public List<ProductDTO> getMyProductList(String tag, SearchDTO searchDTO) throws Exception {
+    // type : 0 판매중, type : 1 판매완료, type : 2 구매완료
+    @GetMapping("/getMyProductList/{tag}/{currentPage}")
+    public List<ProductDTO> getMyProductList(@PathVariable String tag, @PathVariable int currentPage, @RequestParam(defaultValue = "0") int type) throws Exception {
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCurrentPage(currentPage);
+        searchDTO.setPageSize(pageSize);
+        if(type == 1){
+            searchDTO.setSold(true);
+        }
+        if(type == 2){
+            searchDTO.setBuyer(true);
+        }
         return productService.getMyProductList(tag, searchDTO);
     }
 
-    @GetMapping("/deleteProduct")
-    public String deleteProduct(Long productId) throws Exception {
+    @GetMapping("/deleteProduct/{productId}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws Exception {
         productService.deleteProduct(productId);
-        return "{\"success\": true}";
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/saleCompleted")
-    public String saleCompleted(Long productId) throws Exception {
-        productService.saleCompleted(productId);
-        return "{\"success\": true}";
+    public ResponseEntity<String> saleCompleted(@RequestBody ProductDTO productDTO) throws Exception {
+        productService.saleCompleted(productDTO.getProductId());
+        return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
 }
