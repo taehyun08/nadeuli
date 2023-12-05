@@ -25,16 +25,16 @@ public class TradeRestController {
     private int pageSize;
 
     @PostMapping("/addTradeReview")
-    public ResponseEntity<String> addTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO){
-        memberService.
+    public ResponseEntity<String> addTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO) throws Exception {
         tradeService.addTradeReview(tradeReviewDTO);
+        memberService.updateAffinity(tradeReviewDTO.getTrader().getTag());
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
     @PostMapping("/updateTradeReview")
-    public ResponseEntity<String> updateTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO){
-        //memberService.
+    public ResponseEntity<String> updateTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO) throws Exception {
         tradeService.updateTradeReview(tradeReviewDTO);
+        memberService.updateAffinity(tradeReviewDTO.getTrader().getTag());
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
@@ -45,8 +45,9 @@ public class TradeRestController {
     }
 
     @GetMapping("/deleteTradeReview/{tradeReviewId}")
-    public ResponseEntity<String> deleteTradeReview(@PathVariable Long tradeReviewId){
-        tradeService.deleteTradeReivew(tradeReviewId);
+    public ResponseEntity<String> deleteTradeReview(@PathVariable Long tradeReviewId) throws Exception {
+        String tag = tradeService.deleteTradeReivew(tradeReviewId);
+        memberService.updateAffinity(tag);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 

@@ -13,7 +13,7 @@ public interface TradeService {
 
     List<TradeReviewDTO> getTradeReviewList(String tag, SearchDTO searchDTO);
 
-    void deleteTradeReivew(Long tradeReviewId);
+    String deleteTradeReivew(Long tradeReviewId);
 
     void addTradeSchedule(TradeScheduleDTO tradeScheduleDTO);
 
