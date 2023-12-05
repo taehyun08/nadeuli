@@ -51,6 +51,6 @@ public class ImageApplicationTests {
 
 //        @Test
     public void testDeleteImage() throws Exception {
-        imageService.deleteImage(25L);
+        imageService.deletePostImage(25L);
     }
 }

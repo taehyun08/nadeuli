@@ -26,25 +26,19 @@ public class OrikkiriRestController {
     @Value("${pageSize}")
     private int pageSize;
 
-    //todo 리턴 타입 아래처럼 수정
-    // public ResponseEntity<String> getData() {
-    //        String jsonData = "{\"message\": \"Hello, World!\"}";
-    //        return ResponseEntity.status(HttpStatus.OK).body(jsonData);
-    //    }
-
     @PostMapping("/addOrikkrirSignUp")
     public ResponseEntity<String> addOrikkrirSignUp(OriScheMemChatFavDTO oriScheMemChatFavDTO) throws Exception {
         orikkiriService.addOrikkrirSignUp(oriScheMemChatFavDTO);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/orikkrirSignupList")
+    @GetMapping("/getOrikkrirSignupList")
     public List<OriScheMemChatFavDTO> getOrikkiriSignUpList(long ansQuestionId, SearchDTO searchDTO) throws Exception {
         searchDTO.setPageSize(pageSize);
         return orikkiriService.getOrikkiriSignUpList(ansQuestionId, searchDTO);
     }
 
-    @GetMapping("/myOrikkiriList")
+    @GetMapping("/getMyOrikkiriList")
     public List<OriScheMemChatFavDTO> getMyOrikkiriList(String tag, SearchDTO searchDTO) throws Exception {
         searchDTO.setPageSize(pageSize);
         return orikkiriService.getMyOrikkiriList(tag, searchDTO);
@@ -56,7 +50,7 @@ public class OrikkiriRestController {
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/orikkiriMemberList")
+    @GetMapping("/getOrikkiriMemberList")
     public List<OriScheMemChatFavDTO> getOrikkiriMemberList(long orikkiriId, SearchDTO searchDTO) throws Exception {
         searchDTO.setPageSize(pageSize);
         return orikkiriService.getOrikkiriMemberList(orikkiriId, searchDTO);
@@ -74,7 +68,7 @@ public class OrikkiriRestController {
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/orikkiriScheduleMemberList")
+    @GetMapping("/getOrikkiriScheduleMemberList")
     public List<OriScheMemChatFavDTO> getOrikkiriScheduleMemberList(long orikkiriScheduleId, SearchDTO searchDTO) throws Exception {
         searchDTO.setPageSize(pageSize);
         return orikkiriService.getOrikkiriScheduleMemberList(orikkiriScheduleId, searchDTO);
@@ -86,13 +80,13 @@ public class OrikkiriRestController {
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
-    @GetMapping("/orikkiriScheduleList")
+    @GetMapping("/getOrikkiriScheduleList")
     public List<OrikkiriScheduleDTO> getOrikkiriScheduleList(long orikkiriId, SearchDTO searchDTO) throws Exception {
         searchDTO.setPageSize(pageSize);
         return orikkiriService.getOrikkiriScheduleList(orikkiriId, searchDTO);
     }
 
-    @GetMapping("/orikkiriSchedule/{orikkiriScheduleId}")
+    @GetMapping("/getOrikkiriSchedule/{orikkiriScheduleId}")
     public OrikkiriScheduleDTO getOrikkiriSchedule(@PathVariable long orikkiriScheduleId) throws Exception {
         return orikkiriService.getOrikkiriSchedule(orikkiriScheduleId);
     }

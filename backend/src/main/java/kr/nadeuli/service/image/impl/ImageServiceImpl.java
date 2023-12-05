@@ -66,21 +66,23 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void updateImages(ImageDTO imageDTO) throws Exception {
-        Image image = imageMapper.imageDTOToImage(imageDTO);
-        System.out.println(image);
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        String formattedDateTime = now.format(formatter);
-        String imageName = image.getImageName();
-        String updatedImageName = imageName + formattedDateTime;
-        image.setImageName(updatedImageName);
-
-        log.info(image);
-        System.out.println(image);
-
-        imageRepository.save(image);
+    public void deletePostImage(long postId) throws Exception {
+            log.info(postId);
+            imageRepository.deleteByPost(Post.builder().postId(postId).build());
     }
+
+    @Override
+    public void deleteProductImage(long productId) throws Exception {
+        log.info(productId);
+        imageRepository.deleteByProduct(Product.builder().productId(productId).build());
+    }
+
+    @Override
+    public void deleteNadeuliDeliveryImage(long nadeuliDeliveryId) throws Exception {
+        log.info(nadeuliDeliveryId);
+        imageRepository.deleteByNadeuliDelivery(NadeuliDelivery.builder().nadeuliDeliveryId(nadeuliDeliveryId).build());
+    }
+
 
     @Override
     public void deleteImage(long imageId) throws Exception {
