@@ -61,9 +61,14 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public void deleteTradeReivew(Long tradeReviewId) {
+    public String deleteTradeReivew(Long tradeReviewId) {
         log.info(tradeReviewId);
+        TradeReview tradeReview = tradeReviewRepository.findById(tradeReviewId).orElse(null);
         tradeReviewRepository.deleteById(tradeReviewId);
+        if(tradeReview == null){
+            return null;
+        }
+        return tradeReview.getTrader().getTag();
     }
 
     @Override
