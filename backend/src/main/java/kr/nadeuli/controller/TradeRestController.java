@@ -26,7 +26,7 @@ public class TradeRestController {
 
     @PostMapping("/addTradeReview")
     public ResponseEntity<String> addTradeReview(@RequestBody TradeReviewDTO tradeReviewDTO){
-        // memberService.
+        memberService.
         tradeService.addTradeReview(tradeReviewDTO);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
