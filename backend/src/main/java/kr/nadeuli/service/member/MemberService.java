@@ -46,4 +46,6 @@ public interface MemberService {
 
   public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception;
 
+  public void  updateAffinity(String tag) throws Exception;
+
 }

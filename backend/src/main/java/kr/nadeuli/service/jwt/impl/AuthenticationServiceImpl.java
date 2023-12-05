@@ -90,8 +90,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public TokenDTO refreshToken(RefreshTokenDTO refreshTokenDTO) throws Exception  {
+    // 받은 RefreshToken을 통해 유저 정보 중 아이디값추출 -> subject
     String memberTag = jwtService.extractUserName(refreshTokenDTO.getRefreshToken());
+    // 추출한 아이디로 데이터를가져옴
     Member member = memberRepository.findByTag(memberTag).orElseThrow(()-> new IllegalArgumentException("없는 태그입니다."));
+
+    //
     if(jwtService.isTokenValid(refreshTokenDTO.getRefreshToken(),member)){
 
       TokenDTO token = new TokenDTO();
