@@ -10,11 +10,8 @@ import java.util.List;
 
 public interface NadeuliDeliveryService {
 
-    // 구매자의 주문 등록
-    void addDeliveryOrder(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
-
-    // 구매자의 주문 수정
-    void updateDeliveryOrder(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
+    // 구매자의 주문 등록/수정
+    void addOrUpdateDeliveryOrder(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
 
     // 배달 주문 조회
     NadeuliDeliveryDTO getDeliveryOrder(long nadeuliDeliveryId) throws Exception;
@@ -23,13 +20,13 @@ public interface NadeuliDeliveryService {
     List<NadeuliDeliveryDTO> getDeliveryOrderList(MemberDTO memberDTO, SearchDTO searchDTO) throws Exception;
 
     // 구매자의 주문 내역 조회
-    NadeuliDeliveryDTO getMyOrderHistory(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
+//    NadeuliDeliveryDTO getMyOrderHistory(long nadeuliDeliveryId) throws Exception;
 
     // 구매자의 주문 내역 목록 조회
     List<NadeuliDeliveryDTO> getMyOrderHistoryList(NadeuliDeliveryDTO nadeuliDeliveryDTO, SearchDTO searchDTO) throws Exception;
 
     // 배송자의 배달 내역 조회
-    NadeuliDeliveryDTO getMyDeliveryHistory(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
+//    NadeuliDeliveryDTO getMyDeliveryHistory(long nadeuliDeliveryId) throws Exception;
 
     // 배송자의 배달 내역 목록 조회
     List<NadeuliDeliveryDTO> getMyDeliveryHistoryList(NadeuliDeliveryDTO nadeuliDeliveryDTO, SearchDTO searchDTO) throws Exception;
@@ -50,7 +47,7 @@ public interface NadeuliDeliveryService {
     void completeDelivery(long nadeuliDeliveryId) throws Exception;
 
     // 배송자의 주문 수락 장소(출발지, 도착지) 목록 조회
-    List<NadeuliDeliveryDTO> getAcceptedDeliveryLocationList(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
+//    List<NadeuliDeliveryDTO> getAcceptedDeliveryLocationList(NadeuliDeliveryDTO nadeuliDeliveryDTO) throws Exception;
 
 
     // 부름 알림 서비스

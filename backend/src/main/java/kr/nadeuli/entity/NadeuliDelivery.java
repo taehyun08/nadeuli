@@ -118,7 +118,7 @@ public class NadeuliDelivery {
     private List<DeliveryNotification> deliveryNotifications;
 
     // 상품 사진
-    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "nadeuliDelivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
     // 신고
