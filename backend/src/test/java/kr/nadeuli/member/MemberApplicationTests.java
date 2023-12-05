@@ -309,5 +309,16 @@ public class MemberApplicationTests {
 //    memberService.handleNadeuliPayBalance(tag,nadeuliPayHistoryDTO,null);
 
   }
+
+  @DisplayName("친화력 점수 반영 테스트")
+//  @Test
+  public void testUpdateAffinity() throws Exception{
+    String tag = "Kv4G";
+    Long affinityScore = 5L;
+    Long affinityScore1 = -5L;
+
+    memberService.updateAffinity(tag);
+
+  }
 }
 

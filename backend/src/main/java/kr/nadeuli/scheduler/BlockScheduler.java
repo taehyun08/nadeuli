@@ -30,7 +30,7 @@ public class BlockScheduler {
 
   public void startBlockDayScheduler(String tag) {
     // 초기 스케줄링 로직
-    scheduledFuture = scheduler.schedule(() -> updateBlock(tag), new CronTrigger("* * * * * *"));
+    scheduledFuture = scheduler.schedule(() -> updateBlock(tag), new CronTrigger("0 0 0 * * *"));
     log.info("스케줄링 시작");
   }
 
