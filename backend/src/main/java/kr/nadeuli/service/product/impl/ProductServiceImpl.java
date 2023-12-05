@@ -29,14 +29,16 @@ public class ProductServiceImpl implements ProductService {
     private final PremiumTimeScheduler premiumTimeScheduler;
 
     @Override
-    public void addProduct(ProductDTO productDTO) throws Exception {
+    public Long addProduct(ProductDTO productDTO) throws Exception {
         productDTO.setViewNum(0L);
         Product product = productMapper.productDTOToProduct(productDTO);
         log.info(product);
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
         if(productDTO.isPremium()){
-            premiumTimeScheduler.startPremiumTimeScheduler(product.getProductId());
+            premiumTimeScheduler.startPremiumTimeScheduler(savedProduct.getProductId());
         }
+        log.info(savedProduct);
+        return savedProduct.getProductId();
     }
 
     @Override

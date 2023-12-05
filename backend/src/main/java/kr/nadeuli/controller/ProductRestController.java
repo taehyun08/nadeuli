@@ -1,8 +1,10 @@
 package kr.nadeuli.controller;
 
+import kr.nadeuli.dto.ImageDTO;
 import kr.nadeuli.dto.NadeuliPayHistoryDTO;
 import kr.nadeuli.dto.ProductDTO;
 import kr.nadeuli.dto.SearchDTO;
+import kr.nadeuli.service.image.ImageService;
 import kr.nadeuli.service.nadeuli_pay.NadeuliPayService;
 import kr.nadeuli.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/product")
@@ -22,6 +25,7 @@ import java.util.List;
 public class ProductRestController {
     private final ProductService productService;
     private final NadeuliPayService nadeuliPayService;
+    private final ImageService imageService;
 
     @Value("${pageSize}")
     private int pageSize;
@@ -48,6 +52,14 @@ public class ProductRestController {
 
     @PostMapping("/updateProduct")
     public ResponseEntity<String> updateProduct(ProductDTO productDTO) throws Exception {
+        ProductDTO beforeProductDTO = productService.getProduct(productDTO.getProductId());
+        if(productDTO.isPremium() &&(productDTO.getPremiumTime() > beforeProductDTO.getPremiumTime())){
+            nadeuliPayService.nadeuliPayPay(productDTO.getSeller().getTag(), NadeuliPayHistoryDTO.builder()
+                                                                                                 .productTitle(productDTO.getTitle())
+                                                                                                 .product(productDTO)
+                                                                                                 .tradingMoney((beforeProductDTO.getPremiumTime()- productDTO.getPremiumTime()) * premiumPricePerHour)
+                                                                                                 .build());
+        }
         productService.updateProduct(productDTO);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
@@ -61,7 +73,17 @@ public class ProductRestController {
                                      .tradingMoney(productDTO.getPremiumTime() * premiumPricePerHour)
                                                                                                  .build());
         }
-        productService.addProduct(productDTO);
+        Long productId = productService.addProduct(productDTO);
+        for(String image : productDTO.getImages()){
+            imageService.addImage(ImageDTO.builder()
+                                .imageName(image)
+                                .product(ProductDTO.builder()
+                                        .productId(productId)
+                                                   .build())
+                                          .build());
+        }
+
+
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 

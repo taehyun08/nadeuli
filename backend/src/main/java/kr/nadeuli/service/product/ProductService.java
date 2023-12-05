@@ -6,7 +6,7 @@ import kr.nadeuli.dto.SearchDTO;
 import java.util.List;
 
  public interface ProductService {
-     void addProduct(ProductDTO productDTO) throws Exception;
+     Long addProduct(ProductDTO productDTO) throws Exception;
 
      void updateProduct(ProductDTO productDTO) throws Exception;
 
