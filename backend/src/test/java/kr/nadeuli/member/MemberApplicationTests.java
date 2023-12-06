@@ -281,7 +281,7 @@ public class MemberApplicationTests {
         .product(productDTO)
         .build();
 
-    memberService.report(reportDTO);
+    memberService.addReport(reportDTO);
 
   }
 
@@ -290,7 +290,7 @@ public class MemberApplicationTests {
   public void testHandleNadeuliPayBalance() throws Exception{
     NadeuliPayHistoryDTO nadeuliPayHistoryDTO = NadeuliPayHistoryDTO.builder()
         .nadeuliPayHistoryId(1L)
-        .tradingMoney(500L)
+        .tradingMoney(10000L)
 //        .tradingMoney(4000L)
 //        .tradeType(TradeType.CHARGE)
 //        .tradeType(TradeType.PAYMENT)
@@ -299,19 +299,19 @@ public class MemberApplicationTests {
 
     NadeuliDeliveryDTO nadeuliDeliveryDTO = NadeuliDeliveryDTO.builder()
         .nadeuliDeliveryId(1L)
-        .deposit(100L)
+        .deposit(10001L)
         .deliveryState(DeliveryState.CANCEL_DELIVERY)
         .deliveryState(DeliveryState.DELIVERY_ORDER)
         .build();
     String tag = "#1qZL";
 
 //    memberService.handleNadeuliPayBalance(tag,null,nadeuliDeliveryDTO);
-//    memberService.handleNadeuliPayBalance(tag,nadeuliPayHistoryDTO,null);
+    memberService.handleNadeuliPayBalance(tag,nadeuliPayHistoryDTO,null,null);
 
   }
 
   @DisplayName("친화력 점수 반영 테스트")
-//  @Test
+  @Test
   public void testUpdateAffinity() throws Exception{
     String tag = "Kv4G";
     Long affinityScore = 5L;

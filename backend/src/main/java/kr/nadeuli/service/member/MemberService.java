@@ -40,11 +40,11 @@ public interface MemberService {
 
   public List<OriScheMemChatFavDTO> getFavoriteList(String tag, SearchDTO searchDTO) throws Exception;
 
-  public void report(ReportDTO reportDTO) throws Exception;
+  public void addReport(ReportDTO reportDTO) throws Exception;
 
   public String getAffinityToolTip() throws Exception;
 
-  public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception;
+  public boolean handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception;
 
   public void  updateAffinity(String tag) throws Exception;
 

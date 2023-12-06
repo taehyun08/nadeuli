@@ -18,6 +18,7 @@ import kr.nadeuli.service.member.MemberRepository;
 import kr.nadeuli.service.sms.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+  @Value("${affinity}")
+  private Long affinity;
 
   private final MemberMapper memberMapper;
 
@@ -49,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }else{
       // 회원이 존재하지 않는 경우
       memberDTO.setTag(memberService.addTag());
-      memberDTO.setAffinity(50L);
+      memberDTO.setAffinity(affinity);
       //기본값이 유저이기떄문에 필요없음
       memberDTO.setRole(Role.USER);
       memberDTO.setDongNe(memberService.addDongNe(memberDTO.getTag(),gpsDTO).getDocuments().get(1).getAddressName());
