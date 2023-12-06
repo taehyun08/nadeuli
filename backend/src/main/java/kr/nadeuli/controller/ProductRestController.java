@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/product")
@@ -46,12 +47,20 @@ public class ProductRestController {
     @GetMapping("/getProduct/{productId}")
     public ProductDTO getProduct(@PathVariable Long productId) throws Exception {
         log.info(productId);
-        // 이미지 리스트 가져와서 dto에 담아줌
-        return productService.getProduct(productId);
+        List<ImageDTO> imageDTOList = imageService.getImageList(productId, SearchDTO.builder()
+                            .isProduct(true)
+                                                      .build());
+        ProductDTO productDTO = productService.getProduct(productId);
+        List<String> imageNames = imageDTOList.stream()
+                                              .map(ImageDTO::getImageName)
+                                              .collect(Collectors.toList());
+        productDTO.setImages(imageNames);
+        return productDTO;
     }
 
     @PostMapping("/updateProduct")
-    public ResponseEntity<String> updateProduct(ProductDTO productDTO) throws Exception {
+    public ResponseEntity<String> updateProduct(@RequestBody ProductDTO productDTO) throws Exception {
+        log.info(productDTO);
         ProductDTO beforeProductDTO = productService.getProduct(productDTO.getProductId());
         if(productDTO.isPremium() &&(productDTO.getPremiumTime() > beforeProductDTO.getPremiumTime())){
             nadeuliPayService.nadeuliPayPay(productDTO.getSeller().getTag(), NadeuliPayHistoryDTO.builder()
@@ -62,7 +71,6 @@ public class ProductRestController {
         }
         productService.updateProduct(productDTO);
         imageService.deleteProductImage(productDTO.getProductId());
-        log.info(productDTO);
         for(String image : productDTO.getImages()){
             imageService.addImage(ImageDTO.builder()
                                           .imageName(image)
