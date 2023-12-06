@@ -2,6 +2,7 @@ package kr.nadeuli.image;
 
 import kr.nadeuli.dto.*;
 import kr.nadeuli.service.image.ImageService;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,12 +46,12 @@ public class ImageApplicationTests {
         searchDTO.setCurrentPage(0);
         searchDTO.setPageSize(pageSize);
         long id = 2L;
-        System.out.println(imageService.getImagesList(id, searchDTO));
+        System.out.println(imageService.getImageList(id, searchDTO));
     }
 
 
-//        @Test
+    @Test
     public void testDeleteImage() throws Exception {
-        imageService.deletePostImage(25L);
+        imageService.deleteProductImage(10L);
     }
 }

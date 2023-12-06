@@ -24,30 +24,36 @@ public class NadeuliPayRestController {
     @Value("${pageSize}")
     private int pageSize;
 
-    @GetMapping("/getNadeuliPayList/{currentPage}/{tradeType}")
-    public List<NadeuliPayHistoryDTO> getNadeuliPayList(String tag, @PathVariable TradeType tradeType, @PathVariable SearchDTO searchDTO){
-        searchDTO.setPageSize(pageSize);
+    @GetMapping("/getNadeuliPayList/{currentPage}/{tradeType}/{tag}")
+    public List<NadeuliPayHistoryDTO> getNadeuliPayList(@PathVariable String tag, @PathVariable TradeType tradeType, @PathVariable int currentPage){
+        SearchDTO searchDTO = SearchDTO.builder()
+                .currentPage(currentPage)
+                .pageSize(pageSize)
+                                       .build();
         return nadeuliPayService.getNadeuliPayList(tag, tradeType, searchDTO);
     }
-
+    
+    // api 사용 로직 필요
     @PostMapping("/nadeuliPayCharge")
-    public ResponseEntity<String> nadeuliPayCharge(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
+    public ResponseEntity<String> nadeuliPayCharge(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO) throws Exception {
         nadeuliPayService.nadeuliPayCharge(memberDTO.getTag(), nadeuliPayHistoryDTO);
-        //memberDTO.getNadeuliPayBalance()
+        memberService.handleNadeuliPayBalance(memberDTO.getTag(), nadeuliPayHistoryDTO, null, null);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
+    //예외처리 필요
     @PostMapping("/nadeuliPayWithdraw")
-    public ResponseEntity<String> nadeuliPayWithdraw(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
+    public ResponseEntity<String> nadeuliPayWithdraw(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO) throws Exception {
         nadeuliPayService.nadeuliPayWithdraw(memberDTO.getTag(), nadeuliPayHistoryDTO);
-        //memberDTO.getNadeuliPayBalance()
+        memberService.handleNadeuliPayBalance(memberDTO.getTag(), nadeuliPayHistoryDTO, null, null);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 
+    //예외처리 필요
     @PostMapping("/nadeuliPayPay")
-    public ResponseEntity<String> nadeuliPayPay(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO){
+    public ResponseEntity<String> nadeuliPayPay(MemberDTO memberDTO, NadeuliPayHistoryDTO nadeuliPayHistoryDTO) throws Exception {
         nadeuliPayService.nadeuliPayPay(memberDTO.getTag(), nadeuliPayHistoryDTO);
-        //memberDTO.getNadeuliPayBalance()
+        memberService.handleNadeuliPayBalance(memberDTO.getTag(), nadeuliPayHistoryDTO, null, null);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 

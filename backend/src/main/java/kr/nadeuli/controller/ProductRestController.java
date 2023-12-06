@@ -33,7 +33,6 @@ public class ProductRestController {
     @Value("${premiumPricePerHour}")
     private int premiumPricePerHour;
 
-    // tag 받는 부분 확인 필요
     @GetMapping("/home/{currentPage}/{gu}")
     public List<ProductDTO> getProductList(@PathVariable int currentPage, @PathVariable String gu, @RequestParam(required = false) String keyword) throws Exception {
         SearchDTO searchDTO = SearchDTO.builder()
@@ -47,6 +46,7 @@ public class ProductRestController {
     @GetMapping("/getProduct/{productId}")
     public ProductDTO getProduct(@PathVariable Long productId) throws Exception {
         log.info(productId);
+        // 이미지 리스트 가져와서 dto에 담아줌
         return productService.getProduct(productId);
     }
 
@@ -61,7 +61,8 @@ public class ProductRestController {
                                                                                                  .build());
         }
         productService.updateProduct(productDTO);
-        imageService.deletePostImage(productDTO.getProductId());
+        imageService.deleteProductImage(productDTO.getProductId());
+        log.info(productDTO);
         for(String image : productDTO.getImages()){
             imageService.addImage(ImageDTO.builder()
                                           .imageName(image)
@@ -113,7 +114,7 @@ public class ProductRestController {
     @GetMapping("/deleteProduct/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws Exception {
         productService.deleteProduct(productId);
-        imageService.deletePostImage(productId);
+        imageService.deleteProductImage(productId);
         return ResponseEntity.status(HttpStatus.OK).body("{\"success\": true}");
     }
 

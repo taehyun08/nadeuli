@@ -13,7 +13,7 @@ public interface ImageService {
 
     ImageDTO getImage(long imageId) throws Exception;
 
-    List<ImageDTO> getImagesList(long ImageId, SearchDTO searchDTO) throws Exception;
+    List<ImageDTO> getImageList(long id, SearchDTO searchDTO) throws Exception;
 
     void deletePostImage(long postId) throws Exception;
     void deleteProductImage(long productId) throws Exception;

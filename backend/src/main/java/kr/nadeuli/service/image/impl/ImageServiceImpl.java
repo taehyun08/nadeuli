@@ -11,6 +11,7 @@ import kr.nadeuli.service.image.ImageRepository;
 import kr.nadeuli.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,9 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
+
+    @Value("${imageNum}")
+    int imageNum;
 
     @Override
     public void addImage(ImageDTO imageDTO) throws Exception {
@@ -51,8 +55,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<ImageDTO> getImagesList(long id, SearchDTO searchDTO) throws Exception {
-        Pageable pageable = PageRequest.of(searchDTO.getCurrentPage(), searchDTO.getPageSize());
+    public List<ImageDTO> getImageList(long id, SearchDTO searchDTO) throws Exception {
+        Pageable pageable = PageRequest.of(0, imageNum);
         Page<Image> imagePage;
         if(searchDTO.isPost())
             imagePage = imageRepository.findByPost(Post.builder().postId(id).build(), pageable);
