@@ -10,6 +10,15 @@ pipeline {
             }
         }
 
+        stage('Update Repository') {
+            steps {
+                git branch: 'main',
+                    credentialsId: 'github_personal_access_token',
+                    url: 'https://github.com/taehyun08/nadeuli.git',
+                    changelog: true
+            }
+        }
+
         stage('Check Code Changes') {
             steps {
                 script {
@@ -116,10 +125,10 @@ pipeline {
             }
             post {
                 success {
-                    slackSend channel: '#jenkins', color: 'good', message: "배포 성공"
+                    //slackSend channel: '#jenkins', color: 'good', message: "배포 성공"
                 }
                 failure {
-                    slackSend channel: '#jenkins', color: 'danger', message: "배포 실패"
+                    //slackSend channel: '#jenkins', color: 'danger', message: "배포 실패"
                 }
             }
         }
