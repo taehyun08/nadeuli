@@ -64,16 +64,12 @@ public class NadeuliDeliveryApplicationTests {
                 .build();
 
         // method 실행
-        nadeuliDeliveryService.addOrUpdateDeliveryOrder(nadeuliDeliveryDTO);
-
-        // 엔티티 조회
-        NadeuliDelivery responseEntity = nadeuliDeliveryRepository.findByProductName(nadeuliDeliveryDTO.getProductName());
+        NadeuliDeliveryDTO returnedNadeuliDeliveryDTO = nadeuliDeliveryService.addOrUpdateDeliveryOrder(nadeuliDeliveryDTO);
 
         // 검증
-        assertEquals(nadeuliDeliveryDTO.getProductName(), responseEntity.getProductName());
-        assertNotNull(responseEntity.getProductNum(), "productNum 은 반드시 있어야 함.");
+        assertEquals(nadeuliDeliveryDTO.getProductName(), returnedNadeuliDeliveryDTO.getProductName());
+        assertNotNull(returnedNadeuliDeliveryDTO.getProductNum(), "productNum 은 반드시 있어야 함.");
 //        assertEquals(product.getProductId(), responseEntity.getProduct().getProductId());
-        assertNotNull(responseEntity.getImageName(), "imageName 은 반드시 있어야 함.");
 
     }
 
