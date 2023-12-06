@@ -69,7 +69,7 @@ public class AuthApplicationTests {
     } else {
 
       // 3.회원이 존재하지 않을 경우 예외 처리
-      System.out.println("존재하지 않는 회원입니다.        ");
+      System.out.println("존재하지 않는 회원입니다.         ");
     }
   }
 
