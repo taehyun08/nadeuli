@@ -23,4 +23,6 @@ public interface OriScheMenChatFavRepository extends JpaRepository<OriScheMemCha
 
     void deleteByMemberAndProduct(Member member, Product product);
 
+    boolean existsByMemberAndProduct(Member member, Product product);
+
 }

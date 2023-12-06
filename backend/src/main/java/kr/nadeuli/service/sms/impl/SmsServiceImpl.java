@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,35 +38,35 @@ public class SmsServiceImpl implements SmsService {
   }
 
   // 단일 메시지 발송 예제
-//  @Override
-//  public SingleMessageSentResponse sendOne(String cellphone) {
-//    Message message = new Message();
-//    String authNum = generateRandomCode(5);
-//    // 발신번호 및 수신번호는 반드시 01012345678 형태.
-//    message.setFrom(senderNumber);
-//    message.setTo(cellphone);
-//    message.setText("[나드리] 인증번호 넣을게~" + authNum);
-//
-//    SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-//
-//    // DB에 발송한 인증번호 저장
-//    smsCertification.addAuthNum(cellphone,authNum);
-//
-//    return response;
-//  }
-
-  //테스트용
   @Override
-  public void sendOne(String cellphone) {
+  public SingleMessageSentResponse sendOne(String cellphone) {
     Message message = new Message();
     String authNum = generateRandomCode(5);
+    // 발신번호 및 수신번호는 반드시 01012345678 형태.
+    message.setFrom(senderNumber);
+    message.setTo(cellphone);
+    message.setText("김성윤 샤워실에서 알몸으로 뽀삐뽀삐추는 영상[보러가기]" + authNum);
+
+    SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
 
     // DB에 발송한 인증번호 저장
-    System.out.println(authNum);
-    System.out.println(cellphone);
     smsCertification.addAuthNum(cellphone,authNum);
 
+    return response;
   }
+
+  //테스트용
+//  @Override
+//  public void sendOne(String cellphone) {
+//    Message message = new Message();
+//    String authNum = generateRandomCode(5);
+//
+//    // DB에 발송한 인증번호 저장
+//    System.out.println(authNum);
+//    System.out.println(cellphone);
+//    smsCertification.addAuthNum(cellphone,authNum);
+//
+//  }
   private String generateRandomCode(int length) {
     StringBuilder code = new StringBuilder();
     Random random = new Random();

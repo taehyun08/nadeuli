@@ -93,8 +93,8 @@ public class MemberServiceImpl implements MemberService{
   @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
   private String mapKey;
 
-  @Value("${affinity}")
-  private String affinity;
+  @Value("${affinityTooltip}")
+  private String affinityTooltip;
 
   @Value("${kakao.map.api-url}")
   private String mapApiUrl;
@@ -329,6 +329,14 @@ public class MemberServiceImpl implements MemberService{
   public void addFavorite(String tag, Long productId) throws Exception {
     Member member = memberMapper.memberDTOToMember(getMember(tag));
     Product product = productMapper.productDTOToProduct(productService.getProduct(productId));
+
+    // 이미 등록되어 있는지 확인
+    if (oriScheMenChatFavRepository.existsByMemberAndProduct(member, product)) {
+      throw new Exception("이미 등록된 즐겨찾기입니다.");
+
+    }
+
+
     OriScheMemChatFav oriScheMemChatFav = OriScheMemChatFav.builder()
         .product(product)
         .member(member)
@@ -357,7 +365,7 @@ public class MemberServiceImpl implements MemberService{
 
   //신고
   @Override
-  public void report(ReportDTO reportDTO) throws Exception {
+  public void addReport(ReportDTO reportDTO) throws Exception {
     log.info("ReportDTO는 {}",reportDTO);
     reportRepository.save(reportMapper.reportDTOToReport(reportDTO));
   }
@@ -365,14 +373,15 @@ public class MemberServiceImpl implements MemberService{
   //친화력 툴팁
   @Override
   public String getAffinityToolTip() throws Exception {
-    return affinity;
+    return affinityTooltip;
   }
 
   //나드리페이 입금
   //nadeuliPayCharge
   @Override
-  public void handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception {
+  public boolean handleNadeuliPayBalance(String tag, NadeuliPayHistoryDTO nadeuliPayHistoryDTO, NadeuliDeliveryDTO nadeuliDeliveryDTO, Long beforeDeposit) throws Exception {
     log.info("전달받은 tag와 nadeuliPayHistoryDTO와 nadeuliDeliveryDTO는 {},{},{}", tag, nadeuliPayHistoryDTO, nadeuliDeliveryDTO);
+    boolean handleResult = true;
     //1. 전달받은 tag로 현재 멤버 잔액 조회
     MemberDTO memberDTO = getMember(tag);
     log.info("조회한 memberDTO는 {}", memberDTO);
@@ -392,10 +401,13 @@ public class MemberServiceImpl implements MemberService{
       Long result = memberNadeuliPayBalance + beforeDeposit - afterDeposit;
       // 잔액 부족 예외 처리
       if (result < 0) {
-        throw new Exception("잔액이 부족합니다.");
+        handleResult = false;
+        log.error("잔액이 부족합니다.");
+      }else{
+        // 나드리페이 계산결과를 잔액에 set
+        memberDTO.setNadeuliPayBalance(result);
       }
-      // 나드리페이 계산결과를 잔액에 set
-      memberDTO.setNadeuliPayBalance(result);
+
     }
 
     //6. 나드리페이 입금이 참이면 현재잔액에 +
@@ -411,14 +423,18 @@ public class MemberServiceImpl implements MemberService{
 
       // 잔액 부족 예외 처리
       if (result < 0) {
-        throw new Exception("잔액이 부족합니다.");
-      }
-      // 나드리페이 계산결과를 잔액에 set
-      memberDTO.setNadeuliPayBalance(result);
-    }
+        handleResult = false;
+        log.error("잔액이 부족합니다.");
 
+      }else{
+        // 나드리페이 계산결과를 잔액에 set
+        memberDTO.setNadeuliPayBalance(result);
+      }
+
+    }
     //8. 멤버 잔액 업데이트
     updateMember(memberDTO);
+    return handleResult;
   }
 
   // DTO별로 null체크해서 계산할 금액 가져오기
@@ -468,7 +484,9 @@ public class MemberServiceImpl implements MemberService{
                                                        .map(TradeReviewDTO::getAffinityScore)
                                                        .toList());
     //3-1. 친화력점수에 회원의 기존 친화력 추가
-    affinityScoreList.add(memberDTO.getAffinity());
+
+    affinityScoreList.add(50L);
+
     //4. 정수로 올림된 평균 계산
     //4-1. affinityScores를 전부 Long에서 Double로 바꾸고 갯수로 평균을 구한다.
     //4-2. Long에서 double로 바꾸는 이유는 평균계산을 간단하게해주는
@@ -478,11 +496,9 @@ public class MemberServiceImpl implements MemberService{
                                                 .average()
                                                 .orElse(0.0));
 
-    //5. 친화력은 100을 넘어서는 안된다
-    memberDTO.setAffinity(Math.min(averageAffinity, 100L));
+    //5. 친화력 설정
+    memberDTO.setAffinity(averageAffinity);
 
-    //5-1. 또한 0아래로 내려가면 안된다
-    memberDTO.setAffinity(Math.max(memberDTO.getAffinity(), 0L));
 
 //    log.info("거래후기의 친화력 점수: {}", affinityScoreList);
 //    log.info("평균 친화력: {}", averageAffinity);

@@ -9,7 +9,9 @@ import java.util.Map;
 import kr.nadeuli.dto.BlockDTO;
 import kr.nadeuli.dto.GpsDTO;
 import kr.nadeuli.dto.MemberDTO;
+import kr.nadeuli.dto.OriScheMemChatFavDTO;
 import kr.nadeuli.dto.ProductDTO;
+import kr.nadeuli.dto.ReportDTO;
 import kr.nadeuli.dto.SearchDTO;
 import kr.nadeuli.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -122,5 +125,58 @@ public class MemberRestController {
 
     return "{\"success\": true}";
   }
+
+  @PostMapping("/updateMember")
+  public String updateMember(@RequestBody MemberDTO memberDTO) throws Exception{
+    log.info("/member/updateMember : POST : {}", memberDTO);
+    memberService.updateMember(memberDTO);
+
+    return "{\"success\": true}";
+  }
+
+  @GetMapping("/addFavorite/{tag}/{productId}")
+  public String addFavorite(@PathVariable String tag, @PathVariable Long productId) throws Exception{
+    log.info("/member/addFavorite : GET : {},{}", tag,productId);
+
+    memberService.addFavorite(tag,productId);
+
+    return "{\"success\": true}";
+  }
+
+  @GetMapping("/deleteFavorite/{tag}/{productId}")
+  public String deleteFavorite(@PathVariable String tag, @PathVariable Long productId) throws Exception{
+    log.info("/member/deleteFavorite : GET : {},{}", tag,productId);
+
+    memberService.deleteFavorite(tag,productId);
+
+    return "{\"success\": true}";
+  }
+
+  @PostMapping ("/getFavoriteList")
+  public List<OriScheMemChatFavDTO> getFavoriteList(@RequestParam String tag, @RequestBody SearchDTO searchDTO) throws Exception{
+    log.info("/member/deleteFavorite : GET : {},{}", tag,searchDTO);
+    searchDTO.setPageSize(pageSize);
+    return memberService.getFavoriteList(tag,searchDTO);
+  }
+
+  @PostMapping("/addReport")
+  public String addReport(@RequestBody ReportDTO reportDTO) throws Exception{
+    log.info("/member/addReport : POST : {}", reportDTO);
+    memberService.addReport(reportDTO);
+    return "{\"success\": true}";
+  }
+
+  @GetMapping("/getAffinityToolTip")
+  public String getAffinityToolTip() throws Exception{
+    return memberService.getAffinityToolTip();
+  }
+
+  @GetMapping("/handleNadeuliDelivery/{tag}")
+  public String handleNadeuliDelivery(@PathVariable String tag) throws Exception{
+    log.info("/member/handleNadeuliDelivery : GET : {}", tag);
+    memberService.handleNadeuliDelivery(tag);
+    return "{\"success\": true}";
+  }
+
 
 }

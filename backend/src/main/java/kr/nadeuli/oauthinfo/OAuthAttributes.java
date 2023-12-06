@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 각 소셜에서 받아오는 데이터가 다르므로
@@ -21,6 +22,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class OAuthAttributes {
+
+  @Value("${affinity}")
+  private Long affinity;
 
   private String nameAttributeKey; // OAuth2 로그인 진행 시 키가 되는 필드 값, PK와 같은 의미
   private OAuth2UserInfo oauth2UserInfo; // 소셜 타입별 로그인 유저 정보(닉네임, 이메일, 프로필 사진 등등)
@@ -70,7 +74,7 @@ public class OAuthAttributes {
   public MemberDTO toEntity(OAuth2UserInfo oauth2UserInfo)
       throws Exception {
     return MemberDTO.builder()
-        .affinity(50L)
+        .affinity(affinity)
         .cellphone("")
         .nickname("")
         .dongNe("")
