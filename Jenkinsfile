@@ -125,10 +125,10 @@ pipeline {
             }
             post {
                 success {
-                    //slackSend channel: '#jenkins', color: 'good', message: "배포 성공"
+                    slackSend channel: '#jenkins', color: 'good', message: "배포 성공"
                 }
                 failure {
-                    //slackSend channel: '#jenkins', color: 'danger', message: "배포 실패"
+                    slackSend channel: '#jenkins', color: 'danger', message: "배포 실패"
                 }
             }
         }
