@@ -43,8 +43,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long updateProduct(ProductDTO productDTO) throws Exception {
+        Product beforeProduct = productRepository.findById(productDTO.getProductId()).orElse(null);
+        if(beforeProduct == null){
+            throw new NullPointerException("product is null");
+        }
         Product product = productMapper.productDTOToProduct(productDTO);
         log.info(product);
+        product.setViewNum(beforeProduct.getViewNum());
+
         Product savedProduct = productRepository.save(product);
         if(productDTO.isPremium()){
             premiumTimeScheduler.startPremiumTimeScheduler(savedProduct.getProductId());
