@@ -14,12 +14,14 @@ pipeline {
             steps {
                 script {
                     // backend 디렉토리에 속한 파일만 추려내기
-                    def backendChanges = sh(script: 'git diff --name-only origin/main backend/', returnStdout: true).trim().split('\n')
+                    def backendChanges = sh(script: 'git diff --name-only origin/main backend/', returnStdout: true).trim()
 
                     // frontend 디렉토리에서 변경된 파일 목록 가져오기
-                    def frontendChanges = sh(script: 'git diff --name-only origin/main frontend/', returnStdout: true).trim().split('\n')
+                    def frontendChanges = sh(script: 'git diff --name-only origin/main frontend/', returnStdout: true).trim()
+
                     echo "Backend Changes : ${backendChanges}"
                     echo "Frontend Changes : ${frontendChanges}"
+
             // backend 디렉토리에 변경이 있으면 nadeuliWas 아이템 실행
             if (backendChanges.isEmpty()) {
                 echo 'backend 변경된 파일 없음'
