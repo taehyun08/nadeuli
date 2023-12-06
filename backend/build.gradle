@@ -67,8 +67,12 @@ dependencies {
     //쿼리문 확인을 위한 spy추가
     implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.1'
 
-    //이메일 전송을위한 Gmail SMTP Dependency추가
+    //이메일 전송을위한 Gmail SMTP 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    //이메일 내용 전용 타임리프 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('bootBuildImage') {
