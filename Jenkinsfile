@@ -10,23 +10,14 @@ pipeline {
             }
         }
 
-        stage('Update Repository') {
-            steps {
-                git branch: 'main',
-                    credentialsId: 'github_personal_access_token',
-                    url: 'https://github.com/taehyun08/nadeuli.git',
-                    changelog: true
-            }
-        }
-
         stage('Check Code Changes') {
             steps {
                 script {
                     // backend 디렉토리에 속한 파일만 추려내기
-                    def backendChanges = sh(script: 'git diff --name-only origin/main backend/', returnStdout: true).trim()
+                    def backendChanges = sh(script: 'git diff --name-only origin/main...HEAD backend/', returnStdout: true).trim()
 
                     // frontend 디렉토리에서 변경된 파일 목록 가져오기
-                    def frontendChanges = sh(script: 'git diff --name-only origin/main frontend/', returnStdout: true).trim()
+                    def frontendChanges = sh(script: 'git diff --name-only origin/main...HEAD frontend/', returnStdout: true).trim()
 
                     echo "Backend Changes : ${backendChanges}"
                     echo "Frontend Changes : ${frontendChanges}"
