@@ -83,7 +83,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 tasks.named('showBuildDirectories') {
-    showBuildDirectories.dependsOn(build)
+    showBuildDirectories.dependsOn(bootJar)
     doLast {
         println "Build directory: ${project.buildDir}"
         println "Output directory: ${sourceSets.main.output.classesDirs.singleFile}"
