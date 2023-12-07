@@ -6,7 +6,7 @@ import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring")
+@Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring", uses = MemberMapper.class)
 public interface BlockMapper {
 
   @Mapping(target = "blockMember", source = "blockMember")

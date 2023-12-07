@@ -9,7 +9,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring", uses = {ProductMapper.class,
-    PostMapper.class, NadeuliDeliveryMapper.class})
+    PostMapper.class, NadeuliDeliveryMapper.class, MemberMapper.class})
 public interface ReportMapper {
 
 
