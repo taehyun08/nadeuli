@@ -82,5 +82,15 @@ tasks.named('bootBuildImage') {
 tasks.named('test') {
     useJUnitPlatform()
 }
+tasks.named('showBuildDirectories') {
+    showBuildDirectories.dependsOn(build)
+    doLast {
+        println "Build directory: ${project.buildDir}"
+        println "Output directory: ${sourceSets.main.output.classesDirs.singleFile}"
+        println "Jar file: ${jar.archivePath}"
+        println "BootJar file: ${bootJar.archivePath}"
+    }
+}
+
 
 
